@@ -1,6 +1,6 @@
 import { lazy } from 'react'
 import { createBrowserRouter } from 'react-router-dom'
-import { NotFound, Unauthorized, ServerError } from '@/pages/base'
+import { NotFound, ServerError, Unauthorized } from '@/pages/base'
 import { Layout } from '@/shared/components/layout'
 import { AuthGuard } from './guard'
 
@@ -9,7 +9,9 @@ const Login = lazy(() => import('@/pages/Login'))
 const Home = lazy(() => import('@/pages/Home'))
 const Creation = lazy(() => import('@/pages/Creation'))
 const AiTools = lazy(() => import('@/pages/AiTools'))
-const ProjectDetail = lazy(() => import('@/pages/ProjectDetail'))
+const ProjectDetail = lazy(() =>
+  import('@/features/project').then(m => ({ default: m.ProjectDetail }))
+)
 
 const router = createBrowserRouter([
   {
