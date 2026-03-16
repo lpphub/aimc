@@ -4,6 +4,7 @@ import {
   type CreateRecordReq,
   projectApi,
   recordApi,
+  tagApi,
   templateApi,
   type UpdateProjectReq,
   type UpdateRecordReq,
@@ -18,6 +19,11 @@ export const projectKeys = {
 export const templateKeys = {
   all: ['templates'] as const,
   list: (type?: 'copy' | 'image' | 'video') => [...templateKeys.all, 'list', type] as const,
+}
+
+export const tagKeys = {
+  all: ['tags'] as const,
+  list: () => [...tagKeys.all, 'list'] as const,
 }
 
 export const recordKeys = {
@@ -114,5 +120,12 @@ export function useDeleteRecord(projectId: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: recordKeys.list(projectId) })
     },
+  })
+}
+
+export function useTags() {
+  return useQuery({
+    queryKey: tagKeys.list(),
+    queryFn: () => tagApi.list(),
   })
 }

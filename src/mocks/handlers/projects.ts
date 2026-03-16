@@ -181,4 +181,11 @@ export const projectHandlers = [
       return HttpResponse.json(success(null))
     }
   ),
+
+  // Tags
+  http.get<never, never, ApiResponse<string[]>>(`${API_BASE}/tags`, async () => {
+    await delay(200)
+    const presetTags = ['小红书', '短视频', '抖音', '品牌', '文案', '营销', '推广', '电商']
+    return HttpResponse.json(success(presetTags))
+  }),
 ]

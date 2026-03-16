@@ -1,8 +1,9 @@
-import { Layers, Plus, Search, Sparkles } from 'lucide-react'
+import { Layers, Plus, Search, Sparkles, X } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ProjectCard } from '@/features/project/components'
-import { useCreateProject, useProjects } from '@/features/project/hooks'
+import { useCreateProject, useProjects, useTags } from '@/features/project/hooks'
+import { Badge } from '@/shared/components/ui/badge'
 import { Button } from '@/shared/components/ui/button'
 import {
   Dialog,
@@ -17,11 +18,12 @@ import { Input } from '@/shared/components/ui/input'
 export default function HomePage() {
   const navigate = useNavigate()
   const { data: projects = [], isLoading } = useProjects()
+  const { data: presetTags = [] } = useTags()
   const createProject = useCreateProject()
   const [searchQuery, setSearchQuery] = useState('')
   const [newProjectName, setNewProjectName] = useState('')
   const [newProjectDescription, setNewProjectDescription] = useState('')
-  const [newProjectTags, setNewProjectTags] = useState('')
+  const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   const filteredProjects = projects.filter(
@@ -32,31 +34,26 @@ export default function HomePage() {
 
   const handleCreateProject = () => {
     if (!newProjectName.trim()) return
-    const tags = newProjectTags
-      .split(/[,，\s]+/)
-      .map(t => t.trim())
-      .filter(t => t && !t.startsWith('#'))
-    const hashTags = newProjectTags
-      .split(/[,，\s]+/)
-      .map(t => t.trim())
-      .filter(t => t.startsWith('#'))
-      .map(t => t.slice(1))
 
     createProject.mutate(
       {
         name: newProjectName,
         description: newProjectDescription || undefined,
-        tags: [...tags, ...hashTags].filter(Boolean),
+        tags: selectedTags,
       },
       {
         onSuccess: () => {
           setNewProjectName('')
           setNewProjectDescription('')
-          setNewProjectTags('')
+          setSelectedTags([])
           setIsDialogOpen(false)
         },
       }
     )
+  }
+
+  const toggleTag = (tag: string) => {
+    setSelectedTags(prev => (prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]))
   }
 
   const handleProjectClick = (projectId: string) => {
@@ -129,15 +126,25 @@ export default function HomePage() {
                   </div>
                   <div className='space-y-2'>
                     <label className='text-sm text-gray-300'>标签</label>
-                    <Input
-                      placeholder='输入标签，用空格或逗号分隔（支持 #标签 格式）...'
-                      value={newProjectTags}
-                      onChange={e => setNewProjectTags(e.target.value)}
-                      className='bg-gray-800 border-gray-700 text-white placeholder:text-gray-500 focus:border-cyan-500/50'
-                    />
-                    <p className='text-xs text-gray-500'>
-                      多个标签用空格或逗号分隔，支持 #标签 格式
-                    </p>
+                    <div className='flex flex-wrap gap-2'>
+                      {presetTags.map(tag => (
+                        <Badge
+                          key={tag}
+                          onClick={() => toggleTag(tag)}
+                          className={`cursor-pointer transition-all ${
+                            selectedTags.includes(tag)
+                              ? 'bg-cyan-500 text-white border-cyan-500'
+                              : 'bg-gray-800 text-gray-400 border-gray-700 hover:border-cyan-500/50'
+                          }`}
+                        >
+                          {tag}
+                          {selectedTags.includes(tag) && <X className='ml-1 h-3 w-3' />}
+                        </Badge>
+                      ))}
+                    </div>
+                    {selectedTags.length > 0 && (
+                      <p className='text-xs text-gray-500'>已选择: {selectedTags.join(', ')}</p>
+                    )}
                   </div>
                 </div>
                 <div className='flex justify-end gap-2'>

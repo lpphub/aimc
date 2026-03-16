@@ -18,9 +18,7 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 5000,
       host: true,
-      watch: {
-        usePolling: true,
-      },
+      open: true,
       proxy:
         env.VITE_ENABLE_PROXY === 'true'
           ? {

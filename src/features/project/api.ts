@@ -44,6 +44,10 @@ export const templateApi = {
   },
 }
 
+export const tagApi = {
+  list: () => api.get<string[]>('tags'),
+}
+
 export const recordApi = {
   list: (projectId: string) => api.get<CreationRecord[]>(`projects/${projectId}/records`),
   create: (projectId: string, data: CreateRecordReq) =>
