@@ -1,6 +1,7 @@
 import { Layers, Plus, Search, Sparkles } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 import { ProjectCard } from '@/features/project/components'
 import { useCreateProject, useProjects, useTags } from '@/features/project/hooks'
 import { Button } from '@/shared/components/ui/button'
@@ -33,7 +34,10 @@ export default function HomePage() {
   )
 
   const handleCreateProject = () => {
-    if (!newProjectName.trim()) return
+    if (!newProjectName.trim()) {
+      toast.error('请输入项目名称')
+      return
+    }
 
     createProject.mutate(
       {
@@ -43,10 +47,15 @@ export default function HomePage() {
       },
       {
         onSuccess: () => {
+          toast.success('项目创建成功')
           setNewProjectName('')
           setNewProjectDescription('')
           setSelectedTags([])
           setIsDialogOpen(false)
+        },
+        onError: error => {
+          console.error('创建项目失败:', error)
+          toast.error('创建项目失败，请重试')
         },
       }
     )
