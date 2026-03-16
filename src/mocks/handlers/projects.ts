@@ -1,7 +1,7 @@
 import { delay, HttpResponse, http } from 'msw'
-import type { Project } from '@/features/project/types'
+import type { CreationRecord, Project, Template } from '@/features/project/types'
 import type { ApiResponse } from '@/lib/api'
-import { generateId, projects } from '../db'
+import { generateId, projects, records, templates } from '../db'
 
 const API_BASE = '/api'
 
@@ -14,14 +14,13 @@ function error(message: string, code = 400): ApiResponse<null> {
 }
 
 export const projectHandlers = [
-  // 获取项目列表
+  // Projects
   http.get<never, never, ApiResponse<Project[]>>(`${API_BASE}/projects`, async () => {
     await delay(300)
     const projectList = Array.from(projects.values())
     return HttpResponse.json(success(projectList))
   }),
 
-  // 获取单个项目
   http.get<{ id: string }, never, ApiResponse<Project | null>>(
     `${API_BASE}/projects/:id`,
     async ({ params }) => {
@@ -34,25 +33,19 @@ export const projectHandlers = [
     }
   ),
 
-  // 创建项目
-  http.post<never, { name: string; category?: string; tag?: string }, ApiResponse<Project>>(
+  http.post<never, Omit<Project, 'id' | 'createdAt' | 'updatedAt'>, ApiResponse<Project>>(
     `${API_BASE}/projects`,
     async ({ request }) => {
       await delay(300)
       const body = await request.json()
-      const { name, category = '未分类', tag = 'AI 漫画' } = body
-
-      const now = new Date().toLocaleDateString('zh-CN', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      })
+      const now = new Date().toISOString().split('T')[0]
 
       const newProject: Project = {
         id: generateId(),
-        name,
-        category,
-        tag,
+        name: body.name,
+        description: body.description,
+        tags: body.tags || [],
+        presetTemplateIds: body.presetTemplateIds || [],
         createdAt: now,
         updatedAt: now,
       }
@@ -62,7 +55,6 @@ export const projectHandlers = [
     }
   ),
 
-  // 更新项目
   http.put<{ id: string }, Partial<Project>, ApiResponse<Project | null>>(
     `${API_BASE}/projects/:id`,
     async ({ params, request }) => {
@@ -73,11 +65,7 @@ export const projectHandlers = [
       }
 
       const body = await request.json()
-      const now = new Date().toLocaleDateString('zh-CN', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      })
+      const now = new Date().toISOString().split('T')[0]
 
       const updatedProject: Project = {
         ...project,
@@ -91,7 +79,6 @@ export const projectHandlers = [
     }
   ),
 
-  // 删除项目
   http.delete<{ id: string }, never, ApiResponse<null>>(
     `${API_BASE}/projects/:id`,
     async ({ params }) => {
@@ -100,6 +87,97 @@ export const projectHandlers = [
       if (!deleted) {
         return HttpResponse.json(error('项目不存在', 404))
       }
+      return HttpResponse.json(success(null))
+    }
+  ),
+
+  // Templates
+  http.get<never, never, ApiResponse<Template[]>>(`${API_BASE}/templates`, async ({ request }) => {
+    await delay(200)
+    const url = new URL(request.url)
+    const type = url.searchParams.get('type') as 'copy' | 'image' | 'video' | null
+    const templateList = Array.from(templates.values())
+    const filtered = type ? templateList.filter(t => t.type === type) : templateList
+    return HttpResponse.json(success(filtered))
+  }),
+
+  // Records
+  http.get<{ projectId: string }, never, ApiResponse<CreationRecord[]>>(
+    `${API_BASE}/projects/:projectId/records`,
+    async ({ params }) => {
+      await delay(200)
+      const recordList = Array.from(records.values()).filter(r => r.projectId === params.projectId)
+      return HttpResponse.json(success(recordList))
+    }
+  ),
+
+  http.post<
+    { projectId: string },
+    Omit<CreationRecord, 'id' | 'projectId' | 'createdAt'>,
+    ApiResponse<CreationRecord>
+  >(`${API_BASE}/projects/:projectId/records`, async ({ params, request }) => {
+    await delay(300)
+    const body = await request.json()
+    const now = new Date().toISOString().split('T')[0]
+
+    const newRecord: CreationRecord = {
+      id: `r${Date.now()}`,
+      projectId: params.projectId,
+      type: body.type,
+      title: body.title,
+      content: body.content,
+      metadata: body.metadata,
+      createdAt: now,
+    }
+
+    records.set(newRecord.id, newRecord)
+    return HttpResponse.json(success(newRecord))
+  }),
+
+  http.get<{ projectId: string; id: string }, never, ApiResponse<CreationRecord | null>>(
+    `${API_BASE}/projects/:projectId/records/:id`,
+    async ({ params }) => {
+      await delay(200)
+      const record = records.get(params.id)
+      if (!record || record.projectId !== params.projectId) {
+        return HttpResponse.json(error('记录不存在', 404))
+      }
+      return HttpResponse.json(success(record))
+    }
+  ),
+
+  http.put<
+    { projectId: string; id: string },
+    Partial<CreationRecord>,
+    ApiResponse<CreationRecord | null>
+  >(`${API_BASE}/projects/:projectId/records/:id`, async ({ params, request }) => {
+    await delay(300)
+    const record = records.get(params.id)
+    if (!record || record.projectId !== params.projectId) {
+      return HttpResponse.json(error('记录不存在', 404))
+    }
+
+    const body = await request.json()
+    const updatedRecord: CreationRecord = {
+      ...record,
+      ...body,
+      id: record.id,
+      projectId: record.projectId,
+    }
+
+    records.set(params.id, updatedRecord)
+    return HttpResponse.json(success(updatedRecord))
+  }),
+
+  http.delete<{ projectId: string; id: string }, never, ApiResponse<null>>(
+    `${API_BASE}/projects/:projectId/records/:id`,
+    async ({ params }) => {
+      await delay(200)
+      const record = records.get(params.id)
+      if (!record || record.projectId !== params.projectId) {
+        return HttpResponse.json(error('记录不存在', 404))
+      }
+      records.delete(params.id)
       return HttpResponse.json(success(null))
     }
   ),

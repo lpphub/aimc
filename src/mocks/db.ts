@@ -1,11 +1,15 @@
 import type { User } from '@/features/auth/types'
-import type { Project } from '@/features/project/types'
+import type { CreationRecord, Project, Template } from '@/features/project/types'
 
 const users: Map<string, { password: string; user: User }> = new Map()
 
 const tokens: Map<string, string> = new Map()
 
 const projects: Map<string, Project> = new Map()
+
+const templates: Map<string, Template> = new Map()
+
+const records: Map<string, CreationRecord> = new Map()
 
 function generateToken(): string {
   return `token_${Date.now()}_${Math.random().toString(36).slice(2)}`
@@ -46,36 +50,22 @@ function seedMockUsers(): void {
 function seedMockProjects(): void {
   const mockProjects: Project[] = [
     {
-      id: 'proj_001',
-      name: 'AI 漫画创作项目',
-      category: '漫画',
-      tag: 'AI 漫画',
-      createdAt: '2024/03/10',
-      updatedAt: '2024/03/15',
+      id: 'p1',
+      name: '夏季新品推广',
+      description: '为小红书和抖音生成营销素材',
+      tags: ['小红书', '短视频'],
+      presetTemplateIds: ['t1', 't3'],
+      createdAt: '2026-03-16',
+      updatedAt: '2026-03-16',
     },
     {
-      id: 'proj_002',
-      name: '智能绘本生成',
-      category: '绘本',
-      tag: 'AI 绘本',
-      createdAt: '2024/03/08',
-      updatedAt: '2024/03/12',
-    },
-    {
-      id: 'proj_003',
-      name: '角色设计合集',
-      category: '设计',
-      tag: '角色设计',
-      createdAt: '2024/03/05',
-      updatedAt: '2024/03/10',
-    },
-    {
-      id: 'proj_004',
-      name: '故事板创作',
-      category: '漫画',
-      tag: 'AI 漫画',
-      createdAt: '2024/03/01',
-      updatedAt: '2024/03/08',
+      id: 'p2',
+      name: '品牌宣传',
+      description: '品牌形象宣传素材',
+      tags: ['品牌', '宣传'],
+      presetTemplateIds: ['t2'],
+      createdAt: '2026-03-15',
+      updatedAt: '2026-03-15',
     },
   ]
 
@@ -84,13 +74,55 @@ function seedMockProjects(): void {
   }
 }
 
+function seedMockTemplates(): void {
+  const mockTemplates: Template[] = [
+    { id: 't1', name: '文案模板A', type: 'copy', content: '模板内容A...' },
+    { id: 't2', name: '文案模板B', type: 'copy', content: '模板内容B...' },
+    { id: 't3', name: '图片模板A', type: 'image', content: '图片描述...' },
+    { id: 't4', name: '视频模板A', type: 'video', content: '视频脚本...' },
+  ]
+
+  for (const t of mockTemplates) {
+    templates.set(t.id, t)
+  }
+}
+
+function seedMockRecords(): void {
+  const mockRecords: CreationRecord[] = [
+    {
+      id: 'r1',
+      projectId: 'p1',
+      type: 'copy',
+      title: '夏季新品文案',
+      content: '炎炎夏日，新品上市...',
+      createdAt: '2026-03-16',
+    },
+    {
+      id: 'r2',
+      projectId: 'p1',
+      type: 'image',
+      title: '产品主图',
+      content: 'https://example.com/image.jpg',
+      createdAt: '2026-03-16',
+    },
+  ]
+
+  for (const r of mockRecords) {
+    records.set(r.id, r)
+  }
+}
+
 seedMockUsers()
 seedMockProjects()
+seedMockTemplates()
+seedMockRecords()
 
 export {
   users,
   tokens,
   projects,
+  templates,
+  records,
   generateToken,
   generateId,
   storeToken,
