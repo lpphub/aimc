@@ -1,11 +1,29 @@
+import { createContext, type ReactNode, useContext, useState } from 'react'
+import { Outlet } from 'react-router-dom'
 import { ChevronLeft, ChevronRight, Layers, LogOut, PenTool, Sparkles } from 'lucide-react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { useLogout } from '@/features/auth'
 import { cn } from '@/lib/utils'
 import { useStore } from '@/shared/stores/useStore'
-import { useNavigation } from './NavigationContext'
 
-export function Sidebar() {
+// Navigation Context
+interface NavigationContextType {
+  isCollapsed: boolean
+  toggleSidebar: () => void
+}
+
+const NavigationContext = createContext<NavigationContextType | undefined>(undefined)
+
+function useNavigation() {
+  const context = useContext(NavigationContext)
+  if (context === undefined) {
+    throw new Error('useNavigation must be used within a Layout')
+  }
+  return context
+}
+
+// Sidebar Component
+function Sidebar() {
   const location = useLocation()
   const navigate = useNavigate()
   const { setActiveTab } = useStore()
@@ -151,5 +169,36 @@ export function Sidebar() {
         </button>
       </div>
     </aside>
+  )
+}
+
+// Main Component
+function Main({ children }: { children: ReactNode }) {
+  const { isCollapsed } = useNavigation()
+
+  return (
+    <div className={cn('flex-1 transition-all duration-300', isCollapsed ? 'ml-20' : 'ml-64')}>
+      {children}
+    </div>
+  )
+}
+
+// Layout Component
+export function Layout() {
+  const [isCollapsed, setIsCollapsed] = useState(false)
+
+  const toggleSidebar = () => {
+    setIsCollapsed((prev) => !prev)
+  }
+
+  return (
+    <NavigationContext.Provider value={{ isCollapsed, toggleSidebar }}>
+      <div className="flex min-h-screen bg-[#0a0a0a]">
+        <Sidebar />
+        <Main>
+          <Outlet />
+        </Main>
+      </div>
+    </NavigationContext.Provider>
   )
 }
