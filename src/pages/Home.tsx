@@ -20,6 +20,8 @@ export default function HomePage() {
   const createProject = useCreateProject()
   const [searchQuery, setSearchQuery] = useState('')
   const [newProjectName, setNewProjectName] = useState('')
+  const [newProjectDescription, setNewProjectDescription] = useState('')
+  const [newProjectTags, setNewProjectTags] = useState('')
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   const filteredProjects = projects.filter(
@@ -30,11 +32,27 @@ export default function HomePage() {
 
   const handleCreateProject = () => {
     if (!newProjectName.trim()) return
+    const tags = newProjectTags
+      .split(/[,，\s]+/)
+      .map(t => t.trim())
+      .filter(t => t && !t.startsWith('#'))
+    const hashTags = newProjectTags
+      .split(/[,，\s]+/)
+      .map(t => t.trim())
+      .filter(t => t.startsWith('#'))
+      .map(t => t.slice(1))
+
     createProject.mutate(
-      { name: newProjectName },
+      {
+        name: newProjectName,
+        description: newProjectDescription || undefined,
+        tags: [...tags, ...hashTags].filter(Boolean),
+      },
       {
         onSuccess: () => {
           setNewProjectName('')
+          setNewProjectDescription('')
+          setNewProjectTags('')
           setIsDialogOpen(false)
         },
       }
@@ -72,7 +90,10 @@ export default function HomePage() {
             {/* Create Button */}
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
-                <Button className='bg-gradient-to-r from-cyan-500 to-teal-500 text-white font-medium hover:from-cyan-600 hover:to-teal-600 shadow-lg shadow-cyan-500/20 transition-all duration-300 hover:shadow-cyan-500/40'>
+                <Button
+                  variant='ghost'
+                  className='bg-gradient-to-r from-cyan-500 to-teal-500 text-white font-medium hover:text-white hover:from-cyan-600 hover:to-teal-600 hover:bg-transparent shadow-lg shadow-cyan-500/20 transition-all duration-300 hover:shadow-cyan-500/40'
+                >
                   <Plus className='mr-2 h-4 w-4' />
                   创建新项目
                 </Button>
@@ -84,27 +105,54 @@ export default function HomePage() {
                     输入项目名称以创建一个新的创作项目
                   </DialogDescription>
                 </DialogHeader>
-                <div className='py-4'>
-                  <Input
-                    placeholder='输入项目名称...'
-                    value={newProjectName}
-                    onChange={e => setNewProjectName(e.target.value)}
-                    onKeyDown={e => e.key === 'Enter' && handleCreateProject()}
-                    className='bg-gray-800 border-gray-700 text-white placeholder:text-gray-500 focus:border-cyan-500/50'
-                  />
+                <div className='py-4 space-y-4'>
+                  <div className='space-y-2'>
+                    <label className='text-sm text-gray-300'>
+                      项目名称 <span className='text-red-400'>*</span>
+                    </label>
+                    <Input
+                      placeholder='输入项目名称...'
+                      value={newProjectName}
+                      onChange={e => setNewProjectName(e.target.value)}
+                      onKeyDown={e => e.key === 'Enter' && handleCreateProject()}
+                      className='bg-gray-800 border-gray-700 text-white placeholder:text-gray-500 focus:border-cyan-500/50'
+                    />
+                  </div>
+                  <div className='space-y-2'>
+                    <label className='text-sm text-gray-300'>项目描述</label>
+                    <Input
+                      placeholder='输入项目描述（可选）...'
+                      value={newProjectDescription}
+                      onChange={e => setNewProjectDescription(e.target.value)}
+                      className='bg-gray-800 border-gray-700 text-white placeholder:text-gray-500 focus:border-cyan-500/50'
+                    />
+                  </div>
+                  <div className='space-y-2'>
+                    <label className='text-sm text-gray-300'>标签</label>
+                    <Input
+                      placeholder='输入标签，用空格或逗号分隔（支持 #标签 格式）...'
+                      value={newProjectTags}
+                      onChange={e => setNewProjectTags(e.target.value)}
+                      className='bg-gray-800 border-gray-700 text-white placeholder:text-gray-500 focus:border-cyan-500/50'
+                    />
+                    <p className='text-xs text-gray-500'>
+                      多个标签用空格或逗号分隔，支持 #标签 格式
+                    </p>
+                  </div>
                 </div>
                 <div className='flex justify-end gap-2'>
                   <Button
                     variant='outline'
                     onClick={() => setIsDialogOpen(false)}
-                    className='bg-transparent border-gray-700 text-gray-400 hover:text-white'
+                    className='bg-transparent border-gray-700 text-gray-400 hover:text-white hover:bg-gray-800'
                   >
                     取消
                   </Button>
                   <Button
+                    variant='ghost'
                     onClick={handleCreateProject}
                     disabled={!newProjectName.trim() || createProject.isPending}
-                    className='bg-gradient-to-r from-cyan-500 to-teal-500 text-white hover:from-cyan-600 hover:to-teal-600'
+                    className='bg-gradient-to-r from-cyan-500 to-teal-500 text-white hover:text-white hover:from-cyan-600 hover:to-teal-600 hover:bg-transparent'
                   >
                     {createProject.isPending ? '创建中...' : '创建'}
                   </Button>
