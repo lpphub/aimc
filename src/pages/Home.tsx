@@ -1,9 +1,8 @@
-import { Layers, Plus, Search, Sparkles, X } from 'lucide-react'
+import { Layers, Plus, Search, Sparkles } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ProjectCard } from '@/features/project/components'
 import { useCreateProject, useProjects, useTags } from '@/features/project/hooks'
-import { Badge } from '@/shared/components/ui/badge'
 import { Button } from '@/shared/components/ui/button'
 import {
   Dialog,
@@ -14,6 +13,7 @@ import {
   DialogTrigger,
 } from '@/shared/components/ui/dialog'
 import { Input } from '@/shared/components/ui/input'
+import { TagInput } from '@/shared/components/ui/tag-input'
 
 export default function HomePage() {
   const navigate = useNavigate()
@@ -50,10 +50,6 @@ export default function HomePage() {
         },
       }
     )
-  }
-
-  const toggleTag = (tag: string) => {
-    setSelectedTags(prev => (prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]))
   }
 
   const handleProjectClick = (projectId: string) => {
@@ -126,25 +122,12 @@ export default function HomePage() {
                   </div>
                   <div className='space-y-2'>
                     <label className='text-sm text-gray-300'>标签</label>
-                    <div className='flex flex-wrap gap-2'>
-                      {presetTags.map(tag => (
-                        <Badge
-                          key={tag}
-                          onClick={() => toggleTag(tag)}
-                          className={`cursor-pointer transition-all ${
-                            selectedTags.includes(tag)
-                              ? 'bg-cyan-500 text-white border-cyan-500'
-                              : 'bg-gray-800 text-gray-400 border-gray-700 hover:border-cyan-500/50'
-                          }`}
-                        >
-                          {tag}
-                          {selectedTags.includes(tag) && <X className='ml-1 h-3 w-3' />}
-                        </Badge>
-                      ))}
-                    </div>
-                    {selectedTags.length > 0 && (
-                      <p className='text-xs text-gray-500'>已选择: {selectedTags.join(', ')}</p>
-                    )}
+                    <TagInput
+                      value={selectedTags}
+                      onChange={setSelectedTags}
+                      options={presetTags}
+                      placeholder='选择或输入标签...'
+                    />
                   </div>
                 </div>
                 <div className='flex justify-end gap-2'>
