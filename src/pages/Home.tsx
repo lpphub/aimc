@@ -27,7 +27,7 @@ export default function HomePage() {
   const filteredProjects = projects.filter(
     project =>
       project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      project.tag.toLowerCase().includes(searchQuery.toLowerCase())
+      project.tags?.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
   )
 
   const handleCreateProject = () => {
