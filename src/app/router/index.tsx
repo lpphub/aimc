@@ -8,7 +8,7 @@ import { AuthGuard } from './guard'
 const Login = lazy(() => import('@/pages/Login'))
 const Home = lazy(() => import('@/pages/Home'))
 const Creation = lazy(() => import('@/features/creation').then(m => ({ default: m.Creation })))
-const AiTools = lazy(() => import('@/pages/AiTools'))
+const AiTools = lazy(() => import('@/features/ai-tools').then(m => ({ default: m.AiTools })))
 const ProjectDetail = lazy(() =>
   import('@/features/project').then(m => ({ default: m.ProjectDetail }))
 )
