@@ -22,20 +22,21 @@ src/
 ├── pages/                  # 页面组件（路由入口）
 │   ├── base/              # 错误页面 (404/401/500)
 │   ├── Login.tsx          # 登录页
-│   ├── Home.tsx           # 首页
-│   ├── Creation.tsx       # 创作中心
-│   ├── AiTools.tsx        # AI 工具箱
-│   └── ProjectDetail.tsx  # 项目详情
+│   └── Home.tsx           # 首页
 ├── features/               # 业务功能模块
 │   ├── auth/              # 认证
 │   │   ├── api.ts         # API 接口定义
 │   │   ├── types.ts       # 类型定义
 │   │   ├── hooks/         # 业务 Hooks
 │   │   └── components/    # 业务组件
-│   └── project/           # 项目
-│       ├── api.ts
-│       ├── types.ts
-│       └── components/
+│   ├── project/           # 项目
+│   │   ├── api.ts
+│   │   ├── types.ts
+│   │   └── components/    # ProjectCard, ProjectDetail
+│   ├── creation/          # 创作中心
+│   │   └── components/    # Creation
+│   └── ai-tools/          # AI 工具箱
+│       └── components/    # AiTools
 ├── shared/                 # 跨功能共享资源
 │   ├── components/        # UI 组件
 │   │   ├── ui/            # shadcn/ui：Button, Input, Dialog...
