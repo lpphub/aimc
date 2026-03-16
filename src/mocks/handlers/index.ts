@@ -1,4 +1,4 @@
 import { authHandlers } from './auth'
+import { projectHandlers } from './projects'
 
-// 在这里添加你的 mock handlers
-export const handlers = [...authHandlers]
+export const handlers = [...authHandlers, ...projectHandlers]

@@ -8,7 +8,7 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
-      <Toaster richColors position="top-right" />
+      <Toaster richColors position='top-right' />
     </QueryClientProvider>
   )
 }

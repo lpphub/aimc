@@ -1,1 +1,1 @@
-export { NotFound, Unauthorized, ServerError } from './ErrorPage'
+export { NotFound, ServerError, Unauthorized } from './ErrorPage'

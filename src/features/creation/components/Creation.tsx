@@ -92,6 +92,7 @@ export default function CreationPage() {
                           fill='none'
                           stroke='currentColor'
                           viewBox='0 0 24 24'
+                          aria-label='完成'
                         >
                           <path
                             strokeLinecap='round'
@@ -149,7 +150,13 @@ export default function CreationPage() {
         <div className='relative bg-[#1a1a1a] rounded-xl border border-gray-800 overflow-hidden'>
           <div className='flex items-center justify-between px-4 py-3 border-b border-gray-800'>
             <Button variant='ghost' size='icon' className='h-8 w-8 text-gray-500 hover:text-white'>
-              <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+              <svg
+                className='w-5 h-5'
+                fill='none'
+                stroke='currentColor'
+                viewBox='0 0 24 24'
+                aria-label='添加'
+              >
                 <path
                   strokeLinecap='round'
                   strokeLinejoin='round'

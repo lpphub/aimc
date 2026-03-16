@@ -13,12 +13,12 @@ export function AuthGuard({ children, requireAuth = false }: AuthGuardProps) {
 
   // 需要登录但未登录 -> 跳转登录页
   if (requireAuth && !isAuthenticated) {
-    return <Navigate to="/login" state={{ from: location }} replace />
+    return <Navigate to='/login' state={{ from: location }} replace />
   }
 
   // 不需要登录但已登录 -> 跳转首页
   if (!requireAuth && isAuthenticated) {
-    return <Navigate to="/" replace />
+    return <Navigate to='/' replace />
   }
 
   return <>{children}</>

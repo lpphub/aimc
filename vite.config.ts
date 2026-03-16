@@ -43,7 +43,11 @@ export default defineConfig(({ mode }) => {
           manualChunks(id) {
             if (id.includes('node_modules')) {
               // 核心框架
-              if (['react/', 'react-dom/', 'react-router-dom/', '@tanstack/react-query'].some(m => id.includes(m))) {
+              if (
+                ['react/', 'react-dom/', 'react-router-dom/', '@tanstack/react-query'].some(m =>
+                  id.includes(m)
+                )
+              ) {
                 return 'vendor-core'
               }
               // UI 组件和图标
@@ -51,7 +55,11 @@ export default defineConfig(({ mode }) => {
                 return 'vendor-ui'
               }
               // 工具库
-              if (['zustand', 'clsx', 'tailwind-merge', 'class-variance-authority'].some(m => id.includes(m))) {
+              if (
+                ['zustand', 'clsx', 'tailwind-merge', 'class-variance-authority'].some(m =>
+                  id.includes(m)
+                )
+              ) {
                 return 'vendor-utils'
               }
             }

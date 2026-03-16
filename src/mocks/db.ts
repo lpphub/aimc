@@ -1,32 +1,32 @@
 import type { User } from '@/features/auth/types'
+import type { Project } from '@/features/project/types'
 
-// 模拟数据库
 const users: Map<string, { password: string; user: User }> = new Map()
 
-// token 存储 (token -> email 映射)
 const tokens: Map<string, string> = new Map()
 
-// 生成简单的 token
+const projects: Map<string, Project> = new Map()
+
 function generateToken(): string {
   return `token_${Date.now()}_${Math.random().toString(36).slice(2)}`
 }
 
-// 存储 token 与用户关联
 function storeToken(token: string, email: string): void {
   tokens.set(token, email)
 }
 
-// 根据 token 获取用户邮箱
 function getEmailByToken(token: string): string | undefined {
   return tokens.get(token)
 }
 
-// 移除 token (登出时使用)
 function removeToken(token: string): boolean {
   return tokens.delete(token)
 }
 
-// 初始化测试账户
+function generateId(): string {
+  return `proj_${Date.now()}_${Math.random().toString(36).slice(2)}`
+}
+
 function seedMockUsers(): void {
   const testUser: User = {
     id: 1,
@@ -43,13 +43,56 @@ function seedMockUsers(): void {
   })
 }
 
-// 自动初始化
+function seedMockProjects(): void {
+  const mockProjects: Project[] = [
+    {
+      id: 'proj_001',
+      name: 'AI 漫画创作项目',
+      category: '漫画',
+      tag: 'AI 漫画',
+      createdAt: '2024/03/10',
+      updatedAt: '2024/03/15',
+    },
+    {
+      id: 'proj_002',
+      name: '智能绘本生成',
+      category: '绘本',
+      tag: 'AI 绘本',
+      createdAt: '2024/03/08',
+      updatedAt: '2024/03/12',
+    },
+    {
+      id: 'proj_003',
+      name: '角色设计合集',
+      category: '设计',
+      tag: '角色设计',
+      createdAt: '2024/03/05',
+      updatedAt: '2024/03/10',
+    },
+    {
+      id: 'proj_004',
+      name: '故事板创作',
+      category: '漫画',
+      tag: 'AI 漫画',
+      createdAt: '2024/03/01',
+      updatedAt: '2024/03/08',
+    },
+  ]
+
+  for (const p of mockProjects) {
+    projects.set(p.id, p)
+  }
+}
+
 seedMockUsers()
+seedMockProjects()
 
 export {
   users,
   tokens,
+  projects,
   generateToken,
+  generateId,
   storeToken,
   getEmailByToken,
   removeToken,
