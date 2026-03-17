@@ -1,4 +1,4 @@
-import { apiClient } from '@/lib/api'
+import api, { apiClient, unwrap } from '@/lib/api'
 import type {
   BatchUpdateTagsRequest,
   CreateMaterialRequest,
@@ -15,8 +15,7 @@ export async function getMaterials(filter?: MaterialsFilter): Promise<Material[]
     params.set('search', filter.search)
   }
   const query = params.toString()
-  const res = await apiClient.get(`materials${query ? `?${query}` : ''}`)
-  return res.json<{ data: Material[] }>().then(r => r.data)
+  return api.get<Material[]>(`materials${query ? `?${query}` : ''}`)
 }
 
 export async function uploadMaterial(data: CreateMaterialRequest): Promise<Material> {
@@ -26,19 +25,17 @@ export async function uploadMaterial(data: CreateMaterialRequest): Promise<Mater
     formData.append('tags', JSON.stringify(data.tags))
   }
   const res = await apiClient.post('materials', { body: formData })
-  return res.json<{ data: Material }>().then(r => r.data)
+  return unwrap<Material>(res)
 }
 
 export async function deleteMaterial(id: string): Promise<void> {
-  await apiClient.delete(`materials/${id}`)
+  return api.delete<void>(`materials/${id}`)
 }
 
 export async function batchUpdateTags(data: BatchUpdateTagsRequest): Promise<Material[]> {
-  const res = await apiClient.patch('materials/batch-tags', { json: data })
-  return res.json<{ data: Material[] }>().then(r => r.data)
+  return api.patch<Material[]>('materials/batch-tags', data)
 }
 
 export async function getMaterialTags(): Promise<string[]> {
-  const res = await apiClient.get('materials/tags')
-  return res.json<{ data: string[] }>().then(r => r.data)
+  return api.get<string[]>('materials/tags')
 }

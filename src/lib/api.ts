@@ -167,5 +167,5 @@ const api = {
   delete: <T>(url: string) => apiClient.delete(url).then(unwrap<T>),
 }
 
-export { apiClient }
+export { apiClient, unwrap }
 export default api
