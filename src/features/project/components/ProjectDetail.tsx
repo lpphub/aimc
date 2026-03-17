@@ -1,22 +1,16 @@
-import { BookOpen, ChevronRight, FolderOpen, Layers } from 'lucide-react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { BookOpen, FolderOpen, Layers } from 'lucide-react'
+import { useParams } from 'react-router-dom'
 import { useProject, useRecords, useTemplates } from '@/features/project/hooks'
 import { Badge } from '@/shared/components/ui/badge'
-import { Button } from '@/shared/components/ui/button'
 import { Card } from '@/shared/components/ui/card'
 import { MaterialsTab } from './MaterialsTab'
 import { WorksTab } from './WorksTab'
 
 export default function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>()
-  const navigate = useNavigate()
   const { data: project, isLoading: projectLoading } = useProject(id!)
   const { data: allTemplates = [] } = useTemplates()
   const { data: records = [] } = useRecords(id!)
-
-  const handleStartCreation = () => {
-    navigate('/tools')
-  }
 
   const handleUploadMaterial = () => {
     console.log('Upload material')
@@ -50,7 +44,7 @@ export default function ProjectDetailPage() {
 
   const materials = presetTemplates.map(t => ({
     id: t.id,
-    type: 'text' as const,
+    type: 'image' as const,
     name: t.name,
     content: t.content,
     createdAt: new Date().toISOString(),
@@ -94,16 +88,6 @@ export default function ProjectDetailPage() {
                   ))}
                 </div>
               </div>
-            </div>
-
-            <div className='flex gap-3'>
-              <Button
-                onClick={handleStartCreation}
-                className='bg-gradient-to-r from-cyan-500 to-teal-500 text-white hover:from-cyan-600 hover:to-teal-600 shadow-lg shadow-cyan-500/20 transition-all duration-300 hover:shadow-cyan-500/40'
-              >
-                <ChevronRight className='mr-2 h-4 w-4' />
-                开始AI创作
-              </Button>
             </div>
           </div>
         </div>

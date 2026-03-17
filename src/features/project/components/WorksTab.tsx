@@ -36,7 +36,7 @@ export function WorksTab({ works, onDelete }: WorksTabProps) {
           className='bg-gradient-to-r from-cyan-500 to-teal-500 text-white hover:from-cyan-600 hover:to-teal-600'
         >
           <Plus className='w-4 h-4 mr-2' />
-          开始AI创作
+          AI绘
         </Button>
       </div>
 
