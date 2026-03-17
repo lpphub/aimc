@@ -95,7 +95,7 @@ export function MaterialsTab({ materials, onUpload, onDelete }: MaterialsTabProp
                           }}
                         />
                         <div className='absolute inset-0 flex items-center justify-center p-4'>
-                          <FileText className='w-12 h-12 text-blue-400/50' />
+                          <Icon className='w-12 h-12 text-blue-400/50' />
                         </div>
                       </div>
                     )}
