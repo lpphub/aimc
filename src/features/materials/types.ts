@@ -25,3 +25,16 @@ export interface BatchUpdateTagsRequest {
   tags: string[]
   mode: 'add' | 'replace'
 }
+
+export interface Tag {
+  id: number
+  name: string
+}
+
+export interface TagGroup {
+  id: number
+  name: string
+  tags: Tag[]
+}
+
+export const ALL_TAGS_GROUP_ID = '__all__'
