@@ -1,4 +1,4 @@
-import { FolderOpen, Layers, LogOut, Sparkles } from 'lucide-react'
+import { FolderOpen, LogOut, Sparkles, Tag } from 'lucide-react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { useLogout } from '@/features/auth'
 import { cn } from '@/lib/utils'
@@ -10,10 +10,10 @@ export function Sidebar() {
 
   const navItems = [
     {
-      path: '/',
-      icon: Layers,
-      label: '项目库',
-      description: '项目概览',
+      path: '/portfolio',
+      icon: FolderOpen,
+      label: '作品集',
+      description: 'AI创作结果',
     },
     {
       path: '/tools',
@@ -22,10 +22,10 @@ export function Sidebar() {
       description: 'AI工具',
     },
     {
-      path: '/portfolio',
-      icon: FolderOpen,
-      label: '作品集',
-      description: '全部作品',
+      path: '/materials',
+      icon: Tag,
+      label: '素材库',
+      description: '素材管理',
     },
   ]
 
@@ -40,7 +40,7 @@ export function Sidebar() {
       <div className='p-6 border-b border-gray-800'>
         <div className='flex items-center gap-3'>
           <div className='flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500/20 to-teal-500/20 border border-cyan-500/30 flex-shrink-0'>
-            <Layers className='w-5 h-5 text-cyan-400' />
+            <Sparkles className='w-5 h-5 text-cyan-400' />
           </div>
           <div className='overflow-hidden whitespace-nowrap max-w-48 opacity-100'>
             <h1 className='text-lg font-bold text-white'>智绘工坊</h1>
