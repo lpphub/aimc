@@ -7,6 +7,7 @@ import { AuthGuard } from './guard'
 const Login = lazy(() => import('@/pages/Login'))
 const Home = lazy(() => import('@/pages/Home'))
 const Portfolio = lazy(() => import('@/pages/Portfolio'))
+const Materials = lazy(() => import('@/pages/Materials'))
 const AiTools = lazy(() => import('@/features/ai-tools').then(m => ({ default: m.AiTools })))
 const ProjectDetail = lazy(() =>
   import('@/features/project').then(m => ({ default: m.ProjectDetail }))
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
       {
         path: 'portfolio',
         element: <Portfolio />,
+      },
+      {
+        path: 'materials',
+        element: <Materials />,
       },
       {
         path: 'project/:id',
