@@ -1,25 +1,36 @@
-import { BookOpen, ChevronRight, Plus, Upload } from 'lucide-react'
+import { BookOpen, ChevronRight, FolderOpen, Layers } from 'lucide-react'
+import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { CreationRecords, PresetMaterials } from '@/features/project/components'
 import { useProject, useRecords, useTemplates } from '@/features/project/hooks'
+import { cn } from '@/lib/utils'
 import { Badge } from '@/shared/components/ui/badge'
 import { Button } from '@/shared/components/ui/button'
 import { Card } from '@/shared/components/ui/card'
-import { Separator } from '@/shared/components/ui/separator'
+import { MaterialsTab } from './MaterialsTab'
+import { WorksTab } from './WorksTab'
 
 export default function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { data: project, isLoading: projectLoading } = useProject(id!)
   const { data: allTemplates = [] } = useTemplates()
-  const { data: records = [], isLoading: recordsLoading } = useRecords(id!)
+  const { data: records = [] } = useRecords(id!)
+  const [activeTab, setActiveTab] = useState<'materials' | 'works'>('materials')
 
   const handleStartCreation = () => {
-    navigate('/creation')
+    navigate('/tools')
   }
 
   const handleUploadMaterial = () => {
     console.log('Upload material')
+  }
+
+  const handleDeleteMaterial = (materialId: string) => {
+    console.log('Delete material:', materialId)
+  }
+
+  const handleDeleteWork = (workId: string) => {
+    console.log('Delete work:', workId)
   }
 
   if (projectLoading) {
@@ -39,6 +50,23 @@ export default function ProjectDetailPage() {
   }
 
   const presetTemplates = allTemplates.filter(t => project.presetTemplateIds?.includes(t.id))
+
+  const materials = presetTemplates.map(t => ({
+    id: t.id,
+    type: 'text' as const,
+    name: t.name,
+    content: t.content,
+    createdAt: new Date().toISOString(),
+  }))
+
+  const works = records.map(r => ({
+    id: r.id,
+    projectId: id,
+    type: (r.type === 'copy' ? 'text' : r.type) as 'text' | 'image' | 'video',
+    content: r.content,
+    prompt: r.title || '',
+    createdAt: r.createdAt,
+  }))
 
   return (
     <div className='flex min-h-screen flex-col relative overflow-hidden bg-[#0a0a0a]'>
@@ -75,57 +103,57 @@ export default function ProjectDetailPage() {
                 onClick={handleStartCreation}
                 className='bg-gradient-to-r from-cyan-500 to-teal-500 text-white hover:from-cyan-600 hover:to-teal-600 shadow-lg shadow-cyan-500/20 transition-all duration-300 hover:shadow-cyan-500/40'
               >
-                <Plus className='mr-2 h-4 w-4' />
+                <ChevronRight className='mr-2 h-4 w-4' />
                 开始AI创作
-                <ChevronRight className='ml-2 h-4 w-4' />
               </Button>
             </div>
           </div>
-        </div>
 
-        <div className='flex gap-6 min-h-[calc(100vh-300px)]'>
-          <div className='w-80 flex-shrink-0'>
-            <Card className='h-full bg-gradient-to-br from-gray-900/80 to-gray-900/50 border-gray-700/30 backdrop-blur-sm flex flex-col'>
-              <div className='p-4 border-b border-gray-700/30'>
-                <h2 className='text-lg font-semibold text-white'>预设素材</h2>
-              </div>
-              <div className='flex-1 p-4 overflow-auto'>
-                <PresetMaterials templates={presetTemplates} />
-              </div>
-            </Card>
-          </div>
-
-          <Separator orientation='vertical' className='h-auto bg-gray-700/20' />
-
-          <div className='flex-1 flex flex-col'>
-            <Card className='flex-1 bg-gradient-to-br from-gray-900/80 to-gray-900/50 border-gray-700/30 backdrop-blur-sm flex flex-col'>
-              <div className='p-4 border-b border-gray-700/30 flex items-center justify-between'>
-                <h2 className='text-lg font-semibold text-white'>创作记录</h2>
-                <span className='text-sm text-gray-500'>{records.length} 条记录</span>
-              </div>
-              <div className='flex-1 p-4 overflow-auto'>
-                {recordsLoading ? (
-                  <div className='flex items-center justify-center h-full'>
-                    <div className='text-gray-500'>加载中...</div>
-                  </div>
-                ) : (
-                  <CreationRecords records={records} />
-                )}
-              </div>
-            </Card>
-
-            <div className='mt-4 flex gap-3'>
-              <Button
-                onClick={handleUploadMaterial}
-                variant='outline'
-                className='bg-gray-900/50 border-gray-700/30 text-white hover:bg-gray-800/50 hover:border-gray-600/50 backdrop-blur-sm transition-all duration-300'
-              >
-                <Upload className='mr-2 h-4 w-4' />
-                上传素材
-              </Button>
-            </div>
+          <div className='flex gap-2 border-b border-gray-800'>
+            <button
+              type='button'
+              onClick={() => setActiveTab('materials')}
+              className={cn(
+                'flex items-center gap-2 px-4 py-3 text-sm font-medium transition-all border-b-2 -mb-px',
+                activeTab === 'materials'
+                  ? 'text-cyan-400 border-cyan-400'
+                  : 'text-gray-500 border-transparent hover:text-gray-300'
+              )}
+            >
+              <Layers className='w-4 h-4' />
+              素材库
+              <span className='text-xs bg-gray-800 px-2 py-0.5 rounded-full'>
+                {materials.length}
+              </span>
+            </button>
+            <button
+              type='button'
+              onClick={() => setActiveTab('works')}
+              className={cn(
+                'flex items-center gap-2 px-4 py-3 text-sm font-medium transition-all border-b-2 -mb-px',
+                activeTab === 'works'
+                  ? 'text-cyan-400 border-cyan-400'
+                  : 'text-gray-500 border-transparent hover:text-gray-300'
+              )}
+            >
+              <FolderOpen className='w-4 h-4' />
+              作品集
+              <span className='text-xs bg-gray-800 px-2 py-0.5 rounded-full'>{works.length}</span>
+            </button>
           </div>
         </div>
+
+        <Card className='h-[calc(100vh-350px)] bg-gradient-to-br from-gray-900/80 to-gray-900/50 border-gray-700/30 backdrop-blur-sm p-6'>
+          {activeTab === 'materials' ? (
+            <MaterialsTab
+              materials={materials}
+              onUpload={handleUploadMaterial}
+              onDelete={handleDeleteMaterial}
+            />
+          ) : (
+            <WorksTab works={works} onDelete={handleDeleteWork} />
+          )}
+        </Card>
       </div>
     </div>
   )
