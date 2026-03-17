@@ -1,5 +1,4 @@
 import { FileText, Film, Image, Plus, Trash2, Upload } from 'lucide-react'
-import { useState } from 'react'
 import { Badge } from '@/shared/components/ui/badge'
 import { Button } from '@/shared/components/ui/button'
 import { Card } from '@/shared/components/ui/card'
@@ -33,50 +32,10 @@ const typeConfig = {
 }
 
 export function MaterialsTab({ materials, onUpload, onDelete }: MaterialsTabProps) {
-  const [filter, setFilter] = useState<'all' | 'text' | 'image' | 'video'>('all')
-
-  const filteredMaterials = materials.filter(m => filter === 'all' || m.type === filter)
-
   return (
     <div className='h-full flex flex-col'>
       <div className='flex items-center justify-between mb-4'>
-        <div className='flex gap-2'>
-          <Button
-            variant={filter === 'all' ? 'default' : 'outline'}
-            size='sm'
-            onClick={() => setFilter('all')}
-            className={filter === 'all' ? 'bg-cyan-500 text-white' : 'bg-gray-800 text-gray-400'}
-          >
-            全部
-          </Button>
-          <Button
-            variant={filter === 'text' ? 'default' : 'outline'}
-            size='sm'
-            onClick={() => setFilter('text')}
-            className={filter === 'text' ? 'bg-cyan-500 text-white' : 'bg-gray-800 text-gray-400'}
-          >
-            <FileText className='w-4 h-4 mr-1' />
-            文本
-          </Button>
-          <Button
-            variant={filter === 'image' ? 'default' : 'outline'}
-            size='sm'
-            onClick={() => setFilter('image')}
-            className={filter === 'image' ? 'bg-cyan-500 text-white' : 'bg-gray-800 text-gray-400'}
-          >
-            <Image className='w-4 h-4 mr-1' />
-            图片
-          </Button>
-          <Button
-            variant={filter === 'video' ? 'default' : 'outline'}
-            size='sm'
-            onClick={() => setFilter('video')}
-            className={filter === 'video' ? 'bg-cyan-500 text-white' : 'bg-gray-800 text-gray-400'}
-          >
-            <Film className='w-4 h-4 mr-1' />
-            视频
-          </Button>
-        </div>
+        <div></div>
 
         <Button
           onClick={onUpload}
@@ -87,10 +46,10 @@ export function MaterialsTab({ materials, onUpload, onDelete }: MaterialsTabProp
         </Button>
       </div>
 
-      {filteredMaterials.length > 0 ? (
+      {materials.length > 0 ? (
         <div className='flex-1 overflow-auto'>
           <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4'>
-            {filteredMaterials.map(material => {
+            {materials.map(material => {
               const config = typeConfig[material.type]
               const Icon = config.icon
 
