@@ -49,7 +49,8 @@ export function MaterialsTab({ materials, onUpload, onDelete }: MaterialsTabProp
         <div className='flex-1 overflow-auto'>
           <div className='grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3'>
             {materials.map(material => {
-              const config = typeConfig[material.type]
+              const config = typeConfig[material.type as keyof typeof typeConfig]
+              if (!config) return null
               const Icon = config.icon
 
               return (
