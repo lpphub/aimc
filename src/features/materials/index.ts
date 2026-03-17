@@ -1,4 +1,4 @@
 export * from './api'
+export * from './hooks'
 export * from './types'
-// export * from './hooks'
 // export { Materials } from './components/Materials'
