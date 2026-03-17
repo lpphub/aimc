@@ -1,7 +1,10 @@
 'use client'
 
-import { Image, Sparkles, Type, Video } from 'lucide-react'
+import { Heart, Image, Sparkles, Type, Video } from 'lucide-react'
 import { useState } from 'react'
+import { toast } from 'sonner'
+import { CollectDialog } from '@/features/portfolio/components/CollectDialog'
+import type { WorkType } from '@/features/portfolio/types'
 import { Button } from '@/shared/components/ui/button'
 import { Card } from '@/shared/components/ui/card'
 import {
@@ -20,6 +23,8 @@ export default function AiTools() {
   const [_startFrame, _setStartFrame] = useState<File | null>(null)
   const [_endFrame, _setEndFrame] = useState<File | null>(null)
   const [aspectRatio, setAspectRatio] = useState('1:1')
+  const [generatedContent, setGeneratedContent] = useState<string | null>(null)
+  const [collectDialogOpen, setCollectDialogOpen] = useState(false)
 
   const aspectRatios = [
     { value: '1:1', label: '1:1' },
@@ -37,16 +42,25 @@ export default function AiTools() {
   const handleGenerate = () => {
     console.log('Generate with:', { activeTab, prompt, aspectRatio })
 
-    // 模拟生成过程
     const placeholderContent = {
       text: '在 2147 年的新东京，霓虹灯闪烁的街道上，一台老旧的机器人正在修理自己的核心电路。它的机械手指颤抖着，微小的电火花在指间跳跃。周围是全息广告牌，播放着最新的脑机接口广告。',
-      image: 'AI 正在生成图片...',
-      video: 'AI 正在渲染视频...',
+      image: 'https://picsum.photos/seed/ai-image/800/600',
+      video: 'https://example.com/generated-video.mp4',
     }
 
-    alert(
-      `${activeTab === 'text' ? '文本' : activeTab === 'image' ? '图片' : '视频'}生成功能已触发！\n\n提示词: ${prompt}\n\n${placeholderContent[activeTab]}`
+    setGeneratedContent(placeholderContent[activeTab])
+    toast.success(
+      `${activeTab === 'text' ? '文本' : activeTab === 'image' ? '图片' : '视频'}生成成功！`
     )
+  }
+
+  const handleCollect = () => {
+    if (!generatedContent) return
+    setCollectDialogOpen(true)
+  }
+
+  const handleCollectSuccess = () => {
+    toast.success('作品已收藏到作品集')
   }
 
   return (
@@ -349,36 +363,91 @@ export default function AiTools() {
                   />
                 </div>
 
-                {/* Status */}
-                <div className='text-center relative z-10'>
-                  {activeTab === 'text' ? (
-                    <div>
-                      <div className='w-20 h-20 rounded-full bg-gray-800/50 border border-gray-700/30 flex items-center justify-center mx-auto mb-4'>
-                        <Type className='w-10 h-10 text-gray-600' />
+                {generatedContent ? (
+                  <div className='relative z-10 w-full h-full p-6'>
+                    {activeTab === 'text' ? (
+                      <div className='h-full flex flex-col'>
+                        <div className='flex-1 bg-gray-900/50 border border-gray-700/30 rounded-lg p-6 overflow-auto'>
+                          <p className='text-gray-300 whitespace-pre-wrap'>{generatedContent}</p>
+                        </div>
+                        <Button
+                          onClick={handleCollect}
+                          className='absolute bottom-8 right-8 bg-gradient-to-r from-pink-500 to-rose-500 text-white hover:from-pink-600 hover:to-rose-600 shadow-lg'
+                        >
+                          <Heart className='w-4 h-4 mr-2' />
+                          收藏到作品集
+                        </Button>
                       </div>
-                      <p className='text-gray-500 text-lg mb-2'>在此处查看生成的文本内容</p>
-                    </div>
-                  ) : activeTab === 'image' ? (
-                    <div>
-                      <div className='w-20 h-20 rounded-full bg-gray-800/50 border border-gray-700/30 flex items-center justify-center mx-auto mb-4'>
-                        <Image className='w-10 h-10 text-gray-600' />
+                    ) : activeTab === 'image' ? (
+                      <div className='h-full flex flex-col items-center justify-center'>
+                        <img
+                          src={generatedContent}
+                          alt='AI generated'
+                          className='max-w-full max-h-[calc(100%-80px)] rounded-lg object-contain'
+                        />
+                        <Button
+                          onClick={handleCollect}
+                          className='absolute bottom-8 right-8 bg-gradient-to-r from-pink-500 to-rose-500 text-white hover:from-pink-600 hover:to-rose-600 shadow-lg'
+                        >
+                          <Heart className='w-4 h-4 mr-2' />
+                          收藏到作品集
+                        </Button>
                       </div>
-                      <p className='text-gray-500 text-lg mb-2'>AI 绘图引擎就绪</p>
-                    </div>
-                  ) : (
-                    <div>
-                      <div className='w-20 h-20 rounded-full bg-gray-800/50 border border-gray-700/30 flex items-center justify-center mx-auto mb-4'>
-                        <Video className='w-10 h-10 text-gray-600' />
+                    ) : (
+                      <div className='h-full flex flex-col items-center justify-center'>
+                        <div className='w-full max-w-2xl aspect-video bg-gray-900/50 border border-gray-700/30 rounded-lg flex items-center justify-center'>
+                          <Video className='w-16 h-16 text-gray-600' />
+                        </div>
+                        <Button
+                          onClick={handleCollect}
+                          className='absolute bottom-8 right-8 bg-gradient-to-r from-pink-500 to-rose-500 text-white hover:from-pink-600 hover:to-rose-600 shadow-lg'
+                        >
+                          <Heart className='w-4 h-4 mr-2' />
+                          收藏到作品集
+                        </Button>
                       </div>
-                      <p className='text-gray-500 text-lg mb-2'>画境引擎 就绪</p>
-                    </div>
-                  )}
-                </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className='text-center relative z-10'>
+                    {activeTab === 'text' ? (
+                      <div>
+                        <div className='w-20 h-20 rounded-full bg-gray-800/50 border border-gray-700/30 flex items-center justify-center mx-auto mb-4'>
+                          <Type className='w-10 h-10 text-gray-600' />
+                        </div>
+                        <p className='text-gray-500 text-lg mb-2'>在此处查看生成的文本内容</p>
+                      </div>
+                    ) : activeTab === 'image' ? (
+                      <div>
+                        <div className='w-20 h-20 rounded-full bg-gray-800/50 border border-gray-700/30 flex items-center justify-center mx-auto mb-4'>
+                          <Image className='w-10 h-10 text-gray-600' />
+                        </div>
+                        <p className='text-gray-500 text-lg mb-2'>AI 绘图引擎就绪</p>
+                      </div>
+                    ) : (
+                      <div>
+                        <div className='w-20 h-20 rounded-full bg-gray-800/50 border border-gray-700/30 flex items-center justify-center mx-auto mb-4'>
+                          <Video className='w-10 h-10 text-gray-600' />
+                        </div>
+                        <p className='text-gray-500 text-lg mb-2'>画境引擎 就绪</p>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </Card>
           </div>
         </div>
       </div>
+
+      <CollectDialog
+        open={collectDialogOpen}
+        onOpenChange={setCollectDialogOpen}
+        type={activeTab as WorkType}
+        content={generatedContent || ''}
+        prompt={prompt}
+        onSuccess={handleCollectSuccess}
+      />
     </div>
   )
 }
