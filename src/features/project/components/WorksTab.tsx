@@ -42,7 +42,7 @@ export function WorksTab({ works, onDelete }: WorksTabProps) {
 
       {works.length > 0 ? (
         <div className='flex-1 overflow-auto'>
-          <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4'>
+          <div className='grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3'>
             {works.map(work => {
               const config = typeConfig[work.type]
               const Icon = config.icon
@@ -50,7 +50,7 @@ export function WorksTab({ works, onDelete }: WorksTabProps) {
               return (
                 <Card
                   key={work.id}
-                  className='group relative bg-gradient-to-br from-gray-900/80 to-gray-900/50 border-gray-700/30 backdrop-blur-sm overflow-hidden transition-all duration-300 hover:border-gray-600/50'
+                  className='group relative bg-gradient-to-br from-gray-900/60 to-gray-900/40 border border-gray-700/30 backdrop-blur-md rounded-lg overflow-hidden transition-all duration-300 hover:border-cyan-500/50 hover:shadow-lg hover:shadow-cyan-500/20'
                 >
                   <div className='aspect-square relative'>
                     {work.type === 'image' && work.content ? (
