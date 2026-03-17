@@ -1,12 +1,24 @@
-import { HttpResponse, http } from 'msw'
+import { delay, HttpResponse, http } from 'msw'
 import type { CreateWorkRequest, Work } from '@/features/portfolio/types'
+import type { ApiResponse } from '@/lib/api'
 import { mockWorks } from '../db'
 
+const API_BASE = '/api'
+
+function success<T>(data: T): ApiResponse<T> {
+  return { code: 0, message: 'success', data }
+}
+
+function error(message: string, code = 400): ApiResponse<null> {
+  return { code, message, data: null as unknown as null }
+}
+
 export const portfolioHandlers = [
-  http.get('/api/works', ({ request }) => {
+  http.get<never, never, ApiResponse<Work[]>>(`${API_BASE}/works`, async ({ request }) => {
+    await delay(200)
     const url = new URL(request.url)
     const projectId = url.searchParams.get('projectId')
-    const type = url.searchParams.get('type')
+    const type = url.searchParams.get('type') as 'text' | 'image' | 'video' | null
     const search = url.searchParams.get('search')
 
     let works = [...mockWorks]
@@ -25,25 +37,34 @@ export const portfolioHandlers = [
       )
     }
 
-    return HttpResponse.json({ data: works })
+    return HttpResponse.json(success(works))
   }),
 
-  http.post('/api/works', async ({ request }) => {
-    const body = (await request.json()) as CreateWorkRequest
-    const newWork: Work = {
-      id: String(mockWorks.length + 1),
-      ...body,
-      createdAt: new Date().toISOString(),
+  http.post<never, CreateWorkRequest, ApiResponse<Work>>(
+    `${API_BASE}/works`,
+    async ({ request }) => {
+      await delay(300)
+      const body = await request.json()
+      const newWork: Work = {
+        id: `w${Date.now()}`,
+        ...body,
+        createdAt: new Date().toISOString(),
+      }
+      mockWorks.push(newWork)
+      return HttpResponse.json(success(newWork))
     }
-    mockWorks.push(newWork)
-    return HttpResponse.json({ data: newWork })
-  }),
+  ),
 
-  http.delete('/api/works/:id', ({ params }) => {
-    const index = mockWorks.findIndex(w => w.id === params.id)
-    if (index > -1) {
+  http.delete<{ id: string }, never, ApiResponse<null>>(
+    `${API_BASE}/works/:id`,
+    async ({ params }) => {
+      await delay(200)
+      const index = mockWorks.findIndex(w => w.id === params.id)
+      if (index === -1) {
+        return HttpResponse.json(error('作品不存在', 404))
+      }
       mockWorks.splice(index, 1)
+      return HttpResponse.json(success(null))
     }
-    return HttpResponse.json({ data: null })
-  }),
+  ),
 ]
