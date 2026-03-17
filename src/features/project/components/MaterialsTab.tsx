@@ -1,11 +1,11 @@
-import { FileText, Film, Image, Play, Plus, Trash2, Upload } from 'lucide-react'
+import { Film, Image, Play, Plus, Trash2, Upload } from 'lucide-react'
 import { Badge } from '@/shared/components/ui/badge'
 import { Button } from '@/shared/components/ui/button'
 import { Card } from '@/shared/components/ui/card'
 
 interface Material {
   id: string
-  type: 'text' | 'image' | 'video'
+  type: 'image' | 'video'
   name: string
   content: string
   createdAt: string
@@ -18,7 +18,6 @@ interface MaterialsTabProps {
 }
 
 const typeConfig = {
-  text: { icon: FileText, label: '文本', color: 'text-blue-400 bg-blue-500/10 border-blue-500/30' },
   image: {
     icon: Image,
     label: '图片',
@@ -68,7 +67,7 @@ export function MaterialsTab({ materials, onUpload, onDelete }: MaterialsTabProp
                         />
                         <div className='absolute inset-0 bg-gradient-to-t from-black/40 to-transparent' />
                       </div>
-                    ) : material.type === 'video' && material.content ? (
+                    ) : (
                       <div className='relative w-full aspect-square'>
                         <video
                           src={material.content}
@@ -82,20 +81,6 @@ export function MaterialsTab({ materials, onUpload, onDelete }: MaterialsTabProp
                         </div>
                         <div className='absolute bottom-2 right-2 px-2 py-1 bg-black/60 rounded text-xs text-white'>
                           视频
-                        </div>
-                      </div>
-                    ) : (
-                      <div className='w-full aspect-square relative bg-gradient-to-br from-gray-800/50 to-gray-900/50'>
-                        <div
-                          className='absolute inset-0 opacity-10'
-                          style={{
-                            backgroundImage:
-                              'radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)',
-                            backgroundSize: '8px 8px',
-                          }}
-                        />
-                        <div className='absolute inset-0 flex items-center justify-center p-4'>
-                          <Icon className='w-12 h-12 text-blue-400/50' />
                         </div>
                       </div>
                     )}
