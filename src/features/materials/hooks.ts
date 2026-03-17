@@ -9,9 +9,9 @@ export const materialKeys = {
   tags: ['material-tags'] as const,
 }
 
-export const tagKeys = {
-  all: ['tags'] as const,
-  groups: () => [...tagKeys.all, 'groups'] as const,
+export const materialTagKeys = {
+  all: ['material-tags'] as const,
+  groups: () => [...materialTagKeys.all, 'groups'] as const,
 }
 
 export function useMaterials(filter?: MaterialsFilter) {
@@ -66,7 +66,7 @@ export function useMaterialTags() {
 
 export function useTagGroups() {
   return useQuery({
-    queryKey: tagKeys.groups(),
+    queryKey: materialTagKeys.groups(),
     queryFn: () => api.getTagGroups(),
   })
 }
@@ -76,7 +76,7 @@ export function useCreateTagGroup() {
   return useMutation({
     mutationFn: (name: string) => api.createTagGroup(name),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: tagKeys.groups() })
+      queryClient.invalidateQueries({ queryKey: materialTagKeys.groups() })
       toast.success('标签组创建成功')
     },
     onError: () => toast.error('标签组创建失败'),
@@ -89,7 +89,7 @@ export function useCreateTag() {
     mutationFn: (params: { name: string; groupId?: number }) =>
       api.createTag(params.name, params.groupId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: tagKeys.groups() })
+      queryClient.invalidateQueries({ queryKey: materialTagKeys.groups() })
       toast.success('标签创建成功')
     },
     onError: () => toast.error('标签创建失败'),
@@ -101,7 +101,7 @@ export function useDeleteTag() {
   return useMutation({
     mutationFn: (tagId: number) => api.deleteTag(tagId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: tagKeys.groups() })
+      queryClient.invalidateQueries({ queryKey: materialTagKeys.groups() })
       toast.success('标签删除成功')
     },
     onError: () => toast.error('标签删除失败'),
