@@ -4,10 +4,8 @@ import { NotFound, ServerError, Unauthorized } from '@/pages/base'
 import { Layout } from '@/shared/components/layout'
 import { AuthGuard } from './guard'
 
-// 懒加载页面组件
 const Login = lazy(() => import('@/pages/Login'))
 const Home = lazy(() => import('@/pages/Home'))
-const Creation = lazy(() => import('@/features/creation').then(m => ({ default: m.Creation })))
 const AiTools = lazy(() => import('@/features/ai-tools').then(m => ({ default: m.AiTools })))
 const ProjectDetail = lazy(() =>
   import('@/features/project').then(m => ({ default: m.ProjectDetail }))
@@ -35,11 +33,7 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: 'creation',
-        element: <Creation />,
-      },
-      {
-        path: 'ai-tools',
+        path: 'tools',
         element: <AiTools />,
       },
       {
