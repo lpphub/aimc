@@ -1,11 +1,10 @@
 import { lazy } from 'react'
-import { createBrowserRouter } from 'react-router-dom'
+import { createBrowserRouter, Navigate } from 'react-router-dom'
 import { NotFound, ServerError, Unauthorized } from '@/pages/base'
 import { Layout } from '@/shared/components/layout'
 import { AuthGuard } from './guard'
 
 const Login = lazy(() => import('@/pages/Login'))
-const Home = lazy(() => import('@/pages/Home'))
 const Portfolio = lazy(() => import('@/pages/Portfolio'))
 const Materials = lazy(() => import('@/pages/Materials'))
 const AiTools = lazy(() => import('@/features/ai-tools').then(m => ({ default: m.AiTools })))
@@ -32,7 +31,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Home />,
+        element: <Navigate to='/portfolio' replace />,
       },
       {
         path: 'tools',
