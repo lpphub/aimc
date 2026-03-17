@@ -63,6 +63,11 @@ export default function AiTools() {
     toast.success('作品已收藏到作品集')
   }
 
+  const handleTabChange = (tab: 'text' | 'image' | 'video') => {
+    setActiveTab(tab)
+    setGeneratedContent(null)
+  }
+
   return (
     <div className='flex min-h-screen flex-col relative overflow-hidden bg-[#0a0a0a]'>
       {/* Animated Background */}
@@ -93,7 +98,7 @@ export default function AiTools() {
           <div className='flex gap-2'>
             <Button
               variant={activeTab === 'text' ? 'default' : 'outline'}
-              onClick={() => setActiveTab('text')}
+              onClick={() => handleTabChange('text')}
               className={
                 activeTab === 'text'
                   ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-white shadow-lg shadow-cyan-500/20'
@@ -105,7 +110,7 @@ export default function AiTools() {
             </Button>
             <Button
               variant={activeTab === 'image' ? 'default' : 'outline'}
-              onClick={() => setActiveTab('image')}
+              onClick={() => handleTabChange('image')}
               className={
                 activeTab === 'image'
                   ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-white shadow-lg shadow-cyan-500/20'
@@ -117,7 +122,7 @@ export default function AiTools() {
             </Button>
             <Button
               variant={activeTab === 'video' ? 'default' : 'outline'}
-              onClick={() => setActiveTab('video')}
+              onClick={() => handleTabChange('video')}
               className={
                 activeTab === 'video'
                   ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-white shadow-lg shadow-cyan-500/20'
