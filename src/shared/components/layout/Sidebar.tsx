@@ -1,4 +1,4 @@
-import { Layers, LogOut, PenTool, Sparkles } from 'lucide-react'
+import { FolderOpen, Layers, LogOut, Sparkles } from 'lucide-react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { useLogout } from '@/features/auth'
 import { cn } from '@/lib/utils'
@@ -16,16 +16,16 @@ export function Sidebar() {
       description: '项目概览',
     },
     {
-      path: '/creation',
-      icon: PenTool,
-      label: '创作中心',
-      description: '流水线创作',
+      path: '/tools',
+      icon: Sparkles,
+      label: '工具箱',
+      description: 'AI工具',
     },
     {
-      path: '/ai-tools',
-      icon: Sparkles,
-      label: 'AI 工具箱',
-      description: '单点工具',
+      path: '/portfolio',
+      icon: FolderOpen,
+      label: '作品集',
+      description: '全部作品',
     },
   ]
 
