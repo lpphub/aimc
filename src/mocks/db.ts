@@ -1,4 +1,5 @@
 import type { User } from '@/features/auth/types'
+import type { Work } from '@/features/portfolio/types'
 import type { CreationRecord, Project, Template } from '@/features/project/types'
 
 const users: Map<string, { password: string; user: User }> = new Map()
@@ -10,6 +11,36 @@ const projects: Map<string, Project> = new Map()
 const templates: Map<string, Template> = new Map()
 
 const records: Map<string, CreationRecord> = new Map()
+
+const mockWorks: Work[] = [
+  {
+    id: '1',
+    projectId: 'p1',
+    projectName: '夏季新品推广',
+    type: 'image',
+    content: 'https://picsum.photos/512/512?random=1',
+    prompt: '赛博朋克风格的街道',
+    engine: 'gemini',
+    createdAt: '2024-03-15T10:00:00Z',
+  },
+  {
+    id: '2',
+    projectId: 'p1',
+    projectName: '夏季新品推广',
+    type: 'video',
+    content: 'https://example.com/video.mp4',
+    prompt: '机器人在城市中行走',
+    engine: 'veo',
+    createdAt: '2024-03-14T14:30:00Z',
+  },
+  {
+    id: '3',
+    type: 'text',
+    content: '在遥远的未来，人类与AI和谐共存...',
+    prompt: '写一段科幻小说开头',
+    createdAt: '2024-03-13T09:00:00Z',
+  },
+]
 
 function generateToken(): string {
   return `token_${Date.now()}_${Math.random().toString(36).slice(2)}`
@@ -123,6 +154,7 @@ export {
   projects,
   templates,
   records,
+  mockWorks,
   generateToken,
   generateId,
   storeToken,
