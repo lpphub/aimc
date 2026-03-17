@@ -1,8 +1,6 @@
 import { BookOpen, ChevronRight, FolderOpen, Layers } from 'lucide-react'
-import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useProject, useRecords, useTemplates } from '@/features/project/hooks'
-import { cn } from '@/lib/utils'
 import { Badge } from '@/shared/components/ui/badge'
 import { Button } from '@/shared/components/ui/button'
 import { Card } from '@/shared/components/ui/card'
@@ -15,7 +13,6 @@ export default function ProjectDetailPage() {
   const { data: project, isLoading: projectLoading } = useProject(id!)
   const { data: allTemplates = [] } = useTemplates()
   const { data: records = [] } = useRecords(id!)
-  const [activeTab, setActiveTab] = useState<'materials' | 'works'>('materials')
 
   const handleStartCreation = () => {
     navigate('/tools')
@@ -108,51 +105,38 @@ export default function ProjectDetailPage() {
               </Button>
             </div>
           </div>
-
-          <div className='flex gap-2 border-b border-gray-800'>
-            <button
-              type='button'
-              onClick={() => setActiveTab('materials')}
-              className={cn(
-                'flex items-center gap-2 px-4 py-3 text-sm font-medium transition-all border-b-2 -mb-px',
-                activeTab === 'materials'
-                  ? 'text-cyan-400 border-cyan-400'
-                  : 'text-gray-500 border-transparent hover:text-gray-300'
-              )}
-            >
-              <Layers className='w-4 h-4' />
-              素材库
-              <span className='text-xs bg-gray-800 px-2 py-0.5 rounded-full'>
-                {materials.length}
-              </span>
-            </button>
-            <button
-              type='button'
-              onClick={() => setActiveTab('works')}
-              className={cn(
-                'flex items-center gap-2 px-4 py-3 text-sm font-medium transition-all border-b-2 -mb-px',
-                activeTab === 'works'
-                  ? 'text-cyan-400 border-cyan-400'
-                  : 'text-gray-500 border-transparent hover:text-gray-300'
-              )}
-            >
-              <FolderOpen className='w-4 h-4' />
-              作品集
-              <span className='text-xs bg-gray-800 px-2 py-0.5 rounded-full'>{works.length}</span>
-            </button>
-          </div>
         </div>
 
         <Card className='h-[calc(100vh-350px)] bg-gradient-to-br from-gray-900/80 to-gray-900/50 border-gray-700/30 backdrop-blur-sm p-6'>
-          {activeTab === 'materials' ? (
-            <MaterialsTab
-              materials={materials}
-              onUpload={handleUploadMaterial}
-              onDelete={handleDeleteMaterial}
-            />
-          ) : (
-            <WorksTab works={works} onDelete={handleDeleteWork} />
-          )}
+          <div className='flex h-full gap-6'>
+            <div className='flex-[6] min-w-0'>
+              <div className='flex items-center gap-2 mb-4'>
+                <FolderOpen className='w-5 h-5 text-cyan-400' />
+                <span className='text-lg font-medium text-white'>作品集</span>
+                <span className='text-xs bg-gray-800 px-2 py-0.5 rounded-full text-gray-400'>
+                  {works.length}
+                </span>
+              </div>
+              <WorksTab works={works} onDelete={handleDeleteWork} />
+            </div>
+
+            <div className='w-px bg-gradient-to-b from-transparent via-cyan-500/30 to-transparent' />
+
+            <div className='flex-[4] min-w-0'>
+              <div className='flex items-center gap-2 mb-4'>
+                <Layers className='w-5 h-5 text-teal-400' />
+                <span className='text-lg font-medium text-white'>素材库</span>
+                <span className='text-xs bg-gray-800 px-2 py-0.5 rounded-full text-gray-400'>
+                  {materials.length}
+                </span>
+              </div>
+              <MaterialsTab
+                materials={materials}
+                onUpload={handleUploadMaterial}
+                onDelete={handleDeleteMaterial}
+              />
+            </div>
+          </div>
         </Card>
       </div>
     </div>
