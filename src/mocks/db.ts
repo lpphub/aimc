@@ -1,4 +1,5 @@
 import type { User } from '@/features/auth/types'
+import type { Material } from '@/features/materials/types'
 import type { Work } from '@/features/portfolio/types'
 import type { CreationRecord, Project, Template } from '@/features/project/types'
 
@@ -41,6 +42,8 @@ const mockWorks: Work[] = [
     createdAt: '2024-03-13T09:00:00Z',
   },
 ]
+
+const materials: Material[] = []
 
 function generateToken(): string {
   return `token_${Date.now()}_${Math.random().toString(36).slice(2)}`
@@ -155,6 +158,7 @@ export {
   templates,
   records,
   mockWorks,
+  materials,
   generateToken,
   generateId,
   storeToken,
