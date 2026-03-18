@@ -2,7 +2,7 @@ import { delay, HttpResponse, http } from 'msw'
 import type { ApiResponse } from '@/lib/api'
 import { env } from '@/shared/utils/env'
 
-const API_BASE = env.API_BASE_URL
+const API_BASE = `${env.API_BASE_URL}/`
 
 interface Tag {
   id: number
