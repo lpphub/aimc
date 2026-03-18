@@ -1,5 +1,5 @@
 import { Check, Plus, Search, X } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Button } from '@/shared/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/components/ui/dialog'
 import { Input } from '@/shared/components/ui/input'
@@ -20,13 +20,17 @@ export function TagSelectorModal({
   selectedTagIds: initialSelectedTagIds,
   onConfirm,
 }: TagSelectorModalProps) {
-  const [selectedTagIds, setSelectedTagIds] = useState<number[]>(initialSelectedTagIds)
+  const [localSelectedTagIds, setLocalSelectedTagIds] = useState<number[]>(initialSelectedTagIds)
   const [activeGroupId, setActiveGroupId] = useState<string>(ALL_TAGS_GROUP_ID)
   const [searchKeyword, setSearchKeyword] = useState('')
 
-  const { data: groups = [] } = useTagGroups()
+  const { data: groups = [], isLoading } = useTagGroups()
   const createTag = useCreateTag()
   const createTagGroup = useCreateTagGroup()
+
+  useEffect(() => {
+    setLocalSelectedTagIds(initialSelectedTagIds)
+  }, [initialSelectedTagIds])
 
   const allTags = useMemo(() => {
     const tags: Tag[] = []
@@ -53,25 +57,25 @@ export function TagSelectorModal({
   }, [activeGroupId, allTags, groups, searchKeyword])
 
   const selectedTags = useMemo(() => {
-    return allTags.filter(t => selectedTagIds.includes(t.id))
-  }, [allTags, selectedTagIds])
+    return allTags.filter(t => localSelectedTagIds.includes(t.id))
+  }, [allTags, localSelectedTagIds])
 
   const toggleTag = (tagId: number) => {
-    setSelectedTagIds(prev =>
+    setLocalSelectedTagIds(prev =>
       prev.includes(tagId) ? prev.filter(id => id !== tagId) : [...prev, tagId]
     )
   }
 
   const removeTag = (tagId: number) => {
-    setSelectedTagIds(prev => prev.filter(id => id !== tagId))
+    setLocalSelectedTagIds(prev => prev.filter(id => id !== tagId))
   }
 
   const clearSelection = () => {
-    setSelectedTagIds([])
+    setLocalSelectedTagIds([])
   }
 
   const handleConfirm = () => {
-    onConfirm(selectedTagIds)
+    onConfirm(localSelectedTagIds)
     onOpenChange(false)
   }
 
@@ -129,84 +133,93 @@ export function TagSelectorModal({
           </div>
 
           <div className='flex-1 p-6 flex flex-col overflow-hidden'>
-            <div className='relative mb-4'>
-              <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500' />
-              <Input
-                value={searchKeyword}
-                onChange={e => setSearchKeyword(e.target.value)}
-                placeholder='搜索标签...'
-                className='h-9 pl-9 bg-gray-800/50 border-gray-700'
-              />
-            </div>
-
-            <div className='flex-1 overflow-auto'>
-              <div className='flex flex-wrap gap-3'>
-                <button
-                  type='button'
-                  onClick={() => {
-                    const name = prompt('请输入标签名称')
-                    if (name) {
-                      const groupId =
-                        activeGroupId === ALL_TAGS_GROUP_ID ? undefined : Number(activeGroupId)
-                      createTag.mutate({ name, groupId })
-                    }
-                  }}
-                  className='px-4 py-2 border border-dashed border-gray-600 rounded-lg text-gray-400 hover:border-gray-500 hover:text-gray-300 transition-colors'
-                >
-                  <Plus className='w-4 h-4 inline mr-1' />
-                  新建标签
-                </button>
-                {filteredTags.map(tag => {
-                  const isSelected = selectedTagIds.includes(tag.id)
-                  return (
-                    <button
-                      key={tag.id}
-                      type='button'
-                      onClick={() => toggleTag(tag.id)}
-                      className={`px-4 py-2 rounded-lg transition-colors ${
-                        isSelected
-                          ? 'bg-cyan-500/20 border border-cyan-500/50 text-cyan-400'
-                          : 'bg-gray-800 border border-gray-700 text-gray-300 hover:border-gray-600'
-                      }`}
-                    >
-                      {tag.name}
-                      {isSelected && <Check className='w-4 h-4 inline ml-2' />}
-                    </button>
-                  )
-                })}
+            {isLoading && (
+              <div className='flex items-center justify-center h-full'>
+                <span className='text-gray-500'>加载中...</span>
               </div>
-            </div>
-
-            {selectedTags.length > 0 && (
-              <div className='mt-4 pt-4 border-t border-gray-700'>
-                <div className='flex flex-wrap gap-2'>
-                  {selectedTags.map(tag => {
-                    const group = groups.find(g => g.tags.some(t => t.id === tag.id))
-                    return (
-                      <span
-                        key={tag.id}
-                        className='inline-flex items-center gap-1 px-2.5 py-1 bg-gray-800 rounded-full text-xs text-gray-300'
-                      >
-                        {group?.name}: {tag.name}
-                        <button
-                          type='button'
-                          onClick={() => removeTag(tag.id)}
-                          className='p-0.5 hover:bg-gray-700 rounded-full'
-                        >
-                          <X className='w-3 h-3' />
-                        </button>
-                      </span>
-                    )
-                  })}
+            )}
+            {!isLoading && (
+              <>
+                <div className='relative mb-4'>
+                  <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500' />
+                  <Input
+                    value={searchKeyword}
+                    onChange={e => setSearchKeyword(e.target.value)}
+                    placeholder='搜索标签...'
+                    className='h-9 pl-9 bg-gray-800/50 border-gray-700'
+                  />
                 </div>
-              </div>
+
+                <div className='flex-1 overflow-auto'>
+                  <div className='flex flex-wrap gap-3'>
+                    <button
+                      type='button'
+                      onClick={() => {
+                        const name = prompt('请输入标签名称')
+                        if (name) {
+                          const groupId =
+                            activeGroupId === ALL_TAGS_GROUP_ID ? undefined : Number(activeGroupId)
+                          createTag.mutate({ name, groupId })
+                        }
+                      }}
+                      className='px-4 py-2 border border-dashed border-gray-600 rounded-lg text-gray-400 hover:border-gray-500 hover:text-gray-300 transition-colors'
+                    >
+                      <Plus className='w-4 h-4 inline mr-1' />
+                      新建标签
+                    </button>
+                    {filteredTags.map(tag => {
+                      const isSelected = localSelectedTagIds.includes(tag.id)
+                      return (
+                        <button
+                          key={tag.id}
+                          type='button'
+                          onClick={() => toggleTag(tag.id)}
+                          className={`px-4 py-2 rounded-lg transition-colors ${
+                            isSelected
+                              ? 'bg-cyan-500/20 border border-cyan-500/50 text-cyan-400'
+                              : 'bg-gray-800 border border-gray-700 text-gray-300 hover:border-gray-600'
+                          }`}
+                        >
+                          {tag.name}
+                          {isSelected && <Check className='w-4 h-4 inline ml-2' />}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+
+                {selectedTags.length > 0 && (
+                  <div className='mt-4 pt-4 border-t border-gray-700'>
+                    <div className='flex flex-wrap gap-2'>
+                      {selectedTags.map(tag => {
+                        const group = groups.find(g => g.tags.some(t => t.id === tag.id))
+                        return (
+                          <span
+                            key={tag.id}
+                            className='inline-flex items-center gap-1 px-2.5 py-1 bg-gray-800 rounded-full text-xs text-gray-300'
+                          >
+                            {group?.name}: {tag.name}
+                            <button
+                              type='button'
+                              onClick={() => removeTag(tag.id)}
+                              className='p-0.5 hover:bg-gray-700 rounded-full'
+                            >
+                              <X className='w-3 h-3' />
+                            </button>
+                          </span>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>
 
         <div className='h-16 px-4 flex items-center justify-between border-t border-gray-700'>
           <span className='text-sm text-gray-400'>
-            已选择 <span className='text-cyan-400'>{selectedTagIds.length}</span> 个标签
+            已选择 <span className='text-cyan-400'>{localSelectedTagIds.length}</span> 个标签
           </span>
           <div className='flex gap-2'>
             <Button variant='outline' onClick={clearSelection}>

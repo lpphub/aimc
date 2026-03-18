@@ -126,7 +126,7 @@ export function Materials() {
             <div className='text-gray-500'>加载中...</div>
           </div>
         ) : materials.length > 0 ? (
-          <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
+          <div className='grid grid-cols-4 gap-3 sm:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8'>
             {materials.map(material => (
               <MaterialCard
                 key={material.id}
