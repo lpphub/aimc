@@ -56,7 +56,7 @@ export function CollectDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='bg-gray-900 border-gray-800'>
+      <DialogContent className='max-w-md bg-gray-900 border-gray-800'>
         <DialogHeader>
           <DialogTitle className='text-white flex items-center gap-2'>
             <Sparkles className='w-5 h-5 text-cyan-400' />

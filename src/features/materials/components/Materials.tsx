@@ -1,29 +1,31 @@
-import { Search, Tag, Upload } from 'lucide-react'
+import { Filter, Search, Tag, Upload } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { Button } from '@/shared/components/ui/button'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/shared/components/ui/select'
-import { useDeleteMaterial, useMaterials, useMaterialTags, useUploadMaterial } from '../hooks'
+import { useDeleteMaterial, useMaterials, useTagGroups, useUploadMaterial } from '../hooks'
 import { BatchActionBar } from './BatchActionBar'
 import { MaterialCard } from './MaterialCard'
+import { TagSelectorModal } from './TagSelectorModal'
 
 export function Materials() {
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [search, setSearch] = useState('')
-  const [tagFilter, setTagFilter] = useState<string>('all')
+  const [filterTagIds, setFilterTagIds] = useState<number[]>([])
+  const [showFilterModal, setShowFilterModal] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
+  const { data: groups = [] } = useTagGroups()
+
+  const allTags = groups.flatMap(g => g.tags)
+
+  const filterTagNames = filterTagIds
+    .map(id => allTags.find(t => t.id === id)?.name)
+    .filter(Boolean) as string[]
+
   const { data: materials = [], isLoading } = useMaterials({
-    tags: tagFilter !== 'all' ? [tagFilter] : undefined,
+    tags: filterTagNames.length > 0 ? filterTagNames : undefined,
     search: search || undefined,
   })
-  const { data: allTags = [] } = useMaterialTags()
   const uploadMutation = useUploadMaterial()
   const deleteMutation = useDeleteMaterial()
 
@@ -89,19 +91,14 @@ export function Materials() {
               />
             </div>
 
-            <Select value={tagFilter} onValueChange={setTagFilter}>
-              <SelectTrigger className='w-40 bg-gray-900/50 border-gray-700/30 text-white'>
-                <SelectValue placeholder='全部标签' />
-              </SelectTrigger>
-              <SelectContent className='bg-gray-900/95 border-gray-700/30'>
-                <SelectItem value='all'>全部标签</SelectItem>
-                {allTags.map(tag => (
-                  <SelectItem key={tag} value={tag}>
-                    {tag}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Button
+              variant='outline'
+              onClick={() => setShowFilterModal(true)}
+              className={`${filterTagIds.length > 0 ? 'border-cyan-500/50 text-cyan-400' : 'border-gray-700/30 text-white'}`}
+            >
+              <Filter className='w-4 h-4 mr-2' />
+              {filterTagIds.length > 0 ? `标签筛选 ${filterTagIds.length}` : '标签筛选'}
+            </Button>
 
             <Button
               onClick={() => fileInputRef.current?.click()}
@@ -156,6 +153,16 @@ export function Materials() {
         selectedIds={selectedIds}
         onClear={clearSelection}
         onDelete={handleBatchDelete}
+      />
+
+      <TagSelectorModal
+        open={showFilterModal}
+        onOpenChange={setShowFilterModal}
+        selectedTagIds={filterTagIds}
+        onConfirm={tagIds => {
+          setFilterTagIds(tagIds)
+          setShowFilterModal(false)
+        }}
       />
     </div>
   )

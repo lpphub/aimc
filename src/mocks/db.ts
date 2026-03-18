@@ -1,5 +1,5 @@
 import type { User } from '@/features/auth/types'
-import type { Material } from '@/features/materials/types'
+import type { Material, TagGroup } from '@/features/materials/types'
 import type { Work } from '@/features/portfolio/types'
 import type { CreationRecord, Project, Template } from '@/features/project/types'
 
@@ -44,6 +44,28 @@ const mockWorks: Work[] = [
 ]
 
 const materials: Material[] = []
+
+const tagGroups: TagGroup[] = [
+  {
+    id: 1,
+    name: '默认',
+    tags: [
+      { id: 1, name: '风景' },
+      { id: 2, name: '人物' },
+    ],
+  },
+  {
+    id: 2,
+    name: '风格',
+    tags: [
+      { id: 3, name: '简约' },
+      { id: 4, name: '复古' },
+    ],
+  },
+]
+
+const nextTagGroupId = 3
+const nextTagId = 5
 
 function generateToken(): string {
   return `token_${Date.now()}_${Math.random().toString(36).slice(2)}`
@@ -159,6 +181,9 @@ export {
   records,
   mockWorks,
   materials,
+  tagGroups,
+  nextTagGroupId,
+  nextTagId,
   generateToken,
   generateId,
   storeToken,

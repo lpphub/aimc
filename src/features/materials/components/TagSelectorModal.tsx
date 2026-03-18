@@ -1,7 +1,13 @@
 import { Check, Plus, Search, X } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { Button } from '@/shared/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/components/ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/shared/components/ui/dialog'
 import { Input } from '@/shared/components/ui/input'
 import { useCreateTag, useCreateTagGroup, useTagGroups } from '../hooks'
 import type { Tag } from '../types'
@@ -23,6 +29,10 @@ export function TagSelectorModal({
   const [localSelectedTagIds, setLocalSelectedTagIds] = useState<number[]>(initialSelectedTagIds)
   const [activeGroupId, setActiveGroupId] = useState<string>(ALL_TAGS_GROUP_ID)
   const [searchKeyword, setSearchKeyword] = useState('')
+  const [showNewGroupDialog, setShowNewGroupDialog] = useState(false)
+  const [newGroupName, setNewGroupName] = useState('')
+  const [showNewTagDialog, setShowNewTagDialog] = useState(false)
+  const [newTagName, setNewTagName] = useState('')
 
   const { data: groups = [], isLoading } = useTagGroups()
   const createTag = useCreateTag()
@@ -78,23 +88,44 @@ export function TagSelectorModal({
     onConfirm(localSelectedTagIds)
   }
 
+  const handleCreateGroup = () => {
+    if (!newGroupName.trim()) return
+    createTagGroup.mutate(newGroupName.trim(), {
+      onSuccess: () => {
+        setNewGroupName('')
+        setShowNewGroupDialog(false)
+      },
+    })
+  }
+
+  const handleCreateTag = () => {
+    if (!newTagName.trim()) return
+    const groupId = activeGroupId === ALL_TAGS_GROUP_ID ? undefined : Number(activeGroupId)
+    createTag.mutate(
+      { name: newTagName.trim(), groupId },
+      {
+        onSuccess: () => {
+          setNewTagName('')
+          setShowNewTagDialog(false)
+        },
+      }
+    )
+  }
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='max-w-[950px] h-[600px] p-0 flex flex-col bg-gray-900 border-gray-700'>
-        <DialogHeader className='h-12 px-4 flex flex-row items-center justify-between border-b border-gray-700'>
+      <DialogContent className='max-w-[960px] h-[700px] p-0 flex flex-col bg-background border-0'>
+        <DialogHeader className='h-12 px-4 flex flex-row items-center justify-between border-b border-gray-800'>
           <DialogTitle className='text-base font-semibold'>选择标签</DialogTitle>
         </DialogHeader>
 
         <div className='flex flex-1 overflow-hidden'>
-          <div className='w-[220px] border-r border-gray-700 flex flex-col'>
-            <div className='h-12 px-4 flex items-center justify-between border-b border-gray-800'>
+          <div className='w-[260px] border-r border-gray-800 flex flex-col'>
+            <div className='h-12 px-4 flex items-center justify-between border-b border-gray-800/50'>
               <span className='text-sm font-medium text-gray-300'>标签组</span>
               <button
                 type='button'
-                onClick={() => {
-                  const name = prompt('请输入标签组名称')
-                  if (name) createTagGroup.mutate(name)
-                }}
+                onClick={() => setShowNewGroupDialog(true)}
                 className='p-1 hover:bg-gray-800 rounded transition-colors'
               >
                 <Plus className='w-4 h-4 text-gray-400' />
@@ -153,14 +184,7 @@ export function TagSelectorModal({
                   <div className='flex flex-wrap gap-3'>
                     <button
                       type='button'
-                      onClick={() => {
-                        const name = prompt('请输入标签名称')
-                        if (name) {
-                          const groupId =
-                            activeGroupId === ALL_TAGS_GROUP_ID ? undefined : Number(activeGroupId)
-                          createTag.mutate({ name, groupId })
-                        }
-                      }}
+                      onClick={() => setShowNewTagDialog(true)}
                       className='px-4 py-2 border border-dashed border-gray-600 rounded-lg text-gray-400 hover:border-gray-500 hover:text-gray-300 transition-colors'
                     >
                       <Plus className='w-4 h-4 inline mr-1' />
@@ -188,7 +212,7 @@ export function TagSelectorModal({
                 </div>
 
                 {selectedTags.length > 0 && (
-                  <div className='mt-4 pt-4 border-t border-gray-700'>
+                  <div className='mt-4 pt-4 border-t border-gray-800'>
                     <div className='flex flex-wrap gap-2'>
                       {selectedTags.map(tag => {
                         const group = groups.find(g => g.tags.some(t => t.id === tag.id))
@@ -216,7 +240,7 @@ export function TagSelectorModal({
           </div>
         </div>
 
-        <div className='h-16 px-4 flex items-center justify-between border-t border-gray-700'>
+        <div className='h-16 px-4 flex items-center justify-between border-t border-gray-800'>
           <span className='text-sm text-gray-400'>
             已选择 <span className='text-cyan-400'>{localSelectedTagIds.length}</span> 个标签
           </span>
@@ -224,10 +248,92 @@ export function TagSelectorModal({
             <Button variant='outline' onClick={clearSelection}>
               清空
             </Button>
-            <Button onClick={handleConfirm}>确认</Button>
+            <Button
+              onClick={handleConfirm}
+              className='bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/30'
+            >
+              确认
+            </Button>
           </div>
         </div>
       </DialogContent>
+
+      {/* 新建标签组弹窗 */}
+      <Dialog open={showNewGroupDialog} onOpenChange={setShowNewGroupDialog}>
+        <DialogContent className='max-w-sm bg-background border-0'>
+          <DialogHeader>
+            <DialogTitle className='text-white'>新建标签组</DialogTitle>
+          </DialogHeader>
+          <div className='py-4'>
+            <Input
+              value={newGroupName}
+              onChange={e => setNewGroupName(e.target.value)}
+              placeholder='请输入标签组名称'
+              className='bg-gray-800 border-gray-700'
+              autoFocus
+            />
+          </div>
+          <DialogFooter>
+            <Button
+              variant='outline'
+              onClick={() => {
+                setShowNewGroupDialog(false)
+                setNewGroupName('')
+              }}
+            >
+              取消
+            </Button>
+            <Button
+              onClick={handleCreateGroup}
+              disabled={!newGroupName.trim()}
+              className='bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/30'
+            >
+              创建
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* 新建标签弹窗 */}
+      <Dialog open={showNewTagDialog} onOpenChange={setShowNewTagDialog}>
+        <DialogContent className='max-w-sm bg-background border-0'>
+          <DialogHeader>
+            <DialogTitle className='text-white'>新建标签</DialogTitle>
+          </DialogHeader>
+          <div className='py-4 space-y-3'>
+            <Input
+              value={newTagName}
+              onChange={e => setNewTagName(e.target.value)}
+              placeholder='请输入标签名称'
+              className='bg-gray-800 border-gray-700'
+              autoFocus
+            />
+            {activeGroupId !== ALL_TAGS_GROUP_ID && (
+              <p className='text-xs text-gray-500'>
+                将添加到「{groups.find(g => g.id === Number(activeGroupId))?.name}」
+              </p>
+            )}
+          </div>
+          <DialogFooter>
+            <Button
+              variant='outline'
+              onClick={() => {
+                setShowNewTagDialog(false)
+                setNewTagName('')
+              }}
+            >
+              取消
+            </Button>
+            <Button
+              onClick={handleCreateTag}
+              disabled={!newTagName.trim()}
+              className='bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/30'
+            >
+              创建
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Dialog>
   )
 }

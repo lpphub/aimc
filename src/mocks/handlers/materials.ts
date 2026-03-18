@@ -1,7 +1,7 @@
 import { HttpResponse, http } from 'msw'
 import type { Material } from '@/features/materials/types'
 import type { ApiResponse } from '@/lib/api'
-import { generateId, materials } from '../db'
+import { generateId, materials, tagGroups } from '../db'
 
 const API_BASE = '/api'
 
@@ -89,4 +89,28 @@ export const materialsHandlers = [
     })
     return HttpResponse.json(success([...allTags]))
   }),
+
+  http.post<never, { materialIds: string[]; tagIds: number[] }, ApiResponse<null>>(
+    `${API_BASE}/materials/tags`,
+    async ({ request }) => {
+      const { materialIds, tagIds } = await request.json()
+
+      const tagNames: string[] = []
+      for (const groupId of tagIds) {
+        for (const group of tagGroups) {
+          const tag = group.tags.find(t => t.id === groupId)
+          if (tag) tagNames.push(tag.name)
+        }
+      }
+
+      for (const id of materialIds) {
+        const material = materials.find(m => m.id === id)
+        if (material) {
+          material.tags = [...new Set([...material.tags, ...tagNames])]
+        }
+      }
+
+      return HttpResponse.json(success(null))
+    }
+  ),
 ]

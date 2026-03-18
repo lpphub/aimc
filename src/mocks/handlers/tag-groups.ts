@@ -1,41 +1,13 @@
 import { delay, HttpResponse, http } from 'msw'
+import type { Tag, TagGroup } from '@/features/materials/types'
 import type { ApiResponse } from '@/lib/api'
 import { env } from '@/shared/utils/env'
+import { nextTagGroupId as _nextTagGroupId, nextTagId as _nextTagId, tagGroups } from '../db'
 
 const API_BASE = `${env.API_BASE_URL}/`
 
-interface Tag {
-  id: number
-  name: string
-}
-
-interface TagGroup {
-  id: number
-  name: string
-  tags: Tag[]
-}
-
-const tagGroups: TagGroup[] = [
-  {
-    id: 1,
-    name: '默认标签组',
-    tags: [
-      { id: 1, name: '风景' },
-      { id: 2, name: '人物' },
-    ],
-  },
-  {
-    id: 2,
-    name: '风格',
-    tags: [
-      { id: 3, name: '简约' },
-      { id: 4, name: '复古' },
-    ],
-  },
-]
-
-let nextTagGroupId = 3
-let nextTagId = 5
+let nextTagGroupId = _nextTagGroupId
+let nextTagId = _nextTagId
 
 function success<T>(data: T): ApiResponse<T> {
   return { code: 0, message: 'success', data }
@@ -81,9 +53,4 @@ export const tagGroupHandlers = [
       return HttpResponse.json(success(null))
     }
   ),
-
-  http.post<never, never, ApiResponse<null>>(`${API_BASE}materials/tags`, async () => {
-    await delay(100)
-    return HttpResponse.json(success(null))
-  }),
 ]
