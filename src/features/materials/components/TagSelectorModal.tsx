@@ -76,7 +76,6 @@ export function TagSelectorModal({
 
   const handleConfirm = () => {
     onConfirm(localSelectedTagIds)
-    onOpenChange(false)
   }
 
   return (
