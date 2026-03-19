@@ -1,4 +1,5 @@
 import { FileText, Film, Image, Trash2 } from 'lucide-react'
+import { cn } from '@/lib/utils'
 import { Badge } from '@/shared/components/ui/badge'
 import { Button } from '@/shared/components/ui/button'
 import { Card } from '@/shared/components/ui/card'
@@ -41,7 +42,7 @@ export function WorkCard({ work, onDelete }: WorkCardProps) {
         )}
 
         <div className='absolute top-2 left-2'>
-          <Badge className={`${config.color} border`}>
+          <Badge className={cn(config.color, 'border')}
             <Icon className='w-3 h-3 mr-1' />
             {config.label}
           </Badge>

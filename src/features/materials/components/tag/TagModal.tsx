@@ -315,7 +315,7 @@ export function TagModal({
                 value={searchKeyword}
                 onChange={e => setSearchKeyword(e.target.value)}
                 placeholder='搜索标签...'
-                className='h-9 pl-9 bg-muted/50 border-border'
+                className='h-9 pl-9 pr-10 bg-muted/50 border-border text-sm'
               />
             </div>
 

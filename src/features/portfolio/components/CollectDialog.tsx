@@ -1,6 +1,7 @@
 import { Check, Loader2, Sparkles } from 'lucide-react'
 import { useState } from 'react'
 import { useProjects } from '@/features/project/hooks'
+import { cn } from '@/lib/utils'
 import { Button } from '@/shared/components/ui/button'
 import {
   Dialog,
@@ -71,11 +72,12 @@ export function CollectDialog({
           <button
             type='button'
             onClick={() => setSelectedProject(undefined)}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+            className={cn(
+              'w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all',
               selectedProject === undefined
                 ? 'bg-primary/20 border border-primary/30 text-primary'
                 : 'bg-muted/50 border border-border/30 text-muted-foreground hover:bg-accent'
-            }`}
+            )}
           >
             <div className='w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500/20 to-teal-500/20 flex items-center justify-center'>
               {selectedProject === undefined && <Check className='w-4 h-4' />}
@@ -88,11 +90,12 @@ export function CollectDialog({
               key={project.id}
               type='button'
               onClick={() => setSelectedProject(project.id)}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+              className={cn(
+                'w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all',
                 selectedProject === project.id
                   ? 'bg-primary/20 border border-primary/30 text-primary'
                   : 'bg-muted/50 border border-border/30 text-muted-foreground hover:bg-accent'
-              }`}
+              )}
             >
               <div className='w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500/20 to-purple-600/20 flex items-center justify-center'>
                 {selectedProject === project.id && <Check className='w-4 h-4' />}

@@ -1,5 +1,6 @@
 import { Check, MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
+import { cn } from '@/lib/utils'
 import type { Tag } from '../../types'
 
 interface TagGridProps {
@@ -26,7 +27,7 @@ export function TagGrid({
   if (isLoading) {
     return (
       <div className='flex items-center justify-center h-full'>
-        <span className='text-muted-foreground'>加载中...</span>
+        <span className='text-muted-foreground text-sm'>加载中...</span>
       </div>
     )
   }
@@ -43,11 +44,11 @@ export function TagGrid({
 
   return (
     <div className='flex-1 overflow-auto'>
-      <div className='grid grid-cols-4 gap-3'>
+      <div className='grid grid-cols-5 gap-3'>
         <button
           type='button'
           onClick={onNewTagClick}
-          className='px-4 py-1.5 border border-dashed border-border rounded-lg text-muted-foreground hover:border-foreground hover:text-foreground transition-colors text-left'
+          className='px-4 py-1.5 border border-dashed border-border rounded-lg text-muted-foreground hover:border-foreground hover:text-foreground transition-colors text-left text-sm'
         >
           <Plus className='w-4 h-4 inline mr-1' />
           新建标签
@@ -60,11 +61,12 @@ export function TagGrid({
               <button
                 type='button'
                 onClick={() => onTagToggle(tag.id)}
-                className={`w-full px-4 py-1.5 rounded-lg transition-colors text-left flex items-center justify-between ${
+                className={cn(
+                  'w-full px-4 py-1.5 rounded-lg transition-colors text-left flex items-center justify-between text-sm',
                   isSelected
                     ? 'bg-primary/20 border border-primary/50 text-primary'
                     : 'bg-muted border border-border text-foreground hover:border-border/70'
-                }`}
+                )}
               >
                 <span className='truncate flex-1'>{tag.name}</span>
                 <div className='flex items-center gap-1 shrink-0'>

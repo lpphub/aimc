@@ -29,7 +29,7 @@ export function TagSelectedChips({ selectedTags, groups, onRemoveTag }: TagSelec
           return (
             <span
               key={tag.id}
-              className='inline-flex items-center gap-1 px-2.5 py-1 bg-muted rounded-full text-xs text-foreground'
+              className='inline-flex items-center gap-1 px-2.5 py-1 bg-muted rounded-full text-sm text-foreground'
             >
               {group?.name}: {tag.name}
               <button

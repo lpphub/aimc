@@ -1,5 +1,6 @@
 import { Check, ChevronsUpDown, X } from 'lucide-react'
 import { useRef, useState } from 'react'
+import { cn } from '@/lib/utils'
 import { Badge } from '@/shared/components/ui/badge'
 import { Button } from '@/shared/components/ui/button'
 import {
@@ -114,7 +115,10 @@ export function TagInput({
                   className='text-foreground hover:bg-accent cursor-pointer'
                 >
                   <Check
-                    className={`mr-2 h-4 w-4 ${value.includes(option) ? 'opacity-100' : 'opacity-0'}`}
+                    className={cn(
+                      value.includes(option) ? 'opacity-100' : 'opacity-0',
+                      'mr-2 h-4 w-4'
+                    )}
                   />
                   {option}
                 </CommandItem>

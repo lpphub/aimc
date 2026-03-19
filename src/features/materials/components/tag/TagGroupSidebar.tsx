@@ -1,5 +1,6 @@
 import { MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
+import { cn } from '@/lib/utils'
 import type { TagGroup } from '../../types'
 import { ALL_TAGS_GROUP_ID } from '../../types'
 
@@ -25,9 +26,10 @@ export function TagGroupSidebar({
   const [menuOpenGroupId, setMenuOpenGroupId] = useState<number | null>(null)
 
   const getButtonClassName = (groupId: string) =>
-    `w-full px-4 py-2 flex items-center justify-between text-left transition-colors text-sm ${
+    cn(
+      'w-full px-4 py-2 flex items-center justify-between text-left transition-colors text-sm',
       activeGroupId === groupId ? 'bg-primary/10 text-primary' : 'text-foreground hover:bg-accent'
-    }`
+    )
 
   const handleDeleteGroup = (groupId: number) => {
     setMenuOpenGroupId(null)
