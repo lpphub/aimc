@@ -13,7 +13,7 @@ export function Sidebar() {
       path: '/portfolio',
       icon: FolderOpen,
       label: '作品集',
-      description: 'AI创作结果',
+      description: '创作结果',
     },
     {
       path: '/tools',
