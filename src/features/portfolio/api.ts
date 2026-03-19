@@ -1,5 +1,12 @@
 import api from '@/lib/api'
-import type { CreateWorkRequest, Work, WorksFilter } from './types'
+import type { CreateWorkRequest, Project, Work, WorksFilter } from './types'
+
+export interface CreateProjectReq {
+  name: string
+  description?: string
+  tags?: string[]
+  presetTemplateIds?: string[]
+}
 
 export const portfolioApi = {
   list: (filter?: WorksFilter) => {
@@ -14,4 +21,8 @@ export const portfolioApi = {
   create: (data: CreateWorkRequest) => api.post<Work, CreateWorkRequest>('works', data),
 
   delete: (id: string) => api.delete<void>(`works/${id}`),
+}
+
+export const projectApi = {
+  list: () => api.get<Project[]>('projects'),
 }

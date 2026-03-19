@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { portfolioApi } from './api'
+import { portfolioApi, projectApi } from './api'
 import type { CreateWorkRequest, WorksFilter } from './types'
 
 export const portfolioKeys = {
@@ -7,10 +7,22 @@ export const portfolioKeys = {
   list: (filter?: WorksFilter) => [...portfolioKeys.all, 'list', filter] as const,
 }
 
+export const projectKeys = {
+  all: ['projects'] as const,
+  list: () => [...projectKeys.all, 'list'] as const,
+}
+
 export function useWorks(filter?: WorksFilter) {
   return useQuery({
     queryKey: portfolioKeys.list(filter),
     queryFn: () => portfolioApi.list(filter),
+  })
+}
+
+export function useProjects() {
+  return useQuery({
+    queryKey: projectKeys.list(),
+    queryFn: () => projectApi.list(),
   })
 }
 

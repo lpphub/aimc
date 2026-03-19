@@ -1,5 +1,15 @@
 export type WorkType = 'text' | 'image' | 'video'
 
+export interface Project {
+  id: string
+  name: string
+  description?: string
+  tags: string[]
+  presetTemplateIds: string[]
+  createdAt: string
+  updatedAt: string
+}
+
 export interface Work {
   id: string
   projectId?: string

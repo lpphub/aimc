@@ -8,9 +8,6 @@ const Login = lazy(() => import('@/pages/Login'))
 const Portfolio = lazy(() => import('@/pages/Portfolio'))
 const Materials = lazy(() => import('@/pages/Materials'))
 const AiTools = lazy(() => import('@/features/ai-tools').then(m => ({ default: m.AiTools })))
-const ProjectDetail = lazy(() =>
-  import('@/features/project').then(m => ({ default: m.ProjectDetail }))
-)
 
 const router = createBrowserRouter([
   {
@@ -44,10 +41,6 @@ const router = createBrowserRouter([
       {
         path: 'materials',
         element: <Materials />,
-      },
-      {
-        path: 'project/:id',
-        element: <ProjectDetail />,
       },
     ],
   },

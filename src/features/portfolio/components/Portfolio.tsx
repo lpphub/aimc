@@ -1,7 +1,6 @@
 import { FolderOpen, Search, Sparkles } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { useProjects } from '@/features/project/hooks'
 import { Button } from '@/shared/components/ui/button'
 import {
   Select,
@@ -10,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/shared/components/ui/select'
-import { useDeleteWork, useWorks } from '../hooks'
+import { useDeleteWork, useProjects, useWorks } from '../hooks'
 import type { WorkType } from '../types'
 import { WorkCard } from './WorkCard'
 

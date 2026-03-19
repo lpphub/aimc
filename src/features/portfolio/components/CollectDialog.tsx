@@ -1,6 +1,5 @@
 import { Check, Loader2, Sparkles } from 'lucide-react'
 import { useState } from 'react'
-import { useProjects } from '@/features/project/hooks'
 import { cn } from '@/lib/utils'
 import { Button } from '@/shared/components/ui/button'
 import {
@@ -11,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/shared/components/ui/dialog'
-import { useCreateWork } from '../hooks'
+import { useCreateWork, useProjects } from '../hooks'
 import type { WorkType } from '../types'
 
 interface CollectDialogProps {
