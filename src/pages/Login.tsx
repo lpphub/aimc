@@ -27,17 +27,17 @@ export default function LoginPage() {
           {/* Logo */}
           <div className='mb-12'>
             <div className='relative inline-flex items-center justify-center w-24 h-24 mb-6'>
-              <div className='absolute inset-0 bg-gradient-to-br from-cyan-500/40 to-teal-500/40 rounded-3xl blur-2xl animate-pulse' />
-              <div className='relative flex items-center justify-center w-24 h-24 rounded-3xl bg-gradient-to-br from-cyan-500/20 to-teal-500/20 border border-cyan-500/30 backdrop-blur-xl'>
+              <div className='absolute inset-0 bg-linear-to-br from-cyan-500/40 to-teal-500/40 rounded-3xl blur-2xl animate-pulse' />
+              <div className='relative flex items-center justify-center w-24 h-24 rounded-3xl bg-linear-to-br from-cyan-500/20 to-teal-500/20 border border-cyan-500/30 backdrop-blur-xl'>
                 <Sparkles className='w-12 h-12 text-cyan-400' />
               </div>
             </div>
             <h1 className='text-5xl font-bold mb-4'>
-              <span className='bg-gradient-to-r from-cyan-400 via-teal-400 to-purple-400 bg-clip-text text-transparent'>
+              <span className='bg-linear-to-r from-cyan-400 via-teal-400 to-purple-400 bg-clip-text text-transparent'>
                 智绘工坊
               </span>
             </h1>
-            <p className='text-xl text-gray-400'>AI 驱动的创意工作流平台</p>
+            <p className='text-xl text-muted-foreground'>AI 驱动的创意工作流平台</p>
           </div>
 
           {/* Features */}
@@ -61,14 +61,14 @@ export default function LoginPage() {
             ].map(item => (
               <div
                 key={item.title}
-                className='flex items-start gap-4 p-4 rounded-2xl bg-gradient-to-br from-gray-900/50 to-gray-900/30 border border-gray-800/50 backdrop-blur-sm'
+                className='flex items-start gap-4 p-4 rounded-2xl bg-card/50 border border-border/50 backdrop-blur-sm'
               >
-                <div className='flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-teal-500/20 border border-cyan-500/30 flex-shrink-0'>
+                <div className='flex items-center justify-center w-12 h-12 rounded-xl bg-linear-to-br from-cyan-500/20 to-teal-500/20 border border-cyan-500/30 shrink-0'>
                   <item.icon className='w-6 h-6 text-cyan-400' />
                 </div>
                 <div>
-                  <h3 className='text-white font-medium mb-1'>{item.title}</h3>
-                  <p className='text-gray-500 text-sm'>{item.desc}</p>
+                  <h3 className='text-foreground font-medium mb-1'>{item.title}</h3>
+                  <p className='text-muted-foreground text-sm'>{item.desc}</p>
                 </div>
               </div>
             ))}

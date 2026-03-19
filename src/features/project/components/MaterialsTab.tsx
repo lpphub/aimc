@@ -38,7 +38,7 @@ export function MaterialsTab({ materials, onUpload, onDelete }: MaterialsTabProp
 
         <Button
           onClick={onUpload}
-          className='bg-gradient-to-r from-cyan-500 to-teal-500 text-white hover:from-cyan-600 hover:to-teal-600'
+          className='bg-primary text-primary-foreground hover:bg-primary/90'
         >
           <Upload className='w-4 h-4 mr-2' />
           上传素材
@@ -56,7 +56,7 @@ export function MaterialsTab({ materials, onUpload, onDelete }: MaterialsTabProp
               return (
                 <Card
                   key={material.id}
-                  className='group relative bg-gradient-to-br from-gray-900/60 to-gray-900/40 border border-gray-700/30 backdrop-blur-md rounded-lg overflow-hidden transition-all duration-300 hover:border-cyan-500/50 hover:shadow-lg hover:shadow-cyan-500/20'
+                  className='group relative bg-card border border-border backdrop-blur-md rounded-lg overflow-hidden transition-all duration-300 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/20'
                 >
                   <div className='aspect-square relative'>
                     {material.type === 'image' && material.content ? (
@@ -80,7 +80,7 @@ export function MaterialsTab({ materials, onUpload, onDelete }: MaterialsTabProp
                             <Play className='w-6 h-6 text-white ml-1' />
                           </div>
                         </div>
-                        <div className='absolute bottom-2 right-2 px-2 py-1 bg-black/60 rounded text-xs text-white'>
+                        <div className='absolute bottom-2 right-2 px-2 py-1 bg-black/60 rounded text-xs text-foreground'>
                           视频
                         </div>
                       </div>
@@ -106,8 +106,8 @@ export function MaterialsTab({ materials, onUpload, onDelete }: MaterialsTabProp
                   </div>
 
                   <div className='p-3'>
-                    <p className='text-sm text-gray-300 truncate'>{material.name}</p>
-                    <p className='text-xs text-gray-600 mt-1'>
+                    <p className='text-sm text-foreground truncate'>{material.name}</p>
+                    <p className='text-xs text-muted-foreground mt-1'>
                       {new Date(material.createdAt).toLocaleDateString()}
                     </p>
                   </div>
@@ -122,8 +122,8 @@ export function MaterialsTab({ materials, onUpload, onDelete }: MaterialsTabProp
             <div className='w-16 h-16 rounded-full bg-gray-800/50 flex items-center justify-center mx-auto mb-4'>
               <Plus className='w-8 h-8 text-gray-600' />
             </div>
-            <p className='text-gray-500'>暂无素材</p>
-            <p className='text-gray-600 text-sm mt-1'>点击上传添加素材</p>
+            <p className='text-muted-foreground'>暂无素材</p>
+            <p className='text-muted-foreground/70 text-sm mt-1'>点击上传添加素材</p>
           </div>
         </div>
       )}

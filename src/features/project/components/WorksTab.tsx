@@ -30,10 +30,10 @@ export function WorksTab({ works, onDelete }: WorksTabProps) {
   return (
     <div className='h-full flex flex-col'>
       <div className='flex items-center justify-between mb-4'>
-        <span className='text-sm text-gray-500'>{works.length} 个作品</span>
+        <span className='text-sm text-muted-foreground'>{works.length} 个作品</span>
         <Button
           onClick={() => navigate('/tools')}
-          className='bg-gradient-to-r from-cyan-500 to-teal-500 text-white hover:from-cyan-600 hover:to-teal-600'
+          className='bg-primary text-primary-foreground hover:bg-primary/90'
         >
           <Plus className='w-4 h-4 mr-2' />
           AI绘
@@ -50,7 +50,7 @@ export function WorksTab({ works, onDelete }: WorksTabProps) {
               return (
                 <Card
                   key={work.id}
-                  className='group relative bg-gradient-to-br from-gray-900/60 to-gray-900/40 border border-gray-700/30 backdrop-blur-md rounded-lg overflow-hidden transition-all duration-300 hover:border-cyan-500/50 hover:shadow-lg hover:shadow-cyan-500/20'
+                  className='group relative bg-card border border-border backdrop-blur-md rounded-lg overflow-hidden transition-all duration-300 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/20'
                 >
                   <div className='aspect-square relative'>
                     {work.type === 'image' && work.content ? (
@@ -74,7 +74,7 @@ export function WorksTab({ works, onDelete }: WorksTabProps) {
                             <Play className='w-6 h-6 text-white ml-1' />
                           </div>
                         </div>
-                        <div className='absolute bottom-2 right-2 px-2 py-1 bg-black/60 rounded text-xs text-white'>
+                        <div className='absolute bottom-2 right-2 px-2 py-1 bg-black/60 rounded text-xs text-foreground'>
                           视频
                         </div>
                       </div>
@@ -114,8 +114,8 @@ export function WorksTab({ works, onDelete }: WorksTabProps) {
                   </div>
 
                   <div className='p-3'>
-                    <p className='text-sm text-gray-400 line-clamp-2'>{work.prompt}</p>
-                    <p className='text-xs text-gray-600 mt-2'>
+                    <p className='text-sm text-foreground line-clamp-2'>{work.prompt}</p>
+                    <p className='text-xs text-muted-foreground mt-2'>
                       {new Date(work.createdAt).toLocaleDateString()}
                     </p>
                   </div>

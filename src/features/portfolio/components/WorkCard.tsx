@@ -28,15 +28,15 @@ export function WorkCard({ work, onDelete }: WorkCardProps) {
   const Icon = config.icon
 
   return (
-    <Card className='group relative bg-gradient-to-br from-gray-900/80 to-gray-900/50 border-gray-700/30 backdrop-blur-sm overflow-hidden transition-all duration-300 hover:border-gray-600/50 hover:shadow-lg hover:shadow-cyan-500/5'>
+    <Card className='group relative bg-card border-border backdrop-blur-sm overflow-hidden transition-all duration-300 hover:border-border/50 hover:shadow-lg hover:shadow-primary/5'>
       <div className='aspect-square relative'>
         {work.type === 'image' && work.content ? (
           <img src={work.content} alt={work.prompt} className='w-full h-full object-cover' />
         ) : work.type === 'video' && work.content ? (
           <video src={work.content} className='w-full h-full object-cover' muted />
         ) : (
-          <div className='w-full h-full flex items-center justify-center bg-gray-800/50'>
-            <Icon className='w-12 h-12 text-gray-600' />
+          <div className='w-full h-full flex items-center justify-center bg-muted/50'>
+            <Icon className='w-12 h-12 text-muted-foreground' />
           </div>
         )}
 

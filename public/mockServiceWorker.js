@@ -16,11 +16,11 @@ addEventListener('install', () => {
   self.skipWaiting()
 })
 
-addEventListener('activate', (event) => {
+addEventListener('activate', event => {
   event.waitUntil(self.clients.claim())
 })
 
-addEventListener('message', async (event) => {
+addEventListener('message', async event => {
   const clientId = Reflect.get(event.source || {}, 'id')
 
   if (!clientId || !self.clients) {
@@ -88,7 +88,7 @@ addEventListener('message', async (event) => {
   }
 })
 
-addEventListener('fetch', (event) => {
+addEventListener('fetch', event => {
   const requestInterceptedAt = Date.now()
 
   // Bypass navigation requests.

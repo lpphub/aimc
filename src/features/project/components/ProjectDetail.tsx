@@ -26,16 +26,16 @@ export default function ProjectDetailPage() {
 
   if (projectLoading) {
     return (
-      <div className='flex min-h-screen items-center justify-center bg-[#0a0a0a]'>
-        <div className='text-gray-500'>加载中...</div>
+      <div className='flex min-h-screen items-center justify-center bg-background'>
+        <div className='text-muted-foreground'>加载中...</div>
       </div>
     )
   }
 
   if (!project) {
     return (
-      <div className='flex min-h-screen items-center justify-center bg-[#0a0a0a]'>
-        <div className='text-gray-500'>项目不存在</div>
+      <div className='flex min-h-screen items-center justify-center bg-background'>
+        <div className='text-muted-foreground'>项目不存在</div>
       </div>
     )
   }
@@ -60,7 +60,7 @@ export default function ProjectDetailPage() {
   }))
 
   return (
-    <div className='flex min-h-screen flex-col relative overflow-hidden bg-[#0a0a0a]'>
+    <div className='flex min-h-screen flex-col relative overflow-hidden bg-background'>
       <div className='absolute inset-0 overflow-hidden pointer-events-none'>
         <div className='absolute top-0 left-1/4 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[120px] animate-pulse' />
         <div className='absolute top-1/3 right-0 w-[400px] h-[400px] bg-purple-500/10 rounded-full blur-[100px] animate-pulse delay-700' />
@@ -76,13 +76,15 @@ export default function ProjectDetailPage() {
                 <BookOpen className='h-10 w-10 text-purple-400' />
               </div>
               <div>
-                <h1 className='text-3xl font-bold text-white mb-2 tracking-tight'>
+                <h1 className='text-3xl font-bold text-foreground mb-2 tracking-tight'>
                   {project.name}
                 </h1>
-                {project.description && <p className='text-gray-400 mb-3'>{project.description}</p>}
+                {project.description && (
+                  <p className='text-muted-foreground mb-3'>{project.description}</p>
+                )}
                 <div className='flex items-center gap-2 flex-wrap'>
                   {project.tags?.map(tag => (
-                    <Badge key={tag} className='bg-cyan-500/20 text-cyan-400 border-cyan-500/30'>
+                    <Badge key={tag} className='bg-primary/20 text-primary border-primary/30'>
                       #{tag}
                     </Badge>
                   ))}
@@ -92,13 +94,13 @@ export default function ProjectDetailPage() {
           </div>
         </div>
 
-        <Card className='h-[calc(100vh-350px)] bg-gradient-to-br from-gray-900/80 to-gray-900/50 border-gray-700/30 backdrop-blur-sm p-6'>
+        <Card className='h-[calc(100vh-350px)] bg-card border-border backdrop-blur-sm p-6'>
           <div className='flex h-full gap-6'>
             <div className='flex-[6] min-w-0'>
               <div className='flex items-center gap-2 mb-4'>
                 <FolderOpen className='w-5 h-5 text-cyan-400' />
-                <span className='text-lg font-medium text-white'>作品集</span>
-                <span className='text-xs bg-gray-800 px-2 py-0.5 rounded-full text-gray-400'>
+                <span className='text-lg font-medium text-foreground'>作品集</span>
+                <span className='text-xs bg-muted px-2 py-0.5 rounded-full text-muted-foreground'>
                   {works.length}
                 </span>
               </div>
@@ -110,8 +112,8 @@ export default function ProjectDetailPage() {
             <div className='flex-[4] min-w-0'>
               <div className='flex items-center gap-2 mb-4'>
                 <Layers className='w-5 h-5 text-teal-400' />
-                <span className='text-lg font-medium text-white'>素材库</span>
-                <span className='text-xs bg-gray-800 px-2 py-0.5 rounded-full text-gray-400'>
+                <span className='text-lg font-medium text-foreground'>素材库</span>
+                <span className='text-xs bg-muted px-2 py-0.5 rounded-full text-muted-foreground'>
                   {materials.length}
                 </span>
               </div>

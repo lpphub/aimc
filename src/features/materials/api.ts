@@ -52,8 +52,20 @@ export async function createTagGroup(name: string): Promise<TagGroup> {
   return api.post<TagGroup, { name: string }>('tag-groups', { name })
 }
 
+export async function updateTagGroup(groupId: number, name: string): Promise<TagGroup> {
+  return api.patch<TagGroup, { name: string }>(`tag-groups/${groupId}`, { name })
+}
+
+export async function deleteTagGroup(groupId: number): Promise<void> {
+  return api.delete(`tag-groups/${groupId}`)
+}
+
 export async function createTag(name: string, groupId?: number): Promise<Tag> {
   return api.post<Tag, { name: string; groupId?: number }>('tags', { name, groupId })
+}
+
+export async function updateTag(tagId: number, name: string): Promise<Tag> {
+  return api.patch<Tag, { name: string }>(`tags/${tagId}`, { name })
 }
 
 export async function deleteTag(tagId: number): Promise<void> {

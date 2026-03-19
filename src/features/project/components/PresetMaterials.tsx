@@ -23,10 +23,10 @@ export function PresetMaterials({ templates }: PresetMaterialsProps) {
   if (templates.length === 0) {
     return (
       <div className='flex flex-col items-center justify-center h-full py-8'>
-        <div className='w-12 h-12 rounded-full bg-gray-800/50 border border-gray-700/30 flex items-center justify-center mb-3'>
-          <FileText className='w-6 h-6 text-gray-600' />
+        <div className='w-12 h-12 rounded-full bg-muted/50 border border-border/30 flex items-center justify-center mb-3'>
+          <FileText className='w-6 h-6 text-muted-foreground' />
         </div>
-        <p className='text-gray-500 text-sm'>暂无预设素材</p>
+        <p className='text-muted-foreground text-sm'>暂无预设素材</p>
       </div>
     )
   }
@@ -38,15 +38,18 @@ export function PresetMaterials({ templates }: PresetMaterialsProps) {
         return (
           <Card
             key={template.id}
-            className='p-4 bg-gray-800/30 border-gray-700/30 hover:border-cyan-500/30 transition-colors cursor-pointer'
+            className='p-4 bg-muted/30 border-border/30 hover:border-primary/30 transition-colors cursor-pointer'
           >
             <div className='flex items-start gap-3'>
               <div className='flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500/20 to-teal-500/20 border border-cyan-500/30 flex items-center justify-center'>
                 <Icon className='w-5 h-5 text-cyan-400' />
               </div>
               <div className='flex-1 min-w-0'>
-                <h4 className='text-white font-medium truncate'>{template.name}</h4>
-                <Badge variant='outline' className='mt-1 text-xs text-gray-400 border-gray-700'>
+                <h4 className='text-foreground font-medium truncate'>{template.name}</h4>
+                <Badge
+                  variant='outline'
+                  className='mt-1 text-xs text-muted-foreground border-border'
+                >
                   {typeLabels[template.type]}
                 </Badge>
               </div>

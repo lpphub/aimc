@@ -78,12 +78,12 @@ export function LoginForm() {
                 type='email'
                 placeholder='邮箱地址'
                 {...form.register('email')}
-                className='h-12 pl-12 bg-gray-900/50 border-gray-700/50 text-white placeholder:text-gray-600 focus:border-cyan-500/50 focus:ring-cyan-500/20 backdrop-blur-sm'
+                className='h-12 pl-12 bg-background/50 border-border/50 text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:ring-primary/20 backdrop-blur-sm'
               />
             </div>
           </div>
           {form.formState.errors.email && (
-            <p className='text-red-400 text-xs pl-1'>{form.formState.errors.email.message}</p>
+            <p className='text-destructive text-xs pl-1'>{form.formState.errors.email.message}</p>
           )}
         </div>
 
@@ -97,19 +97,21 @@ export function LoginForm() {
                 type={showPassword ? 'text' : 'password'}
                 placeholder='密码'
                 {...form.register('password')}
-                className='h-12 pl-12 pr-12 bg-gray-900/50 border-gray-700/50 text-white placeholder:text-gray-600 focus:border-cyan-500/50 focus:ring-cyan-500/20 backdrop-blur-sm'
+                className='h-12 pl-12 pr-12 bg-background/50 border-border/50 text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:ring-primary/20 backdrop-blur-sm'
               />
               <button
                 type='button'
                 onClick={() => setShowPassword(!showPassword)}
-                className='absolute right-4 text-gray-500 hover:text-gray-300 transition-colors'
+                className='absolute right-4 text-muted-foreground hover:text-foreground transition-colors'
               >
                 {showPassword ? <EyeOff className='w-5 h-5' /> : <Eye className='w-5 h-5' />}
               </button>
             </div>
           </div>
           {form.formState.errors.password && (
-            <p className='text-red-400 text-xs pl-1'>{form.formState.errors.password.message}</p>
+            <p className='text-destructive text-xs pl-1'>
+              {form.formState.errors.password.message}
+            </p>
           )}
         </div>
 
@@ -117,7 +119,7 @@ export function LoginForm() {
         <Button
           type='submit'
           disabled={isLoading}
-          className='w-full h-12 bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-white font-medium rounded-xl shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300 disabled:opacity-50'
+          className='w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-medium rounded-xl shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all duration-300 disabled:opacity-50'
         >
           {isLoading ? (
             <>
@@ -134,11 +136,11 @@ export function LoginForm() {
 
         {/* Register Link */}
         <div className='text-center pt-4'>
-          <span className='text-gray-500 text-sm'>还没有账号？</span>
+          <span className='text-muted-foreground text-sm'>还没有账号？</span>
           <button
             type='button'
             onClick={() => setLoginState(LoginStateEnum.REGISTER)}
-            className='ml-2 text-cyan-400 hover:text-cyan-300 text-sm font-medium transition-colors'
+            className='ml-2 text-primary hover:text-primary/90 text-sm font-medium transition-colors'
           >
             立即注册
           </button>

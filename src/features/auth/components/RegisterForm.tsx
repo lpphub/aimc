@@ -80,17 +80,19 @@ export function RegisterForm() {
           <div className='relative group'>
             <div className='absolute inset-0 bg-gradient-to-r from-purple-500/20 to-cyan-500/20 rounded-xl blur-sm opacity-0 group-focus-within:opacity-100 transition-opacity' />
             <div className='relative flex items-center'>
-              <User className='absolute left-4 w-5 h-5 text-gray-500 group-focus-within:text-purple-400 transition-colors' />
+              <User className='absolute left-4 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors' />
               <Input
                 type='text'
                 placeholder='用户名'
                 {...form.register('username')}
-                className='h-12 pl-12 bg-gray-900/50 border-gray-700/50 text-white placeholder:text-gray-600 focus:border-purple-500/50 focus:ring-purple-500/20 backdrop-blur-sm'
+                className='h-12 pl-12 bg-background/50 border-border/50 text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:ring-primary/20 backdrop-blur-sm'
               />
             </div>
           </div>
           {form.formState.errors.username && (
-            <p className='text-red-400 text-xs pl-1'>{form.formState.errors.username.message}</p>
+            <p className='text-destructive text-xs pl-1'>
+              {form.formState.errors.username.message}
+            </p>
           )}
         </div>
 
@@ -99,17 +101,17 @@ export function RegisterForm() {
           <div className='relative group'>
             <div className='absolute inset-0 bg-gradient-to-r from-purple-500/20 to-cyan-500/20 rounded-xl blur-sm opacity-0 group-focus-within:opacity-100 transition-opacity' />
             <div className='relative flex items-center'>
-              <Mail className='absolute left-4 w-5 h-5 text-gray-500 group-focus-within:text-purple-400 transition-colors' />
+              <Mail className='absolute left-4 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors' />
               <Input
                 type='email'
                 placeholder='邮箱地址'
                 {...form.register('email')}
-                className='h-12 pl-12 bg-gray-900/50 border-gray-700/50 text-white placeholder:text-gray-600 focus:border-purple-500/50 focus:ring-purple-500/20 backdrop-blur-sm'
+                className='h-12 pl-12 bg-background/50 border-border/50 text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:ring-primary/20 backdrop-blur-sm'
               />
             </div>
           </div>
           {form.formState.errors.email && (
-            <p className='text-red-400 text-xs pl-1'>{form.formState.errors.email.message}</p>
+            <p className='text-destructive text-xs pl-1'>{form.formState.errors.email.message}</p>
           )}
         </div>
 
@@ -118,24 +120,26 @@ export function RegisterForm() {
           <div className='relative group'>
             <div className='absolute inset-0 bg-gradient-to-r from-purple-500/20 to-cyan-500/20 rounded-xl blur-sm opacity-0 group-focus-within:opacity-100 transition-opacity' />
             <div className='relative flex items-center'>
-              <Lock className='absolute left-4 w-5 h-5 text-gray-500 group-focus-within:text-purple-400 transition-colors' />
+              <Lock className='absolute left-4 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors' />
               <Input
                 type={showPassword ? 'text' : 'password'}
                 placeholder='密码'
                 {...form.register('password')}
-                className='h-12 pl-12 pr-12 bg-gray-900/50 border-gray-700/50 text-white placeholder:text-gray-600 focus:border-purple-500/50 focus:ring-purple-500/20 backdrop-blur-sm'
+                className='h-12 pl-12 pr-12 bg-background/50 border-border/50 text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:ring-primary/20 backdrop-blur-sm'
               />
               <button
                 type='button'
                 onClick={() => setShowPassword(!showPassword)}
-                className='absolute right-4 text-gray-500 hover:text-gray-300 transition-colors'
+                className='absolute right-4 text-muted-foreground hover:text-foreground transition-colors'
               >
                 {showPassword ? <EyeOff className='w-5 h-5' /> : <Eye className='w-5 h-5' />}
               </button>
             </div>
           </div>
           {form.formState.errors.password && (
-            <p className='text-red-400 text-xs pl-1'>{form.formState.errors.password.message}</p>
+            <p className='text-destructive text-xs pl-1'>
+              {form.formState.errors.password.message}
+            </p>
           )}
         </div>
 
@@ -144,24 +148,24 @@ export function RegisterForm() {
           <div className='relative group'>
             <div className='absolute inset-0 bg-gradient-to-r from-purple-500/20 to-cyan-500/20 rounded-xl blur-sm opacity-0 group-focus-within:opacity-100 transition-opacity' />
             <div className='relative flex items-center'>
-              <Lock className='absolute left-4 w-5 h-5 text-gray-500 group-focus-within:text-purple-400 transition-colors' />
+              <Lock className='absolute left-4 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors' />
               <Input
                 type={showConfirmPassword ? 'text' : 'password'}
                 placeholder='确认密码'
                 {...form.register('confirmPassword')}
-                className='h-12 pl-12 pr-12 bg-gray-900/50 border-gray-700/50 text-white placeholder:text-gray-600 focus:border-purple-500/50 focus:ring-purple-500/20 backdrop-blur-sm'
+                className='h-12 pl-12 pr-12 bg-background/50 border-border/50 text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:ring-primary/20 backdrop-blur-sm'
               />
               <button
                 type='button'
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className='absolute right-4 text-gray-500 hover:text-gray-300 transition-colors'
+                className='absolute right-4 text-muted-foreground hover:text-foreground transition-colors'
               >
                 {showConfirmPassword ? <EyeOff className='w-5 h-5' /> : <Eye className='w-5 h-5' />}
               </button>
             </div>
           </div>
           {form.formState.errors.confirmPassword && (
-            <p className='text-red-400 text-xs pl-1'>
+            <p className='text-destructive text-xs pl-1'>
               {form.formState.errors.confirmPassword.message}
             </p>
           )}
@@ -171,7 +175,7 @@ export function RegisterForm() {
         <Button
           type='submit'
           disabled={isLoading}
-          className='w-full h-12 bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-600 hover:to-cyan-600 text-white font-medium rounded-xl shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 transition-all duration-300 disabled:opacity-50'
+          className='w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-medium rounded-xl shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all duration-300 disabled:opacity-50'
         >
           {isLoading ? (
             <>
@@ -188,11 +192,11 @@ export function RegisterForm() {
 
         {/* Login Link */}
         <div className='text-center pt-4'>
-          <span className='text-gray-500 text-sm'>已有账号？</span>
+          <span className='text-muted-foreground text-sm'>已有账号？</span>
           <button
             type='button'
             onClick={backToLogin}
-            className='ml-2 text-purple-400 hover:text-purple-300 text-sm font-medium transition-colors'
+            className='ml-2 text-primary hover:text-primary/90 text-sm font-medium transition-colors'
           >
             返回登录
           </button>
@@ -203,7 +207,7 @@ export function RegisterForm() {
       <button
         type='button'
         onClick={backToLogin}
-        className='absolute top-6 left-6 flex items-center gap-2 text-gray-500 hover:text-gray-300 transition-colors'
+        className='absolute top-6 left-6 flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors'
       >
         <ArrowLeft className='w-5 h-5' />
         <span className='text-sm'>返回</span>

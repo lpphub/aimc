@@ -1,171 +1,172 @@
-# CLAUDE.md
+# CLAUDE.md (AI-STRICT MODE, STYLING INCLUDED)
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+## 0. Mission
 
-## Project Overview
+AI MUST generate code according to these rules:
 
-AIMC (智绘工坊) - AI-powered creative workflow platform.
+- All code MUST follow feature-based architecture.
+- Components MUST NOT contain business logic or API calls.
+- API data MUST go through Hooks.
+- Feature modules MUST be isolated.
+- Server data MUST NOT be stored in Zustand.
+- Query keys MUST be centralized per feature.
+- Styling changes MUST follow Tailwind CSS + CVA + semantic color rules.
 
-## Development Commands
+---
 
-```bash
-pnpm dev        # Start dev server on port 5000
-pnpm build      # Build for production (runs tsc then vite build)
-pnpm lint       # Biome lint check
-pnpm lint:fix   # Biome lint with auto-fix
-pnpm format     # Biome format
+## 1. Naming Conventions (MUST)
+
+### 1.1 Components
+- PascalCase
+- Example: `UserProfile.tsx`, `VideoCard.tsx`
+
+### 1.2 Utility Functions
+- camelCase
+- Example: `formatDate`, `calculateTotal`
+
+### 1.3 Constants
+- UPPER_SNAKE_CASE
+- Example: `MAX_RETRY_COUNT`, `API_TIMEOUT`
+
+### 1.4 Directories / Folders
+- kebab-case
+- Example: `user-profile/`, `video-list/`
+
+### 1.5 API Types
+- Request payloads → XxxReq
+- Response data → XxxResp
+- Example:
+```ts
+export interface ListVideosReq { page: number; pageSize: number }
+export interface VideoItem { id: string; title: string; coverUrl: string }
+export interface ListVideosResp { list: VideoItem[]; total: number }
+export interface CreateVideoReq { title: string; coverUrl: string }
+export interface CreateVideoResp { id: string }
 ```
 
-Adding shadcn/ui components:
-```bash
-npx shadcn@latest add <component>
-npx shadcn@latest add <component> --overwrite
+### 1.6 Query Keys
+- Must be stored in a single object per feature
+- All keys should be `const` and descriptive
+- Example:
+```ts
+export const videoKeys = {
+  all: ['video'] as const,
+  list: () => [...videoKeys.all, 'list'] as const,
+  detail: (id: string) => [...videoKeys.all, 'detail', id] as const,
+}
 ```
 
-## Architecture
+### 1.7 Stores (Zustand)
+- Store names MUST match purpose
+- Example: `useAuthStore`, `useThemeStore`, `useLocaleStore`
+- MUST NOT store server data
 
-### Directory Structure
+---
 
-- `src/app/` - Application core (router, providers, App.tsx)
-- `src/pages/` - Page components (route entry points)
-- `src/features/` - Business feature modules (auth, project, creation, ai-tools)
-- `src/shared/` - Cross-feature shared resources (components/ui, stores, utils)
-- `src/lib/` - Core library wrappers (ky HTTP client, utilities)
-- `src/mocks/` - MSW mock handlers for development
+## 2. Feature Architecture (MUST)
 
-### Feature Module Structure
-
-Each feature follows this pattern:
 ```
 src/features/<feature>/
-├── api.ts        # API endpoints using ky client
-├── types.ts      # TypeScript interfaces
-├── hooks.ts      # TanStack Query hooks (or hooks/index.ts)
-├── components/   # Feature-specific components
-└── index.ts      # Public exports
+├── api.ts                 # API endpoints
+├── types.ts               # API types
+├── hooks/                 # Query Hooks
+│   └── index.ts
+├── components/            # Feature components
+└── index.ts               # Public exports
 ```
 
-### Data Flow Pattern
+Rules:
 
-```
-Component → Hook (TanStack Query) → API (ky) → Backend
-                ↓
-           Store (Zustand) - for client state
-```
+- Components MUST NOT call API directly.
+- API functions MUST be typed with XxxReq / XxxResp.
+- Hooks MUST use TanStack Query.
+- Components MUST use hooks for data.
+- Features MUST NOT import from other features (only `shared/` allowed).
 
-## Key Patterns
+---
 
-### API Layer
+## 3. API Rules (MUST)
 
-Use the `api` client from `@/lib/api`. It handles:
-- Bearer token injection
-- 401 retry with token refresh
-- Response unwrapping (`ApiResponse<T>` → `T`)
+- Must return typed responses.
+- Must not use `any`.
+- Must use ky client.
+- Example:
 
-```typescript
-// src/lib/api.ts provides typed methods
-api.get<T>(url, params?)
-api.post<T, D>(url, body?)
-api.put<T, D>(url, body?)
-api.patch<T, D>(url, body?)
-api.delete<T>(url)
-```
+```ts
+import api from '@/lib/api'
+import type { ListVideosReq, ListVideosResp } from './types'
 
-### Query Keys Pattern
-
-Define query keys as const objects for cache management:
-
-```typescript
-export const featureKeys = {
-  all: ['feature'] as const,
-  list: () => [...featureKeys.all, 'list'] as const,
-  detail: (id: string) => [...featureKeys.all, 'detail', id] as const,
+export const videoApi = {
+  list: (params: ListVideosReq) => api.get<ListVideosResp>('videos', { searchParams: params }),
+  create: (data: CreateVideoReq) => api.post<CreateVideoResp>('videos', data),
 }
 ```
 
-### Hooks Pattern
+---
 
-Use TanStack Query hooks with query key invalidation:
+## 4. Hook Rules (MUST)
 
-```typescript
-export function useFeatureList() {
+- Must use `useQuery` / `useMutation` from TanStack Query.
+- Query keys MUST follow QueryKeys object.
+- Example:
+
+```ts
+export function useVideoList(params: ListVideosReq) {
   return useQuery({
-    queryKey: featureKeys.list(),
-    queryFn: () => featureApi.list(),
-  })
-}
-
-export function useCreateFeature() {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: (data: CreateReq) => featureApi.create(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: featureKeys.list() })
-    },
+    queryKey: [...videoKeys.list(), params],
+    queryFn: () => videoApi.list(params),
   })
 }
 ```
 
-### Store Pattern
+---
 
-Zustand stores in `src/shared/stores/` with persist middleware for auth state.
+## 5. Data Flow (MUST)
 
-## Coding Conventions
+- Components → Hooks → API → Backend
+- NEVER call API directly in component
+- NEVER store server response in Zustand
 
-### TypeScript
+---
 
-- Use `type` for object types, `interface` for extensible types
-- Export types from `types.ts` in each feature
-- Use path alias `@/` for imports
+## 6. Zustand Usage (MUST)
 
-### React
+- Only for `auth`, `theme`, `locale`
+- Store names MUST match purpose
+- NEVER store server data
 
-- Use function components with arrow functions
-- Prefer named exports for components
-- Use `useAuthStore` selector pattern: `useAuthStore(s => s.user)`
+---
 
-### Code Style (Biome)
+## 7. Styling Rules (MUST)
 
-- Single quotes for strings
-- No semicolons (asNeeded)
-- ES5 trailing commas
-- 2-space indentation
-- 100 char line width
+- Tailwind classes only
+- Use `cn()` for conditional classes
+- Use semantic color classes (`text-muted-foreground`, `bg-primary`, `bg-primary-foreground`)
+- NO inline styles
+- NO hardcoded colors
+- **CVA Variants**
+  - Only allowed for buttons, inputs, and other UI primitives
+  - Must not introduce new colors outside Tailwind preset
+  - Must not override global `:root` variables outside theme store
+- **Theme changes**
+  - Light/dark mode only via `useThemeStore` + `document.documentElement.classList.toggle('dark')`
+  - Global colors (`--primary`, `--foreground`, `--background`) MUST NOT be hardcoded in component CSS
 
-### Import Order
+---
 
-Group imports logically:
-1. React/React ecosystem
-2. Third-party libraries
-3. Local imports (use `@/` alias)
-4. Types (use `type` keyword)
+## 8. Routing Rules (MUST)
 
-```typescript
-import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import type { User } from '@/features/auth/types'
-import { authApi } from '@/features/auth/api'
-```
+- Pages MUST be lazy-loaded
+- Auth guard MUST be applied via `<AuthGuard requireAuth>`
+- All routes MUST be defined in `app/router/index.tsx`
 
-## Adding a New Feature
+---
 
-1. Create feature directory: `src/features/<feature>/`
-2. Define types in `types.ts`
-3. Create API endpoints in `api.ts`
-4. Create query keys and hooks in `hooks.ts`
-5. Build components
-6. Add route in `src/app/router/index.tsx`
-7. Add MSW handlers in `src/mocks/handlers/` for development
+## 9. Prohibitions (MUST)
 
-## Environment Variables
-
-```bash
-VITE_API_BASE_URL=/api       # Backend API base URL
-VITE_ENABLE_PROXY=true       # Enable Vite proxy to localhost:8080
-```
-
-## Mock Data (Development)
-
-MSW is enabled in development. Test account:
-- Email: `test@aimc.com`
-- Password: `123456`
+- NO class components
+- NO var keyword
+- NO direct database calls
+- NO comments in AI-generated code
+- NEVER invent types outside XxxReq / XxxResp
+- NEVER bypass feature isolation

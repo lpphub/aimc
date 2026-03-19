@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import * as api from './api'
-import type { BatchUpdateTagsRequest, CreateMaterialRequest, MaterialsFilter } from './types'
+import * as api from '../api'
+import type { BatchUpdateTagsRequest, CreateMaterialRequest, MaterialsFilter } from '../types'
 
 export const materialKeys = {
   all: ['materials'] as const,
@@ -9,15 +9,12 @@ export const materialKeys = {
   tags: ['material-tags'] as const,
 }
 
-export const materialTagKeys = {
-  all: ['material-tags'] as const,
-  groups: () => [...materialTagKeys.all, 'groups'] as const,
-}
-
 export function useMaterials(filter?: MaterialsFilter) {
   return useQuery({
     queryKey: materialKeys.list(filter),
     queryFn: () => api.getMaterials(filter),
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   })
 }
 
@@ -61,50 +58,8 @@ export function useMaterialTags() {
   return useQuery({
     queryKey: materialKeys.tags,
     queryFn: () => api.getMaterialTags(),
-  })
-}
-
-export function useTagGroups() {
-  return useQuery({
-    queryKey: materialTagKeys.groups(),
-    queryFn: () => api.getTagGroups(),
-  })
-}
-
-export function useCreateTagGroup() {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: (name: string) => api.createTagGroup(name),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: materialTagKeys.groups() })
-      toast.success('标签组创建成功')
-    },
-    onError: () => toast.error('标签组创建失败'),
-  })
-}
-
-export function useCreateTag() {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: (params: { name: string; groupId?: number }) =>
-      api.createTag(params.name, params.groupId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: materialTagKeys.groups() })
-      toast.success('标签创建成功')
-    },
-    onError: () => toast.error('标签创建失败'),
-  })
-}
-
-export function useDeleteTag() {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: (tagId: number) => api.deleteTag(tagId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: materialTagKeys.groups() })
-      toast.success('标签删除成功')
-    },
-    onError: () => toast.error('标签删除失败'),
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   })
 }
 

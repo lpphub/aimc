@@ -56,13 +56,13 @@ export function CollectDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='max-w-md bg-gray-900 border-gray-800'>
+      <DialogContent className='max-w-md bg-background border-border'>
         <DialogHeader>
-          <DialogTitle className='text-white flex items-center gap-2'>
+          <DialogTitle className='text-foreground flex items-center gap-2'>
             <Sparkles className='w-5 h-5 text-cyan-400' />
             收藏到作品集
           </DialogTitle>
-          <DialogDescription className='text-gray-500'>
+          <DialogDescription className='text-muted-foreground'>
             选择将作品收藏到项目或全局作品集
           </DialogDescription>
         </DialogHeader>
@@ -73,8 +73,8 @@ export function CollectDialog({
             onClick={() => setSelectedProject(undefined)}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
               selectedProject === undefined
-                ? 'bg-cyan-500/20 border border-cyan-500/30 text-cyan-400'
-                : 'bg-gray-800/50 border border-gray-700/30 text-gray-400 hover:bg-gray-800'
+                ? 'bg-primary/20 border border-primary/30 text-primary'
+                : 'bg-muted/50 border border-border/30 text-muted-foreground hover:bg-accent'
             }`}
           >
             <div className='w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500/20 to-teal-500/20 flex items-center justify-center'>
@@ -90,8 +90,8 @@ export function CollectDialog({
               onClick={() => setSelectedProject(project.id)}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                 selectedProject === project.id
-                  ? 'bg-cyan-500/20 border border-cyan-500/30 text-cyan-400'
-                  : 'bg-gray-800/50 border border-gray-700/30 text-gray-400 hover:bg-gray-800'
+                  ? 'bg-primary/20 border border-primary/30 text-primary'
+                  : 'bg-muted/50 border border-border/30 text-muted-foreground hover:bg-accent'
               }`}
             >
               <div className='w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500/20 to-purple-600/20 flex items-center justify-center'>
@@ -106,14 +106,14 @@ export function CollectDialog({
           <Button
             variant='outline'
             onClick={() => onOpenChange(false)}
-            className='bg-transparent border-gray-700 text-gray-400 hover:text-white hover:bg-gray-800'
+            className='bg-transparent border-border text-muted-foreground hover:text-foreground hover:bg-accent'
           >
             取消
           </Button>
           <Button
             onClick={handleCollect}
             disabled={createWork.isPending}
-            className='bg-gradient-to-r from-cyan-500 to-teal-500 text-white hover:from-cyan-600 hover:to-teal-600'
+            className='bg-primary text-primary-foreground hover:bg-primary/90'
           >
             {createWork.isPending ? (
               <>

@@ -1,3 +1,3 @@
-import { Materials } from '@/features/materials'
+import { MaterialLibrary } from '@/features/materials'
 
-export default Materials
+export default MaterialLibrary

@@ -64,8 +64,16 @@ const tagGroups: TagGroup[] = [
   },
 ]
 
-const nextTagGroupId = 3
-const nextTagId = 5
+let nextTagGroupId = 3
+let nextTagId = 5
+
+export function getNextTagGroupId(): number {
+  return nextTagGroupId++
+}
+
+export function getNextTagId(): number {
+  return nextTagId++
+}
 
 function generateToken(): string {
   return `token_${Date.now()}_${Math.random().toString(36).slice(2)}`

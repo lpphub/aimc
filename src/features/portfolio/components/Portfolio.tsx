@@ -34,7 +34,7 @@ export function Portfolio() {
   }
 
   return (
-    <div className='flex min-h-screen flex-col relative overflow-hidden bg-[#0a0a0a]'>
+    <div className='flex min-h-screen flex-col relative overflow-hidden bg-background'>
       <div className='absolute inset-0 overflow-hidden pointer-events-none'>
         <div className='absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl animate-pulse' />
         <div className='absolute bottom-1/4 right-1/4 w-96 h-96 bg-teal-500/5 rounded-full blur-3xl animate-pulse delay-1000' />
@@ -55,10 +55,10 @@ export function Portfolio() {
 
           <div className='flex gap-4'>
             <Select value={projectFilter} onValueChange={setProjectFilter}>
-              <SelectTrigger className='w-40 bg-gray-900/50 border-gray-700/30 text-white'>
+              <SelectTrigger className='w-40 bg-background/50 border-border/30 text-foreground'>
                 <SelectValue placeholder='全部项目' />
               </SelectTrigger>
-              <SelectContent className='bg-gray-900/95 border-gray-700/30'>
+              <SelectContent className='bg-popover/95 border-border/30'>
                 <SelectItem value='all'>全部项目</SelectItem>
                 {projects.map(p => (
                   <SelectItem key={p.id} value={p.id}>
@@ -69,10 +69,10 @@ export function Portfolio() {
             </Select>
 
             <Select value={typeFilter} onValueChange={setTypeFilter}>
-              <SelectTrigger className='w-32 bg-gray-900/50 border-gray-700/30 text-white'>
+              <SelectTrigger className='w-32 bg-background/50 border-border/30 text-foreground'>
                 <SelectValue placeholder='全部类型' />
               </SelectTrigger>
-              <SelectContent className='bg-gray-900/95 border-gray-700/30'>
+              <SelectContent className='bg-popover/95 border-border/30'>
                 <SelectItem value='all'>全部类型</SelectItem>
                 <SelectItem value='text'>文本</SelectItem>
                 <SelectItem value='image'>图片</SelectItem>
@@ -87,7 +87,7 @@ export function Portfolio() {
                 placeholder='搜索作品...'
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className='w-full h-10 pl-10 pr-4 bg-gray-900/50 border border-gray-700/30 rounded-md text-white placeholder:text-gray-500 focus:border-cyan-500/50 focus:outline-none transition-colors'
+                className='w-full h-10 pl-10 pr-4 bg-background/50 border border-border/30 rounded-md text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:outline-none transition-colors'
               />
             </div>
           </div>
@@ -95,7 +95,7 @@ export function Portfolio() {
 
         {isLoading ? (
           <div className='flex h-[calc(100vh-300px)] items-center justify-center'>
-            <div className='text-gray-500'>加载中...</div>
+            <div className='text-muted-foreground'>加载中...</div>
           </div>
         ) : works.length > 0 ? (
           <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
@@ -112,12 +112,14 @@ export function Portfolio() {
                   <Sparkles className='relative w-16 h-16 text-gray-600' />
                 </div>
               </div>
-              <p className='text-gray-500 text-lg'>暂无作品</p>
-              <p className='text-gray-600 text-sm mt-2'>使用AI工具创作并收藏你的第一个作品</p>
+              <p className='text-muted-foreground text-lg'>暂无作品</p>
+              <p className='text-muted-foreground/70 text-sm mt-2'>
+                使用 AI 工具创作并收藏你的第一个作品
+              </p>
               <Button
                 onClick={() => (window.location.href = '/tools')}
                 variant='outline'
-                className='mt-4 bg-cyan-500/10 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20'
+                className='mt-4 bg-primary/10 border-primary/30 text-primary hover:bg-primary/20'
               >
                 前往工具箱
               </Button>

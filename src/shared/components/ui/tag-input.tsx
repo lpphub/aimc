@@ -62,7 +62,7 @@ export function TagInput({
           variant='outline'
           role='combobox'
           aria-expanded={open}
-          className='w-full h-auto min-h-[40px] justify-between bg-gray-800 border-gray-700 text-white hover:bg-gray-800'
+          className='w-full h-auto min-h-[40px] justify-between bg-background border-border text-foreground hover:bg-accent'
         >
           <div className='flex flex-wrap gap-1 flex-1'>
             {value.length === 0 ? (
@@ -71,7 +71,7 @@ export function TagInput({
               value.map(tag => (
                 <Badge
                   key={tag}
-                  className='bg-cyan-500/20 text-cyan-400 border-cyan-500/30'
+                  className='bg-primary/20 text-primary border-primary/30'
                   onClick={e => {
                     e.stopPropagation()
                     handleRemove(tag)
@@ -87,7 +87,7 @@ export function TagInput({
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className='w-[--radix-popover-trigger-width] p-0 bg-gray-900 border-gray-700'
+        className='w-[--radix-popover-trigger-width] p-0 bg-popover border-border'
         align='start'
       >
         <Command className='bg-transparent'>
@@ -98,11 +98,11 @@ export function TagInput({
               onChange={e => setInputValue(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder='输入后按 Enter 创建...'
-              className='flex-1 h-10 bg-transparent text-white placeholder:text-gray-500 outline-none text-sm'
+              className='flex-1 h-10 bg-transparent text-foreground placeholder:text-muted-foreground outline-none text-sm'
             />
           </div>
           <CommandList>
-            <CommandEmpty className='py-2 px-3 text-sm text-gray-500'>
+            <CommandEmpty className='py-2 px-3 text-sm text-muted-foreground'>
               {inputValue.trim() ? `按 Enter 创建 "${inputValue.trim()}"` : '暂无预设标签'}
             </CommandEmpty>
             <CommandGroup>
@@ -111,7 +111,7 @@ export function TagInput({
                   key={option}
                   value={option}
                   onSelect={() => handleSelect(option)}
-                  className='text-white hover:bg-gray-800 cursor-pointer'
+                  className='text-foreground hover:bg-accent cursor-pointer'
                 >
                   <Check
                     className={`mr-2 h-4 w-4 ${value.includes(option) ? 'opacity-100' : 'opacity-0'}`}
