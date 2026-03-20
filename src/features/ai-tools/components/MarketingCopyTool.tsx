@@ -38,7 +38,7 @@ export function MarketingCopyTool({ onBack }: MarketingCopyToolProps) {
 
         <div className='flex gap-6 flex-1'>
           <div className='w-96 flex-shrink-0'>
-            <Card className='h-full bg-gradient-to-br from-gray-900/80 to-gray-900/50 border-gray-700/30 backdrop-blur-sm p-6'>
+            <Card className='h-full bg-linear-to-br from-gray-900/80 to-gray-900/50 border-gray-700/30 backdrop-blur-sm p-6'>
               <h2 className='text-lg font-semibold text-foreground mb-4'>文案设置</h2>
 
               <div className='mb-6'>

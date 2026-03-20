@@ -52,14 +52,14 @@ export function LoginForm() {
       <div className='text-center mb-8'>
         <div className='relative inline-flex items-center justify-center w-20 h-20 mb-6'>
           {/* Glow effect */}
-          <div className='absolute inset-0 bg-gradient-to-br from-cyan-500/30 to-teal-500/30 rounded-2xl blur-xl animate-pulse' />
+          <div className='absolute inset-0 bg-linear-to-br from-cyan-500/30 to-teal-500/30 rounded-2xl blur-xl animate-pulse' />
           {/* Icon container */}
-          <div className='relative flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-teal-500/20 border border-cyan-500/30 backdrop-blur-sm'>
+          <div className='relative flex items-center justify-center w-20 h-20 rounded-2xl bg-linear-to-br from-cyan-500/20 to-teal-500/20 border border-cyan-500/30 backdrop-blur-sm'>
             <Rocket className='w-10 h-10 text-cyan-400' />
           </div>
         </div>
         <h1 className='text-3xl font-bold text-white mb-2'>
-          <span className='bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent'>
+          <span className='bg-linear-to-br from-cyan-400 to-teal-400 bg-clip-text text-transparent'>
             智绘工坊
           </span>
         </h1>
@@ -71,7 +71,7 @@ export function LoginForm() {
         {/* Email Field */}
         <div className='space-y-2'>
           <div className='relative group'>
-            <div className='absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-teal-500/20 rounded-xl blur-sm opacity-0 group-focus-within:opacity-100 transition-opacity' />
+            <div className='absolute inset-0 bg-linear-to-br from-cyan-500/20 to-teal-500/20 rounded-xl blur-sm opacity-0 group-focus-within:opacity-100 transition-opacity' />
             <div className='relative flex items-center'>
               <Mail className='absolute left-4 w-5 h-5 text-gray-500 group-focus-within:text-cyan-400 transition-colors' />
               <Input
@@ -90,7 +90,7 @@ export function LoginForm() {
         {/* Password Field */}
         <div className='space-y-2'>
           <div className='relative group'>
-            <div className='absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-teal-500/20 rounded-xl blur-sm opacity-0 group-focus-within:opacity-100 transition-opacity' />
+            <div className='absolute inset-0 bg-linear-to-br from-cyan-500/20 to-teal-500/20 rounded-xl blur-sm opacity-0 group-focus-within:opacity-100 transition-opacity' />
             <div className='relative flex items-center'>
               <Lock className='absolute left-4 w-5 h-5 text-gray-500 group-focus-within:text-cyan-400 transition-colors' />
               <Input

@@ -43,7 +43,7 @@ export function Portfolio() {
       <div className='relative z-10 flex-1 p-8'>
         <div className='mb-8'>
           <div className='flex items-center gap-3 mb-4'>
-            <div className='flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-teal-500/20 to-cyan-500/20 border border-teal-500/30'>
+            <div className='flex items-center justify-center w-12 h-12 rounded-xl bg-linear-to-br from-teal-500/20 to-cyan-500/20 border border-teal-500/30'>
               <FolderOpen className='w-6 h-6 text-teal-400' />
             </div>
             <div>

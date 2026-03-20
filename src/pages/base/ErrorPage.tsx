@@ -34,7 +34,7 @@ function ErrorPage({ code, title, description, icon, action, secondaryAction }: 
             <span
               className={cn(
                 'text-[10rem] font-bold leading-none select-none',
-                'bg-gradient-to-br from-cyan-500/30 via-cyan-500/20 to-transparent',
+                'bg-linear-to-br from-cyan-500/30 via-cyan-500/20 to-transparent',
                 'bg-clip-text text-transparent'
               )}
             >
@@ -59,7 +59,7 @@ function ErrorPage({ code, title, description, icon, action, secondaryAction }: 
             {action && (
               <Button
                 onClick={action.onClick}
-                className='bg-gradient-to-r from-cyan-500 to-teal-500 text-white hover:from-cyan-600 hover:to-teal-600'
+                className='bg-linear-to-br from-cyan-500 to-teal-500 text-white hover:from-cyan-600 hover:to-teal-600'
               >
                 {action.label}
               </Button>

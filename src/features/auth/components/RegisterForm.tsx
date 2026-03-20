@@ -59,14 +59,14 @@ export function RegisterForm() {
       <div className='text-center mb-8'>
         <div className='relative inline-flex items-center justify-center w-20 h-20 mb-6'>
           {/* Glow effect */}
-          <div className='absolute inset-0 bg-gradient-to-br from-purple-500/30 to-cyan-500/30 rounded-2xl blur-xl animate-pulse' />
+          <div className='absolute inset-0 bg-linear-to-br from-purple-500/30 to-cyan-500/30 rounded-2xl blur-xl animate-pulse' />
           {/* Icon container */}
-          <div className='relative flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500/20 to-cyan-500/20 border border-purple-500/30 backdrop-blur-sm'>
+          <div className='relative flex items-center justify-center w-20 h-20 rounded-2xl bg-linear-to-br from-purple-500/20 to-cyan-500/20 border border-purple-500/30 backdrop-blur-sm'>
             <Sparkles className='w-10 h-10 text-purple-400' />
           </div>
         </div>
         <h1 className='text-3xl font-bold text-white mb-2'>
-          <span className='bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent'>
+          <span className='bg-linear-to-br from-purple-400 to-cyan-400 bg-clip-text text-transparent'>
             创建账号
           </span>
         </h1>
@@ -78,7 +78,7 @@ export function RegisterForm() {
         {/* Username Field */}
         <div className='space-y-2'>
           <div className='relative group'>
-            <div className='absolute inset-0 bg-gradient-to-r from-purple-500/20 to-cyan-500/20 rounded-xl blur-sm opacity-0 group-focus-within:opacity-100 transition-opacity' />
+            <div className='absolute inset-0 bg-linear-to-br from-purple-500/20 to-cyan-500/20 rounded-xl blur-sm opacity-0 group-focus-within:opacity-100 transition-opacity' />
             <div className='relative flex items-center'>
               <User className='absolute left-4 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors' />
               <Input
@@ -99,7 +99,7 @@ export function RegisterForm() {
         {/* Email Field */}
         <div className='space-y-2'>
           <div className='relative group'>
-            <div className='absolute inset-0 bg-gradient-to-r from-purple-500/20 to-cyan-500/20 rounded-xl blur-sm opacity-0 group-focus-within:opacity-100 transition-opacity' />
+            <div className='absolute inset-0 bg-linear-to-br from-purple-500/20 to-cyan-500/20 rounded-xl blur-sm opacity-0 group-focus-within:opacity-100 transition-opacity' />
             <div className='relative flex items-center'>
               <Mail className='absolute left-4 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors' />
               <Input
@@ -118,7 +118,7 @@ export function RegisterForm() {
         {/* Password Field */}
         <div className='space-y-2'>
           <div className='relative group'>
-            <div className='absolute inset-0 bg-gradient-to-r from-purple-500/20 to-cyan-500/20 rounded-xl blur-sm opacity-0 group-focus-within:opacity-100 transition-opacity' />
+            <div className='absolute inset-0 bg-linear-to-br from-purple-500/20 to-cyan-500/20 rounded-xl blur-sm opacity-0 group-focus-within:opacity-100 transition-opacity' />
             <div className='relative flex items-center'>
               <Lock className='absolute left-4 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors' />
               <Input
@@ -146,7 +146,7 @@ export function RegisterForm() {
         {/* Confirm Password Field */}
         <div className='space-y-2'>
           <div className='relative group'>
-            <div className='absolute inset-0 bg-gradient-to-r from-purple-500/20 to-cyan-500/20 rounded-xl blur-sm opacity-0 group-focus-within:opacity-100 transition-opacity' />
+            <div className='absolute inset-0 bg-linear-to-br from-purple-500/20 to-cyan-500/20 rounded-xl blur-sm opacity-0 group-focus-within:opacity-100 transition-opacity' />
             <div className='relative flex items-center'>
               <Lock className='absolute left-4 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors' />
               <Input

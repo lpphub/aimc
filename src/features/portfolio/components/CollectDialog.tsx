@@ -78,7 +78,7 @@ export function CollectDialog({
                 : 'bg-muted/50 border border-border/30 text-muted-foreground hover:bg-accent'
             )}
           >
-            <div className='w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500/20 to-teal-500/20 flex items-center justify-center'>
+            <div className='w-8 h-8 rounded-lg bg-linear-to-br from-cyan-500/20 to-teal-500/20 flex items-center justify-center'>
               {selectedProject === undefined && <Check className='w-4 h-4' />}
             </div>
             <span className='text-sm font-medium'>全局作品集</span>
@@ -96,7 +96,7 @@ export function CollectDialog({
                   : 'bg-muted/50 border border-border/30 text-muted-foreground hover:bg-accent'
               )}
             >
-              <div className='w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500/20 to-purple-600/20 flex items-center justify-center'>
+              <div className='w-8 h-8 rounded-lg bg-linear-to-br from-purple-500/20 to-purple-600/20 flex items-center justify-center'>
                 {selectedProject === project.id && <Check className='w-4 h-4' />}
               </div>
               <span className='text-sm font-medium'>{project.name}</span>
