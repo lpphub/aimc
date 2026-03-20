@@ -164,7 +164,7 @@ export function MaterialLibrary() {
             <div className='text-on-surface-variant'>加载中...</div>
           </div>
         ) : materials.length > 0 ? (
-          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6'>
             {materials.map(material => (
               <MaterialCard
                 key={material.id}
@@ -176,7 +176,7 @@ export function MaterialLibrary() {
             <button
               type='button'
               onClick={() => fileInputRef.current?.click()}
-              className='aspect-[3/4] flex flex-col items-center justify-center gap-4 bg-surface-container-low/30 border-dashed border-2 border-outline-variant/30 hover:border-primary-container/50 hover:bg-primary-container/5 transition-all rounded-2xl group'
+              className='aspect-[2/3] flex flex-col items-center justify-center gap-4 bg-surface-container-low/30 border-dashed border-2 border-outline-variant/30 hover:border-primary-container/50 hover:bg-primary-container/5 transition-all rounded-2xl group'
             >
               <div className='w-16 h-16 rounded-full bg-primary-container/10 flex items-center justify-center text-primary-container group-hover:scale-110 transition-transform duration-500'>
                 <span className='text-4xl'>+</span>

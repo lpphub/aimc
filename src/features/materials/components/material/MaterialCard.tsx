@@ -24,7 +24,7 @@ export function MaterialCard({ material, isSelected, onSelect }: MaterialCardPro
     <div
       className={cn(
         'relative overflow-hidden rounded-xl bg-surface-container-low border transition-all duration-300 group cursor-pointer',
-        'aspect-[3/4]',
+        'aspect-[2/3]',
         isSelected
           ? 'border-primary-container shadow-[0_0_20px_rgba(0,242,255,0.15)]'
           : 'border-outline-variant/50 hover:border-primary-container hover:shadow-[0_0_20px_rgba(0,242,255,0.15)] hover:-translate-y-1'

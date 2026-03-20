@@ -25,7 +25,10 @@ export function MaterialBatchToolbar({
     addTags.mutate(
       { materialIds: selectedIds, tagIds },
       {
-        onSuccess: () => setShowTagModal(false),
+        onSuccess: () => {
+          setShowTagModal(false)
+          onClear()
+        },
       }
     )
   }
