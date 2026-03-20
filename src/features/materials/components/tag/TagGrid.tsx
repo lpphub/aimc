@@ -27,7 +27,7 @@ export function TagGrid({
   if (isLoading) {
     return (
       <div className='flex items-center justify-center h-full'>
-        <span className='text-muted-foreground text-sm'>加载中...</span>
+        <span className='text-gray-400 text-sm'>加载中...</span>
       </div>
     )
   }
@@ -42,47 +42,57 @@ export function TagGrid({
     onEditTag(tagId, name)
   }
 
+  const tagColors = [
+    'bg-cyan-500/10 border-cyan-500/30 text-cyan-400',
+    'bg-purple-500/10 border-purple-500/30 text-purple-400',
+    'bg-teal-500/10 border-teal-500/30 text-teal-400',
+  ]
+
   return (
-    <div className='flex-1 overflow-auto'>
-      <div className='grid grid-cols-5 gap-3'>
+    <div className='flex-1 overflow-auto mb-4'>
+      <div className='grid grid-cols-3 gap-3'>
         <button
           type='button'
           onClick={onNewTagClick}
-          className='px-4 py-1.5 border border-dashed border-border rounded-lg text-muted-foreground hover:border-foreground hover:text-foreground transition-colors text-left text-sm'
+          className='aspect-square border-2 border-dashed border-white/20 rounded-xl text-gray-400 hover:border-cyan-400 hover:text-cyan-400 transition-colors flex items-center justify-center gap-2 text-sm'
         >
-          <Plus className='w-4 h-4 inline mr-1' />
-          新建标签
+          <Plus className='w-4 h-4' />
+          创建新标签
         </button>
 
-        {tags.map(tag => {
+        {tags.map((tag, index) => {
           const isSelected = selectedTagIds.includes(tag.id)
+          const colorClass = isSelected
+            ? 'bg-cyan-500/20 border-cyan-400 text-cyan-400'
+            : tagColors[index % tagColors.length]
+
           return (
-            <div key={tag.id} className='relative group'>
+            <div key={tag.id} className='relative group/tag'>
               <button
                 type='button'
                 onClick={() => onTagToggle(tag.id)}
                 className={cn(
-                  'w-full px-4 py-1.5 rounded-lg transition-colors text-left flex items-center justify-between text-sm',
-                  isSelected
-                    ? 'bg-primary/20 border border-primary/50 text-primary'
-                    : 'bg-muted border border-border text-foreground hover:border-border/70'
+                  'w-full aspect-square rounded-xl border transition-all text-sm font-medium flex items-center justify-center relative',
+                  colorClass
                 )}
               >
-                <span className='truncate flex-1'>{tag.name}</span>
-                <div className='flex items-center gap-1 shrink-0'>
-                  {isSelected && <Check className='w-4 h-4' />}
-                  <button
-                    type='button'
-                    onClick={e => {
-                      e.stopPropagation()
-                      setMenuOpenTagId(menuOpenTagId === tag.id ? null : tag.id)
-                    }}
-                    className='p-0.5 hover:bg-accent/50 rounded transition-colors opacity-0 group-hover:opacity-100'
-                    aria-label='更多操作'
-                  >
-                    <MoreHorizontal className='w-4 h-4 text-muted-foreground' />
-                  </button>
-                </div>
+                {isSelected && (
+                  <div className='absolute top-2 right-2'>
+                    <Check className='w-4 h-4' />
+                  </div>
+                )}
+                <span className='truncate px-4'>{tag.name}</span>
+                <button
+                  type='button'
+                  onClick={e => {
+                    e.stopPropagation()
+                    setMenuOpenTagId(menuOpenTagId === tag.id ? null : tag.id)
+                  }}
+                  className='absolute bottom-2 right-2 p-1 hover:bg-white/10 rounded transition-colors opacity-0 group-hover/tag:opacity-100'
+                  aria-label='更多操作'
+                >
+                  <MoreHorizontal className='w-3 h-3' />
+                </button>
               </button>
 
               {menuOpenTagId === tag.id && (
@@ -93,11 +103,11 @@ export function TagGrid({
                     onClick={() => setMenuOpenTagId(null)}
                     aria-label='关闭菜单'
                   />
-                  <div className='absolute right-0 top-full mt-1 z-20 bg-popover border border-border rounded-md shadow-lg py-1 min-w-25'>
+                  <div className='absolute right-0 top-full mt-1 z-20 bg-[#1a1f2e] border border-white/10 rounded-lg shadow-lg py-1 min-w-32'>
                     <button
                       type='button'
                       onClick={() => handleEditTag(tag.id, tag.name)}
-                      className='w-full px-3 py-1.5 text-sm text-left text-foreground hover:bg-accent flex items-center gap-2'
+                      className='w-full px-3 py-2 text-sm text-left text-white hover:bg-white/5 flex items-center gap-2'
                     >
                       <Pencil className='w-4 h-4' />
                       编辑
@@ -105,7 +115,7 @@ export function TagGrid({
                     <button
                       type='button'
                       onClick={() => handleDeleteTag(tag.id)}
-                      className='w-full px-3 py-1.5 text-sm text-left text-destructive hover:bg-destructive/10 flex items-center gap-2'
+                      className='w-full px-3 py-2 text-sm text-left text-red-400 hover:bg-red-500/10 flex items-center gap-2'
                     >
                       <Trash2 className='w-4 h-4' />
                       删除

@@ -1,4 +1,4 @@
-import { Filter, Search, Tag, Upload } from 'lucide-react'
+import { Filter, Grid3x3, LayoutGrid, Search, Upload } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { Button } from '@/shared/components/ui/button'
@@ -24,27 +24,38 @@ function MaterialsHeader({
 }) {
   return (
     <div className='mb-8'>
-      <div className='flex items-center gap-3 mb-4'>
-        <div className='flex items-center justify-center w-12 h-12 rounded-xl bg-linear-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30'>
-          <Tag className='w-6 h-6 text-purple-400' />
-        </div>
-        <div>
-          <h1 className='text-3xl font-bold text-foreground tracking-tight'>素材库</h1>
-          <p className='text-sm text-muted-foreground mt-1'>
-            管理你的图片和视频素材 · {materialsCount} 个
-          </p>
-        </div>
+      <div className='mb-6'>
+        <p className='text-xs text-cyan-400 mb-2 tracking-wider'>中央仓库</p>
+        <h1 className='text-4xl font-bold text-white mb-2'>素材管理</h1>
+        <p className='text-sm text-gray-400'>
+          您的合成能工作品。在这里管理产品视觉效果、生成的场景和专辑模板。
+        </p>
       </div>
 
-      <div className='flex gap-4'>
+      <div className='flex items-center gap-3 mb-6'>
+        <Button
+          variant='outline'
+          className='bg-cyan-500/10 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20'
+        >
+          图片
+        </Button>
+        <Button variant='ghost' className='text-gray-400 hover:text-white hover:bg-white/5'>
+          视频
+        </Button>
+        <Button variant='ghost' className='text-gray-400 hover:text-white hover:bg-white/5'>
+          模型
+        </Button>
+      </div>
+
+      <div className='flex items-center gap-3'>
         <div className='relative flex-1 max-w-md'>
-          <Search className='absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground' />
+          <Search className='absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500' />
           <input
             type='text'
-            placeholder='搜索素材...'
+            placeholder='搜索素材、产品或项目标签或系统...'
             value={search}
             onChange={e => onSearchChange(e.target.value)}
-            className='w-full h-10 pl-10 pr-4 bg-card/50 border border-border/30 rounded-md text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:outline-none transition-colors'
+            className='w-full h-10 pl-10 pr-4 bg-[#1a1f2e] border border-white/10 rounded-lg text-white placeholder:text-gray-500 focus:border-cyan-500/50 focus:outline-none transition-colors'
           />
         </div>
 
@@ -53,20 +64,19 @@ function MaterialsHeader({
           onClick={onFilterClick}
           className={
             filterTagCount > 0
-              ? 'border-primary/50 text-primary'
-              : 'border-border/30 text-foreground'
+              ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400'
+              : 'bg-[#1a1f2e] border-white/10 text-gray-400 hover:text-white hover:border-white/20'
           }
         >
           <Filter className='w-4 h-4 mr-2' />
-          {filterTagCount > 0 ? `标签筛选 ${filterTagCount}` : '标签筛选'}
+          {filterTagCount > 0 ? `筛选 ${filterTagCount}` : '筛选'}
         </Button>
 
         <Button
-          onClick={onUploadClick}
-          className='bg-primary/20 border border-primary/30 text-primary-foreground hover:bg-primary/30'
+          variant='outline'
+          className='bg-[#1a1f2e] border-white/10 text-gray-400 hover:text-white hover:border-white/20'
         >
-          <Upload className='w-4 h-4 mr-2' />
-          上传素材
+          <Grid3x3 className='w-4 h-4' />
         </Button>
       </div>
     </div>
@@ -77,14 +87,9 @@ function EmptyState() {
   return (
     <div className='flex h-[calc(100vh-300px)] items-center justify-center'>
       <div className='text-center'>
-        <div className='flex justify-center mb-4'>
-          <div className='relative'>
-            <div className='absolute inset-0 bg-primary/20 rounded-full blur-xl animate-pulse' />
-            <Tag className='relative w-16 h-16 text-muted-foreground' />
-          </div>
-        </div>
-        <p className='text-muted-foreground text-lg'>暂无素材</p>
-        <p className='text-muted-foreground/70 text-sm mt-2'>上传你的第一个素材开始管理</p>
+        <LayoutGrid className='w-16 h-16 text-gray-600 mx-auto mb-4' />
+        <p className='text-gray-400 text-lg'>暂无素材</p>
+        <p className='text-gray-600 text-sm mt-2'>上传你的第一个素材开始管理</p>
       </div>
     </div>
   )
@@ -140,13 +145,8 @@ export function MaterialLibrary() {
   }
 
   return (
-    <div className='flex min-h-screen flex-col relative overflow-hidden bg-background'>
-      <div className='absolute inset-0 overflow-hidden pointer-events-none'>
-        <div className='absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl animate-pulse' />
-        <div className='absolute bottom-1/4 right-1/4 w-96 h-96 bg-teal-500/5 rounded-full blur-3xl animate-pulse delay-1000' />
-      </div>
-
-      <div className='relative z-10 flex-1 p-8'>
+    <div className='flex min-h-screen flex-col bg-[#0a0e14]'>
+      <div className='flex-1 p-8'>
         <MaterialsHeader
           materialsCount={materials.length}
           search={search}
@@ -166,10 +166,10 @@ export function MaterialLibrary() {
 
         {isLoading ? (
           <div className='flex h-[calc(100vh-300px)] items-center justify-center'>
-            <div className='text-muted-foreground'>加载中...</div>
+            <div className='text-gray-400'>加载中...</div>
           </div>
         ) : materials.length > 0 ? (
-          <div className='grid grid-cols-4 gap-3 sm:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8'>
+          <div className='grid grid-cols-4 gap-4'>
             {materials.map(material => (
               <MaterialCard
                 key={material.id}
@@ -182,6 +182,45 @@ export function MaterialLibrary() {
         ) : (
           <EmptyState />
         )}
+      </div>
+
+      <div className='border-t border-white/5 bg-[#0f1419] p-4'>
+        <div className='flex items-center justify-between max-w-7xl mx-auto'>
+          <div className='flex items-center gap-4'>
+            <div className='flex items-center gap-2'>
+              <div className='w-3 h-3 rounded-full bg-cyan-400' />
+              <span className='text-sm text-gray-400'>存储空间</span>
+            </div>
+            <div className='w-48 h-2 bg-[#1a1f2e] rounded-full overflow-hidden'>
+              <div className='h-full w-1/3 bg-linear-to-r from-cyan-400 to-teal-400' />
+            </div>
+            <span className='text-xs text-gray-500'>已使用 12.4 GB</span>
+            <span className='text-xs text-cyan-400'>共计 20 GB</span>
+          </div>
+
+          <div className='flex items-center gap-4'>
+            <div className='flex items-center gap-2'>
+              <div className='w-3 h-3 rounded-full bg-purple-400' />
+              <span className='text-sm text-gray-400'>任务队列</span>
+            </div>
+            <span className='text-xs text-gray-500'>
+              正在渲染 "北欧风列表广告" 广告素材...
+            </span>
+          </div>
+
+          <div className='text-right'>
+            <p className='text-sm text-cyan-400 mb-1'>AI 智能管家</p>
+            <p className='text-xs text-gray-500'>
+              经测到 12 张类似图片可以进行自动标签或建议去重。
+            </p>
+            <button
+              type='button'
+              className='text-xs text-cyan-400 hover:text-cyan-300 mt-1 flex items-center gap-1'
+            >
+              处理全部素材 →
+            </button>
+          </div>
+        </div>
       </div>
 
       <MaterialBatchToolbar

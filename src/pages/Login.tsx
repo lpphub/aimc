@@ -37,7 +37,7 @@ export default function LoginPage() {
                 智绘工坊
               </span>
             </h1>
-            <p className='text-xl text-muted-foreground'>AI 驱动的创意工作流平台</p>
+            <p className='text-xl text-muted-foreground'>AI 驱动的创意工作台</p>
           </div>
 
           {/* Features */}

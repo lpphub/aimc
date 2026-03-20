@@ -1,4 +1,4 @@
-import { FolderOpen, LogOut, Sparkles, Tag } from 'lucide-react'
+import { Clock, FolderOpen, Settings, Sparkles, Tag, X } from 'lucide-react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { useLogout } from '@/features/auth'
 import { cn } from '@/lib/utils'
@@ -10,22 +10,19 @@ export function Sidebar() {
 
   const navItems = [
     {
-      path: '/portfolio',
-      icon: FolderOpen,
-      label: '作品集',
-      description: '创作结果',
-    },
-    {
       path: '/tools',
-      icon: Sparkles,
+      icon: X,
       label: '工具箱',
-      description: 'AI工具',
     },
     {
       path: '/materials',
       icon: Tag,
       label: '素材库',
-      description: '素材管理',
+    },
+    {
+      path: '/portfolio',
+      icon: Clock,
+      label: '项目日志',
     },
   ]
 
@@ -35,22 +32,17 @@ export function Sidebar() {
   }
 
   return (
-    <aside className='fixed left-0 top-0 bottom-0 z-50 w-64 bg-background/95 backdrop-blur-xl border-r border-border flex flex-col'>
-      {/* Logo Section */}
-      <div className='p-6 border-b border-border'>
-        <div className='flex items-center gap-3'>
-          <div className='flex items-center justify-center w-10 h-10 rounded-xl bg-linear-to-br from-cyan-500/20 to-teal-500/20 border border-cyan-500/30 flex-shrink-0'>
-            <Sparkles className='w-5 h-5 text-cyan-400' />
-          </div>
-          <div className='overflow-hidden whitespace-nowrap max-w-48 opacity-100'>
-            <h1 className='text-lg font-bold text-foreground'>智绘工坊</h1>
-            <p className='text-xs text-muted-foreground'>AI 创作平台</p>
-          </div>
+    <aside className='fixed left-0 top-0 bottom-0 z-50 w-52 bg-[#0f1419] border-r border-white/5 flex flex-col'>
+      <div className='p-6'>
+        <div className='mb-1'>
+          <h1 className='text-cyan-400 text-base font-bold tracking-wide'>AIGC Toolset</h1>
         </div>
+        <p className='text-[10px] text-gray-500 uppercase tracking-widest'>
+          THE SYNTHETIC ARCHITECT
+        </p>
       </div>
 
-      {/* Navigation Items */}
-      <nav className='flex-1 px-3 py-4 space-y-1 overflow-y-auto'>
+      <nav className='flex-1 px-3 space-y-1'>
         {navItems.map(item => {
           const Icon = item.icon
           const isActive = location.pathname === item.path
@@ -60,41 +52,40 @@ export function Sidebar() {
               key={item.path}
               to={item.path}
               className={cn(
-                'flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 relative group',
+                'flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200',
                 isActive
-                  ? 'bg-linear-to-br from-sidebar-active/20 to-teal-500/20 text-cyan-400 border border-sidebar-active/30'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-accent/50 border border-transparent'
+                  ? 'bg-cyan-500/10 text-cyan-400 border-l-2 border-cyan-400'
+                  : 'text-gray-400 hover:text-gray-200 hover:bg-white/5'
               )}
             >
-              <Icon className={cn('w-5 h-5 flex-shrink-0', isActive && 'scale-110')} />
-              <div className='flex-1 overflow-hidden whitespace-nowrap max-w-48 opacity-100'>
-                <div className='text-sm font-medium'>{item.label}</div>
-                <div className='text-xs text-muted-foreground'>{item.description}</div>
-              </div>
-              {isActive && (
-                <div className='absolute right-2 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse' />
-              )}
+              <Icon className='w-4 h-4' />
+              <span className='text-sm'>{item.label}</span>
             </NavLink>
           )
         })}
       </nav>
 
-      {/* Footer - Logout & Collapse */}
-      <div className='p-3 space-y-1'>
-        {/* Logout Button */}
+      <div className='p-4 border-t border-white/5'>
+        <button
+          type='button'
+          className='w-full px-4 py-3 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 text-sm font-medium transition-colors'
+        >
+          NEW PROJECT
+        </button>
+      </div>
+
+      <div className='p-3 border-t border-white/5 flex items-center justify-between'>
+        <div className='flex items-center gap-2'>
+          <div className='w-8 h-8 rounded-full bg-linear-to-br from-cyan-400 to-teal-400' />
+          <span className='text-xs text-gray-400'>管理员</span>
+        </div>
         <button
           type='button'
           onClick={handleLogout}
-          className={cn(
-            'flex items-center gap-3 w-full px-4 py-3 rounded-xl transition-all duration-300',
-            'text-muted-foreground hover:text-destructive hover:bg-destructive/10 border border-transparent hover:border-destructive/30'
-          )}
-          title='退出登录'
+          className='p-2 hover:bg-white/5 rounded-lg transition-colors'
+          title='设置'
         >
-          <LogOut className='w-5 h-5 flex-shrink-0' />
-          <span className='text-sm font-medium flex-1 text-left overflow-hidden whitespace-nowrap max-w-48 opacity-100'>
-            退出登录
-          </span>
+          <Settings className='w-4 h-4 text-gray-400' />
         </button>
       </div>
     </aside>
