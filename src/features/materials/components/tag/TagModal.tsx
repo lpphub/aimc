@@ -329,13 +329,13 @@ export function TagModal({
 
           <div className='flex-1 flex flex-col bg-surface/30 backdrop-blur-sm overflow-hidden'>
             <div className='p-6 pb-4 border-b border-outline-variant/10'>
-              <div className='relative group'>
+              <div className='relative group pr-10'>
                 <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant group-focus-within:text-primary-container transition-colors' />
                 <Input
                   value={searchKeyword}
                   onChange={e => setSearchKeyword(e.target.value)}
                   placeholder='搜索当前分组下的标签...'
-                  className='h-10 pl-10 pr-4 bg-surface-container-lowest border-none focus:ring-1 focus:ring-primary-container/50 text-on-surface placeholder:text-on-surface-variant/50'
+                  className='h-10 pl-10 pr-4 bg-surface-container-low border border-outline-variant/20 focus:ring-1 focus:ring-primary-container/50 focus:border-primary-container/50 text-on-surface placeholder:text-on-surface-variant/50'
                 />
               </div>
             </div>

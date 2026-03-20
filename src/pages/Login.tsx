@@ -3,7 +3,7 @@ import { LoginForm, LoginProvider, RegisterForm } from '@/features/auth'
 
 export default function LoginPage() {
   return (
-    <div className='min-h-screen flex bg-[#0a0a0a] relative overflow-hidden'>
+    <div className='min-h-screen flex bg-surface relative overflow-hidden'>
       {/* Animated background */}
       <div className='absolute inset-0 overflow-hidden pointer-events-none'>
         <div className='absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl animate-pulse' />

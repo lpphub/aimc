@@ -1,4 +1,4 @@
-import { CheckCircle } from 'lucide-react'
+import { Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { Material } from '../../types'
 
@@ -20,18 +20,19 @@ export function MaterialCard({ material, isSelected, onSelect }: MaterialCardPro
   const isVideo = material.type === 'video'
   const tagLabel = material.tags[0] || (isVideo ? '无背景' : '成品海报')
   const tagColorClass = isVideo
-    ? 'bg-[#571bc1]/30 backdrop-blur-md text-[#d0bcff]'
-    : 'bg-[#00f2ff]/20 backdrop-blur-md text-[#00f2ff]'
+    ? 'bg-secondary-container/30 backdrop-blur-md text-secondary'
+    : 'bg-primary-container/20 backdrop-blur-md text-primary-container'
 
   return (
     <div
       className={cn(
-        'relative overflow-hidden rounded-2xl bg-[#1c1b1c] border transition-all duration-300 group',
-        'aspect-[4/5]',
+        'relative overflow-hidden rounded-xl bg-surface-container-low border transition-all duration-300 group cursor-pointer',
+        'aspect-[3/4]',
         isSelected
-          ? 'border-[#00f2ff] shadow-[0_0_20px_rgba(0,242,255,0.15)]'
-          : 'border-[#3a494b]/50 hover:border-[#00f2ff] hover:shadow-[0_0_20px_rgba(0,242,255,0.15)] hover:-translate-y-1'
+          ? 'border-primary-container shadow-[0_0_20px_rgba(0,242,255,0.15)]'
+          : 'border-outline-variant/50 hover:border-primary-container hover:shadow-[0_0_20px_rgba(0,242,255,0.15)] hover:-translate-y-1'
       )}
+      onClick={() => onSelect(material.id)}
     >
       <div className='absolute inset-0'>
         <div className='w-full h-full group-hover:scale-110 transition-transform duration-700 overflow-hidden'>
@@ -39,47 +40,30 @@ export function MaterialCard({ material, isSelected, onSelect }: MaterialCardPro
         </div>
       </div>
 
-      <div className='absolute inset-0 bg-linear-to-t from-[#131314] via-[#131314]/20 to-transparent' />
+      <div className='absolute inset-0 bg-linear-to-t from-surface via-surface/20 to-transparent' />
 
-      <div className='absolute top-4 left-4'>
+      <div className='absolute top-3 left-3'>
         <span className={cn('text-[10px] font-bold px-2 py-1 rounded uppercase', tagColorClass)}>
           {tagLabel}
         </span>
       </div>
 
-      <button
-        type='button'
-        onClick={e => {
-          e.stopPropagation()
-          onSelect(material.id)
-        }}
-        className='absolute top-4 right-4 transition-all'
-        aria-label={isSelected ? '取消选择' : '选择'}
-      >
-        {isSelected && (
-          <CheckCircle className='w-5 h-5 text-[#00f2ff] fill-[#00f2ff]' />
+      <div
+        className={cn(
+          'absolute top-3 right-3 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all',
+          isSelected
+            ? 'bg-primary-container border-primary-container'
+            : 'border-on-surface/30 bg-surface/20 opacity-0 group-hover:opacity-100'
         )}
-      </button>
+      >
+        {isSelected && <Check className='w-3 h-3 text-on-primary' />}
+      </div>
 
-      <div className='absolute bottom-0 p-5 w-full'>
-        <h3 className='font-bold text-lg text-white'>{material.filename}</h3>
-        <p className='text-[#b9cacb] text-xs mt-1'>
+      <div className='absolute bottom-0 p-3 w-full'>
+        <h3 className='font-medium text-sm text-on-surface truncate'>{material.filename}</h3>
+        <p className='text-on-surface-variant text-xs mt-0.5'>
           {isVideo ? 'PNG • 透明背景' : '4K • 2小时前生成'}
         </p>
-        <div className='mt-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity'>
-          <button
-            type='button'
-            className='flex-1 bg-[#00f2ff] text-[#00363a] py-2 rounded-lg text-xs font-bold uppercase tracking-widest hover:shadow-[0_0_15px_rgba(0,242,255,0.4)] transition-all'
-          >
-            下载
-          </button>
-          <button
-            type='button'
-            className='p-2 bg-[#353436] text-white rounded-lg hover:bg-[#2a2a2b] transition-colors'
-          >
-            <span className='text-sm'>⋯</span>
-          </button>
-        </div>
       </div>
     </div>
   )

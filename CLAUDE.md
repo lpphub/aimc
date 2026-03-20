@@ -17,46 +17,63 @@ AI MUST generate code according to these rules:
 ## 1. Naming Conventions (MUST)
 
 ### 1.1 Components
+
 - PascalCase
 - Example: `UserProfile.tsx`, `VideoCard.tsx`
 
 ### 1.2 Utility Functions
+
 - camelCase
 - Example: `formatDate`, `calculateTotal`
 
 ### 1.3 Constants
+
 - UPPER_SNAKE_CASE
 - Example: `MAX_RETRY_COUNT`, `API_TIMEOUT`
 
 ### 1.4 Directories / Folders
+
 - kebab-case
 - Example: `user-profile/`, `video-list/`
 
 ### 1.5 API Types
+
 - Request payloads → XxxReq
 - Response data → XxxResp
 - Example:
-```ts
-export interface ListVideosReq { page: number; pageSize: number }
-export interface VideoItem { id: string; title: string; coverUrl: string }
-export interface ListVideosResp { list: VideoItem[]; total: number }
-export interface CreateVideoReq { title: string; coverUrl: string }
-export interface CreateVideoResp { id: string }
-```
 
-### 1.6 Query Keys
-- Must be stored in a single object per feature
-- All keys should be `const` and descriptive
-- Example:
 ```ts
-export const videoKeys = {
-  all: ['video'] as const,
-  list: () => [...videoKeys.all, 'list'] as const,
-  detail: (id: string) => [...videoKeys.all, 'detail', id] as const,
+export interface ListXxReq {
+  page: number;
+  pageSize: number;
+}
+export interface XxItem {
+  id: string;
+  title: string;
+  coverUrl: string;
+}
+export interface ListXxResp {
+  list: XxItem[];
+  total: number;
 }
 ```
 
+### 1.6 Query Keys
+
+- Must be stored in a single object per feature
+- All keys should be `const` and descriptive
+- Example:
+
+```ts
+export const videoKeys = {
+  all: ["video"] as const,
+  list: () => [...videoKeys.all, "list"] as const,
+  detail: (id: string) => [...videoKeys.all, "detail", id] as const,
+};
+```
+
 ### 1.7 Stores (Zustand)
+
 - Store names MUST match purpose
 - Example: `useAuthStore`, `useThemeStore`, `useLocaleStore`
 - MUST NOT store server data
@@ -93,13 +110,14 @@ Rules:
 - Example:
 
 ```ts
-import api from '@/lib/api'
-import type { ListVideosReq, ListVideosResp } from './types'
+import api from "@/lib/api";
+import type { ListXxReq, ListXxResp } from "./types";
 
 export const videoApi = {
-  list: (params: ListVideosReq) => api.get<ListVideosResp>('videos', { searchParams: params }),
-  create: (data: CreateVideoReq) => api.post<CreateVideoResp>('videos', data),
-}
+  list: (params: ListXxReq) =>
+    api.get<ListXxResp>("videos", { searchParams: params }),
+  create: (data: CreateXxReq) => api.post<CreateXxResp>("videos", data),
+};
 ```
 
 ---
@@ -115,7 +133,7 @@ export function useVideoList(params: ListVideosReq) {
   return useQuery({
     queryKey: [...videoKeys.list(), params],
     queryFn: () => videoApi.list(params),
-  })
+  });
 }
 ```
 

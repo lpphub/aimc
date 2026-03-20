@@ -32,12 +32,12 @@ export function Sidebar() {
   }
 
   return (
-    <aside className='fixed left-0 top-0 h-screen w-64 bg-[#131314] border-r border-[#00f2ff]/10 flex flex-col py-6 z-50 shadow-[0px_0px_40px_rgba(0,242,255,0.06)]'>
+    <aside className='fixed left-0 top-0 h-screen w-64 bg-surface-container-lowest border-r border-primary-container/10 flex flex-col py-6 z-50 shadow-[0_0_40px_rgba(0,242,255,0.06)]'>
       <div className='px-6 mb-10'>
-        <div className='text-xl font-bold tracking-tighter text-[#00f2ff] mb-1'>
+        <div className='text-xl font-bold tracking-tighter text-primary mb-1'>
           AIGC Toolset
         </div>
-        <div className='text-[0.6875rem] font-bold tracking-[0.1em] uppercase text-[#b9cacb]'>
+        <div className='text-[0.6875rem] font-bold tracking-[0.1em] uppercase text-on-surface-variant'>
           The Synthetic Architect
         </div>
       </div>
@@ -54,8 +54,8 @@ export function Sidebar() {
               className={cn(
                 'flex items-center gap-4 px-4 py-3 transition-all rounded-xl group',
                 isActive
-                  ? 'bg-[#1c1b1c] text-[#00f2ff] border-r-4 border-[#00f2ff] shadow-[0px_0px_15px_rgba(0,242,255,0.2)]'
-                  : 'text-[#b9cacb] hover:bg-[#2a2a2b] hover:text-[#00f2ff]'
+                  ? 'bg-surface-container-high text-primary border-r-4 border-primary shadow-[0px_0px_15px_rgba(0,242,255,0.2)]'
+                  : 'text-on-surface-variant hover:bg-surface-container-high/50 hover:text-primary'
               )}
             >
               <Icon
@@ -73,21 +73,21 @@ export function Sidebar() {
       <div className='px-6 mt-auto space-y-4'>
         <button
           type='button'
-          className='w-full bg-[#1c1b1c] border border-[#00f2ff]/20 text-[#00f2ff] font-bold py-3 rounded-xl uppercase tracking-tighter text-xs hover:bg-[#00f2ff]/5 transition-all active:scale-[0.98]'
+          className='w-full bg-surface-container-high border border-primary-container/20 text-primary font-bold py-3 rounded-xl uppercase tracking-tighter text-xs hover:bg-primary-container/5 transition-all active:scale-[0.98]'
         >
           New Project
         </button>
 
-        <div className='pt-6 border-t border-[#1c1b1c] flex items-center gap-3'>
-          <div className='w-8 h-8 rounded-full border border-[#00f2ff]/20 bg-linear-to-br from-[#00f2ff] to-[#00dbe7]' />
+        <div className='pt-6 border-t border-outline-variant/10 flex items-center gap-3'>
+          <div className='w-8 h-8 rounded-full border border-primary-container/20 bg-gradient-to-br from-primary to-tertiary' />
           <div className='overflow-hidden flex-1'>
-            <div className='text-xs font-bold text-[#e5e2e3] truncate'>管理员</div>
-            <div className='text-[10px] text-[#b9cacb] truncate'>专业版计划</div>
+            <div className='text-xs font-bold text-on-surface truncate'>管理员</div>
+            <div className='text-[10px] text-on-surface-variant truncate'>专业版计划</div>
           </div>
           <button
             type='button'
             onClick={handleLogout}
-            className='text-[#b9cacb] hover:text-[#00f2ff] cursor-pointer transition-colors'
+            className='text-on-surface-variant hover:text-primary cursor-pointer transition-colors'
             title='设置'
           >
             <Settings className='w-4 h-4' />
