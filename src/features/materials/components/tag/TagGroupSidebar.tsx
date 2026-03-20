@@ -1,4 +1,4 @@
-import { BarChart3, Grid3x3, MoreHorizontal, Palette, Pencil, Plus, Star, Trash2 } from 'lucide-react'
+import { Grid3x3, MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import type { TagGroup } from '../../types'
@@ -27,10 +27,10 @@ export function TagGroupSidebar({
 
   const getButtonClassName = (groupId: string) =>
     cn(
-      'flex items-center gap-3 px-4 py-3 transition-all text-sm',
+      'flex items-center gap-3 px-4 py-3 transition-all text-sm w-full',
       activeGroupId === groupId
-        ? 'bg-[#2a2a2b] text-[#00f2ff] border-r-2 border-[#00f2ff]'
-        : 'text-[#b9cacb] hover:bg-[#2a2a2b]/50 hover:text-[#00f2ff]'
+        ? 'bg-surface-container-high text-primary-container border-r-2 border-primary-container'
+        : 'text-on-surface-variant hover:bg-surface-container-high/50 hover:text-primary-container'
     )
 
   const handleDeleteGroup = (groupId: number) => {
@@ -43,107 +43,96 @@ export function TagGroupSidebar({
     onEditGroup(groupId, name)
   }
 
-  const categoryIcons = [Star, Palette, BarChart3]
-
   return (
-    <aside className='w-64 bg-[#0e0e0f]/40 flex flex-col border-r border-[#3a494b]/10'>
-      <div className='p-6'>
-        <h2 className='font-bold text-xl tracking-tight text-[#00f2ff] mb-1'>标签管理</h2>
-        <p className='text-[#b9cacb] text-[10px] uppercase tracking-[0.1em]'>Tag Navigator</p>
-      </div>
-
-      <div className='px-6 mb-4 flex items-center justify-between'>
-        <span className='text-[10px] font-bold text-[#b9cacb] uppercase tracking-wider'>
+    <aside className='w-64 bg-surface-container-lowest/40 flex flex-col border-r border-outline-variant/10'>
+      <div className='px-6 py-4 flex items-center justify-between border-b border-outline-variant/10'>
+        <span className='text-sm font-bold text-on-surface-variant uppercase tracking-wider'>
           标签组
         </span>
         <button
           type='button'
           onClick={onNewGroupClick}
-          className='flex items-center gap-1 text-[10px] text-[#00f2ff] hover:text-white transition-colors group'
+          className='text-primary-container hover:text-on-surface transition-colors'
         >
-          <Plus className='w-3.5 h-3.5' />
-          创建分组
+          <Plus className='w-4 h-4' />
         </button>
       </div>
 
-      <nav className='flex-1 px-3 space-y-1 overflow-y-auto'>
+      <nav className='flex-1 px-3 py-2 space-y-1 overflow-y-auto'>
         <button
           type='button'
           onClick={() => onGroupSelect(ALL_TAGS_GROUP_ID)}
           className={getButtonClassName(ALL_TAGS_GROUP_ID)}
         >
-          <Grid3x3 className='w-5 h-5' />
-          <span className='font-medium'>全部标签</span>
+          <span className='font-medium flex-1 text-left'>全部标签</span>
         </button>
 
-        {groups.map((group, index) => {
-          const Icon = categoryIcons[index % categoryIcons.length]
-          return (
-            <div key={group.id} className='relative group/item'>
-              <button
-                type='button'
-                onClick={() => onGroupSelect(String(group.id))}
-                className={getButtonClassName(String(group.id))}
-              >
-                <Icon className='w-5 h-5' />
-                <span className='font-medium flex-1 text-left'>{group.name}</span>
+        {groups.length > 0 && (
+          <>
+            <button
+              type='button'
+              onClick={() => onGroupSelect(String(groups[0].id))}
+              className={getButtonClassName(String(groups[0].id))}
+            >
+              <span className='font-medium flex-1 text-left'>{groups[0].name}</span>
+            </button>
+
+            {groups.length > 1 && <div className='h-px bg-outline-variant/10 my-2' />}
+
+            {groups.slice(1).map(group => (
+              <div key={group.id} className='relative group/item'>
                 <button
                   type='button'
-                  onClick={e => {
-                    e.stopPropagation()
-                    setMenuOpenGroupId(menuOpenGroupId === group.id ? null : group.id)
-                  }}
-                  className='p-1 hover:bg-[#353436] rounded transition-colors opacity-0 group-hover/item:opacity-100'
-                  aria-label='更多操作'
+                  onClick={() => onGroupSelect(String(group.id))}
+                  className={getButtonClassName(String(group.id))}
                 >
-                  <MoreHorizontal className='w-4 h-4' />
-                </button>
-              </button>
-
-              {menuOpenGroupId === group.id && (
-                <>
+                  <span className='font-medium flex-1 text-left'>{group.name}</span>
                   <button
                     type='button'
-                    className='fixed inset-0 z-10 cursor-default'
-                    onClick={() => setMenuOpenGroupId(null)}
-                    aria-label='关闭菜单'
-                  />
-                  <div className='absolute right-4 top-full mt-1 z-20 bg-[#1c1b1c] border border-[#3a494b]/20 rounded-lg shadow-lg py-1 min-w-32'>
-                    <button
-                      type='button'
-                      onClick={() => handleEditGroup(group.id, group.name)}
-                      className='w-full px-3 py-2 text-sm text-left text-[#e5e2e3] hover:bg-[#2a2a2b] flex items-center gap-2'
-                    >
-                      <Pencil className='w-4 h-4' />
-                      编辑
-                    </button>
-                    <button
-                      type='button'
-                      onClick={() => handleDeleteGroup(group.id)}
-                      className='w-full px-3 py-2 text-sm text-left text-[#ffb4ab] hover:bg-[#93000a]/10 flex items-center gap-2'
-                    >
-                      <Trash2 className='w-4 h-4' />
-                      删除
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
-          )
-        })}
-      </nav>
+                    onClick={e => {
+                      e.stopPropagation()
+                      setMenuOpenGroupId(menuOpenGroupId === group.id ? null : group.id)
+                    }}
+                    className='p-1 hover:bg-surface-container-highest rounded transition-colors opacity-0 group-hover/item:opacity-100'
+                    aria-label='更多操作'
+                  >
+                    <MoreHorizontal className='w-4 h-4' />
+                  </button>
+                </button>
 
-      <div className='p-6 mt-auto border-t border-[#3a494b]/5'>
-        <div className='flex items-center gap-3 px-2 py-2 rounded-lg bg-[#2a2a2b]/30'>
-          <div className='w-8 h-8 rounded bg-[#00f2ff]/20 flex items-center justify-center'>
-            <span className='text-[#00f2ff] text-lg'>ℹ</span>
-          </div>
-          <div>
-            <p className='text-[11px] font-medium text-[#e5e2e3]'>管理说明</p>
-            <p className='text-[9px] text-[#b9cacb]'>拖拽可重新排序</p>
-          </div>
-        </div>
-      </div>
+                {menuOpenGroupId === group.id && (
+                  <>
+                    <button
+                      type='button'
+                      className='fixed inset-0 z-10 cursor-default'
+                      onClick={() => setMenuOpenGroupId(null)}
+                      aria-label='关闭菜单'
+                    />
+                    <div className='absolute right-4 top-full mt-1 z-20 bg-surface-container-low border border-outline-variant/20 rounded-lg shadow-lg py-1 min-w-32'>
+                      <button
+                        type='button'
+                        onClick={() => handleEditGroup(group.id, group.name)}
+                        className='w-full px-3 py-2 text-sm text-left text-on-surface hover:bg-surface-container-high flex items-center gap-2'
+                      >
+                        <Pencil className='w-4 h-4' />
+                        编辑
+                      </button>
+                      <button
+                        type='button'
+                        onClick={() => handleDeleteGroup(group.id)}
+                        className='w-full px-3 py-2 text-sm text-left text-error hover:bg-error-container/10 flex items-center gap-2'
+                      >
+                        <Trash2 className='w-4 h-4' />
+                        删除
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            ))}
+          </>
+        )}
+      </nav>
     </aside>
   )
 }

@@ -25,33 +25,33 @@ function MaterialsHeader({
     <div className='mb-12'>
       <div className='mb-12 flex justify-between items-end'>
         <div className='max-w-2xl'>
-          <span className='text-[#00dbe7] tracking-[0.2em] font-bold uppercase block mb-4 text-[0.6875rem]'>
+          <span className='text-primary-fixed-dim tracking-[0.2em] font-bold uppercase block mb-4 text-[0.6875rem]'>
             中央仓库
           </span>
-          <h1 className='font-bold text-5xl tracking-[-0.04em] text-[#e5e2e3] leading-none mb-4'>
+          <h1 className='font-bold text-5xl tracking-[-0.04em] text-on-surface leading-none mb-4'>
             素材管理
           </h1>
-          <p className='text-[#b9cacb] text-lg max-w-md'>
+          <p className='text-on-surface-variant text-lg max-w-md'>
             您的合成智能工作站。在这里管理产品视觉效果、生成的场景和营销母版。
           </p>
         </div>
         <div className='flex gap-4'>
-          <div className='bg-[#0e0e0f] border border-[#3a494b]/15 flex p-1 rounded-xl'>
+          <div className='bg-surface-container-lowest border border-outline-variant/15 flex p-1 rounded-xl'>
             <button
               type='button'
-              className='px-6 py-2 bg-[#2a2a2b] text-[#00f2ff] rounded-lg font-medium text-sm'
+              className='px-6 py-2 bg-surface-container-high text-primary-container rounded-lg font-medium text-sm'
             >
               图片
             </button>
             <button
               type='button'
-              className='px-6 py-2 text-[#b9cacb] hover:text-[#e5e2e3] transition-colors rounded-lg font-medium text-sm'
+              className='px-6 py-2 text-on-surface-variant hover:text-on-surface transition-colors rounded-lg font-medium text-sm'
             >
               视频
             </button>
             <button
               type='button'
-              className='px-6 py-2 text-[#b9cacb] hover:text-[#e5e2e3] transition-colors rounded-lg font-medium text-sm'
+              className='px-6 py-2 text-on-surface-variant hover:text-on-surface transition-colors rounded-lg font-medium text-sm'
             >
               模型
             </button>
@@ -61,23 +61,23 @@ function MaterialsHeader({
 
       <div className='flex items-center justify-between gap-6'>
         <div className='flex-1 relative group'>
-          <Search className='absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[#849495]' />
+          <Search className='absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-outline' />
           <input
             type='text'
             placeholder='按标签、产品或生成日期搜索素材...'
             value={search}
             onChange={e => onSearchChange(e.target.value)}
-            className='w-full bg-[#0e0e0f] border border-[#3a494b]/15 focus:border-[#00f2ff]/50 focus:ring-0 text-sm py-4 pl-12 rounded-xl placeholder:text-[#849495]/50 transition-all text-[#e5e2e3]'
+            className='w-full bg-surface-container-lowest border border-outline-variant/15 focus:border-primary-container/50 focus:ring-0 text-sm py-4 pl-12 rounded-xl placeholder:text-outline/50 transition-all text-on-surface'
           />
         </div>
         <button
           type='button'
           onClick={onFilterClick}
           className={cn(
-            'bg-[#2a2a2b] px-6 py-4 rounded-xl transition-colors flex items-center gap-2',
+            'bg-surface-container-high px-6 py-4 rounded-xl transition-colors flex items-center gap-2',
             filterTagCount > 0
-              ? 'text-[#00f2ff]'
-              : 'text-[#b9cacb] hover:text-[#00f2ff]'
+              ? 'text-primary-container'
+              : 'text-on-surface-variant hover:text-primary-container'
           )}
         >
           <Filter className='w-4 h-4' />
@@ -85,7 +85,7 @@ function MaterialsHeader({
         </button>
         <button
           type='button'
-          className='bg-[#2a2a2b] p-4 rounded-xl text-[#b9cacb] hover:text-[#00f2ff] transition-colors'
+          className='bg-surface-container-high p-4 rounded-xl text-on-surface-variant hover:text-primary-container transition-colors'
         >
           <Grid3x3 className='w-5 h-5' />
         </button>
@@ -100,16 +100,16 @@ function EmptyState({ onUploadClick }: { onUploadClick: () => void }) {
       <button
         type='button'
         onClick={onUploadClick}
-        className='flex flex-col items-center justify-center gap-4 p-12 bg-[#1c1b1c]/30 border-dashed border-2 border-[#3a494b]/30 hover:border-[#00f2ff]/50 hover:bg-[#00f2ff]/5 transition-all rounded-2xl group'
+        className='flex flex-col items-center justify-center gap-4 p-12 bg-surface-container-low/30 border-dashed border-2 border-outline-variant/30 hover:border-primary-container/50 hover:bg-primary-container/5 transition-all rounded-2xl group'
       >
-        <div className='w-16 h-16 rounded-full bg-[#00f2ff]/10 flex items-center justify-center text-[#00f2ff] group-hover:scale-110 transition-transform duration-500'>
+        <div className='w-16 h-16 rounded-full bg-primary-container/10 flex items-center justify-center text-primary-container group-hover:scale-110 transition-transform duration-500'>
           <span className='text-4xl'>+</span>
         </div>
         <div className='text-center'>
-          <span className='block text-sm font-bold uppercase tracking-widest text-[#e5e2e3]'>
+          <span className='block text-sm font-bold uppercase tracking-widest text-on-surface'>
             上传素材
           </span>
-          <span className='block text-[10px] text-[#b9cacb] mt-1 uppercase'>
+          <span className='block text-[10px] text-on-surface-variant mt-1 uppercase'>
             支持 JPG, PNG, MP4, OBJ
           </span>
         </div>
