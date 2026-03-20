@@ -44,28 +44,26 @@ interface ToolSelectorProps {
 
 export function ToolSelector({ onSelect }: ToolSelectorProps) {
   return (
-    <div className='flex justify-center px-8'>
-      <div className='grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl'>
-        {tools.map(tool => {
-          const Icon = tool.icon
-          return (
-            <Card
-              key={tool.id}
-              className={`group relative bg-gradient-to-br ${tool.gradient} backdrop-blur-sm border-border/30 hover:scale-[1.02] transition-all duration-300 cursor-pointer overflow-hidden w-60`}
-              onClick={() => onSelect(tool.id)}
-            >
-              <div className='p-5'>
-                <div className='w-12 h-12 rounded-xl bg-gradient-to-br from-foreground/10 to-foreground/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform'>
-                  <Icon className='w-6 h-6 text-foreground' />
-                </div>
-                <h3 className='text-lg font-semibold text-foreground mb-2'>{tool.title}</h3>
-                <p className='text-xs text-muted-foreground leading-relaxed'>{tool.description}</p>
+    <div className='grid grid-cols-3 gap-4 p-8 max-w-3xl'>
+      {tools.map(tool => {
+        const Icon = tool.icon
+        return (
+          <Card
+            key={tool.id}
+            className={`group relative bg-gradient-to-br ${tool.gradient} backdrop-blur-sm border-border/30 hover:scale-[1.02] transition-all duration-300 cursor-pointer overflow-hidden w-60`}
+            onClick={() => onSelect(tool.id)}
+          >
+            <div className='p-5'>
+              <div className='w-12 h-12 rounded-xl bg-gradient-to-br from-foreground/10 to-foreground/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform'>
+                <Icon className='w-6 h-6 text-foreground' />
               </div>
-              <div className='absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-foreground/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity' />
-            </Card>
-          )
-        })}
-      </div>
+              <h3 className='text-lg font-semibold text-foreground mb-2'>{tool.title}</h3>
+              <p className='text-xs text-muted-foreground leading-relaxed'>{tool.description}</p>
+            </div>
+            <div className='absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-foreground/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity' />
+          </Card>
+        )
+      })}
     </div>
   )
 }
