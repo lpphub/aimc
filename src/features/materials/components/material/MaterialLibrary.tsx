@@ -1,4 +1,4 @@
-import { Filter, Grid3x3, Search } from 'lucide-react'
+import { Filter, FolderOpen, Search, Tag } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
@@ -23,12 +23,16 @@ function MaterialsHeader({
 }) {
   return (
     <div className='mb-8'>
-      <div className='mb-6'>
-        <p className='text-xs text-primary-fixed-dim mb-2 tracking-wider'>中央仓库</p>
-        <h1 className='text-4xl font-bold text-on-surface mb-2'>素材管理</h1>
-        <p className='text-sm text-on-surface-variant'>
-          您的合成智能工作站。在这里管理产品视觉效果、生成的场景和营销母版。
-        </p>
+      <div className='flex items-center gap-3 mb-4'>
+        <div className='flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30'>
+          <FolderOpen className='w-6 h-6 text-purple-400' />
+        </div>
+        <div>
+          <h1 className='text-3xl font-bold text-on-surface tracking-tight'>素材库</h1>
+          <p className='text-sm text-on-surface-variant mt-1'>
+            管理你的图片和视频素材 · {materialsCount} 个
+          </p>
+        </div>
       </div>
 
       <div className='flex items-center gap-3'>

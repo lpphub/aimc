@@ -17,11 +17,8 @@ function MaterialContent({ material }: { material: Material }) {
 }
 
 export function MaterialCard({ material, isSelected, onSelect }: MaterialCardProps) {
-  const isVideo = material.type === 'video'
-  const tagLabel = material.tags[0] || (isVideo ? '无背景' : '成品海报')
-  const tagColorClass = isVideo
-    ? 'bg-secondary-container/30 backdrop-blur-md text-secondary'
-    : 'bg-primary-container/20 backdrop-blur-md text-primary-container'
+  const displayTags = material.tags.slice(0, 3)
+  const remainingCount = material.tags.length - 3
 
   return (
     <div
@@ -40,12 +37,22 @@ export function MaterialCard({ material, isSelected, onSelect }: MaterialCardPro
         </div>
       </div>
 
-      <div className='absolute inset-0 bg-linear-to-t from-surface via-surface/20 to-transparent' />
+      <div className='absolute inset-0 bg-gradient-to-t from-surface via-surface/20 to-transparent' />
 
-      <div className='absolute top-3 left-3'>
-        <span className={cn('text-[10px] font-bold px-2 py-1 rounded uppercase', tagColorClass)}>
-          {tagLabel}
-        </span>
+      <div className='absolute top-3 left-3 flex flex-wrap gap-1.5 max-w-[calc(100%-4rem)]'>
+        {displayTags.map((tag, index) => (
+          <span
+            key={index}
+            className='text-[10px] font-bold px-2 py-1 rounded uppercase bg-primary-container/20 backdrop-blur-md text-primary-container border border-primary-container/30'
+          >
+            {tag}
+          </span>
+        ))}
+        {remainingCount > 0 && (
+          <span className='text-[10px] font-bold px-2 py-1 rounded uppercase bg-secondary-container/20 backdrop-blur-md text-secondary border border-secondary-container/30'>
+            +{remainingCount}
+          </span>
+        )}
       </div>
 
       <div
@@ -62,7 +69,7 @@ export function MaterialCard({ material, isSelected, onSelect }: MaterialCardPro
       <div className='absolute bottom-0 p-3 w-full'>
         <h3 className='font-medium text-sm text-on-surface truncate'>{material.filename}</h3>
         <p className='text-on-surface-variant text-xs mt-0.5'>
-          {isVideo ? 'PNG • 透明背景' : '4K • 2小时前生成'}
+          {material.type === 'video' ? 'PNG • 透明背景' : '4K • 2小时前生成'}
         </p>
       </div>
     </div>
