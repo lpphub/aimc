@@ -1,6 +1,7 @@
-import { Filter, Grid3x3, LayoutGrid, Search, Upload } from 'lucide-react'
+import { Filter, Grid3x3, Search } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { toast } from 'sonner'
+import { cn } from '@/lib/utils'
 import { Button } from '@/shared/components/ui/button'
 import { useDeleteMaterial, useMaterials, useTagGroups, useUploadMaterial } from '../../hooks'
 import { TagModal } from '../tag/TagModal'
@@ -13,84 +14,106 @@ function MaterialsHeader({
   onSearchChange,
   filterTagCount,
   onFilterClick,
-  onUploadClick,
 }: {
   materialsCount: number
   search: string
   onSearchChange: (value: string) => void
   filterTagCount: number
   onFilterClick: () => void
-  onUploadClick: () => void
 }) {
   return (
-    <div className='mb-8'>
-      <div className='mb-6'>
-        <p className='text-xs text-cyan-400 mb-2 tracking-wider'>中央仓库</p>
-        <h1 className='text-4xl font-bold text-white mb-2'>素材管理</h1>
-        <p className='text-sm text-gray-400'>
-          您的合成能工作品。在这里管理产品视觉效果、生成的场景和专辑模板。
-        </p>
+    <div className='mb-12'>
+      <div className='mb-12 flex justify-between items-end'>
+        <div className='max-w-2xl'>
+          <span className='text-[#00dbe7] tracking-[0.2em] font-bold uppercase block mb-4 text-[0.6875rem]'>
+            中央仓库
+          </span>
+          <h1 className='font-bold text-5xl tracking-[-0.04em] text-[#e5e2e3] leading-none mb-4'>
+            素材管理
+          </h1>
+          <p className='text-[#b9cacb] text-lg max-w-md'>
+            您的合成智能工作站。在这里管理产品视觉效果、生成的场景和营销母版。
+          </p>
+        </div>
+        <div className='flex gap-4'>
+          <div className='bg-[#0e0e0f] border border-[#3a494b]/15 flex p-1 rounded-xl'>
+            <button
+              type='button'
+              className='px-6 py-2 bg-[#2a2a2b] text-[#00f2ff] rounded-lg font-medium text-sm'
+            >
+              图片
+            </button>
+            <button
+              type='button'
+              className='px-6 py-2 text-[#b9cacb] hover:text-[#e5e2e3] transition-colors rounded-lg font-medium text-sm'
+            >
+              视频
+            </button>
+            <button
+              type='button'
+              className='px-6 py-2 text-[#b9cacb] hover:text-[#e5e2e3] transition-colors rounded-lg font-medium text-sm'
+            >
+              模型
+            </button>
+          </div>
+        </div>
       </div>
 
-      <div className='flex items-center gap-3 mb-6'>
-        <Button
-          variant='outline'
-          className='bg-cyan-500/10 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20'
-        >
-          图片
-        </Button>
-        <Button variant='ghost' className='text-gray-400 hover:text-white hover:bg-white/5'>
-          视频
-        </Button>
-        <Button variant='ghost' className='text-gray-400 hover:text-white hover:bg-white/5'>
-          模型
-        </Button>
-      </div>
-
-      <div className='flex items-center gap-3'>
-        <div className='relative flex-1 max-w-md'>
-          <Search className='absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500' />
+      <div className='flex items-center justify-between gap-6'>
+        <div className='flex-1 relative group'>
+          <Search className='absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[#849495]' />
           <input
             type='text'
-            placeholder='搜索素材、产品或项目标签或系统...'
+            placeholder='按标签、产品或生成日期搜索素材...'
             value={search}
             onChange={e => onSearchChange(e.target.value)}
-            className='w-full h-10 pl-10 pr-4 bg-[#1a1f2e] border border-white/10 rounded-lg text-white placeholder:text-gray-500 focus:border-cyan-500/50 focus:outline-none transition-colors'
+            className='w-full bg-[#0e0e0f] border border-[#3a494b]/15 focus:border-[#00f2ff]/50 focus:ring-0 text-sm py-4 pl-12 rounded-xl placeholder:text-[#849495]/50 transition-all text-[#e5e2e3]'
           />
         </div>
-
-        <Button
-          variant='outline'
+        <button
+          type='button'
           onClick={onFilterClick}
-          className={
+          className={cn(
+            'bg-[#2a2a2b] px-6 py-4 rounded-xl transition-colors flex items-center gap-2',
             filterTagCount > 0
-              ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400'
-              : 'bg-[#1a1f2e] border-white/10 text-gray-400 hover:text-white hover:border-white/20'
-          }
+              ? 'text-[#00f2ff]'
+              : 'text-[#b9cacb] hover:text-[#00f2ff]'
+          )}
         >
-          <Filter className='w-4 h-4 mr-2' />
-          {filterTagCount > 0 ? `筛选 ${filterTagCount}` : '筛选'}
-        </Button>
-
-        <Button
-          variant='outline'
-          className='bg-[#1a1f2e] border-white/10 text-gray-400 hover:text-white hover:border-white/20'
+          <Filter className='w-4 h-4' />
+          <span className='text-sm font-medium'>筛选</span>
+        </button>
+        <button
+          type='button'
+          className='bg-[#2a2a2b] p-4 rounded-xl text-[#b9cacb] hover:text-[#00f2ff] transition-colors'
         >
-          <Grid3x3 className='w-4 h-4' />
-        </Button>
+          <Grid3x3 className='w-5 h-5' />
+        </button>
       </div>
     </div>
   )
 }
 
-function EmptyState() {
+function EmptyState({ onUploadClick }: { onUploadClick: () => void }) {
   return (
-    <div className='flex h-[calc(100vh-300px)] items-center justify-center'>
-      <div className='text-center'>
-        <LayoutGrid className='w-16 h-16 text-gray-600 mx-auto mb-4' />
-        <p className='text-gray-400 text-lg'>暂无素材</p>
-        <p className='text-gray-600 text-sm mt-2'>上传你的第一个素材开始管理</p>
-      </div>
+    <div className='flex h-[calc(100vh-400px)] items-center justify-center'>
+      <button
+        type='button'
+        onClick={onUploadClick}
+        className='flex flex-col items-center justify-center gap-4 p-12 bg-[#1c1b1c]/30 border-dashed border-2 border-[#3a494b]/30 hover:border-[#00f2ff]/50 hover:bg-[#00f2ff]/5 transition-all rounded-2xl group'
+      >
+        <div className='w-16 h-16 rounded-full bg-[#00f2ff]/10 flex items-center justify-center text-[#00f2ff] group-hover:scale-110 transition-transform duration-500'>
+          <span className='text-4xl'>+</span>
+        </div>
+        <div className='text-center'>
+          <span className='block text-sm font-bold uppercase tracking-widest text-[#e5e2e3]'>
+            上传素材
+          </span>
+          <span className='block text-[10px] text-[#b9cacb] mt-1 uppercase'>
+            支持 JPG, PNG, MP4, OBJ
+          </span>
+        </div>
+      </button>
     </div>
   )
 }
@@ -145,15 +168,14 @@ export function MaterialLibrary() {
   }
 
   return (
-    <div className='flex min-h-screen flex-col bg-[#0a0e14]'>
-      <div className='flex-1 p-8'>
+    <div className='flex min-h-screen flex-col bg-[#0e0e0f]'>
+      <div className='flex-1 pt-12 px-12 pb-12'>
         <MaterialsHeader
           materialsCount={materials.length}
           search={search}
           onSearchChange={setSearch}
           filterTagCount={filterTagIds.length}
           onFilterClick={() => setShowFilterModal(true)}
-          onUploadClick={() => fileInputRef.current?.click()}
         />
         <input
           ref={fileInputRef}
@@ -165,11 +187,11 @@ export function MaterialLibrary() {
         />
 
         {isLoading ? (
-          <div className='flex h-[calc(100vh-300px)] items-center justify-center'>
-            <div className='text-gray-400'>加载中...</div>
+          <div className='flex h-[calc(100vh-400px)] items-center justify-center'>
+            <div className='text-[#b9cacb]'>加载中...</div>
           </div>
         ) : materials.length > 0 ? (
-          <div className='grid grid-cols-4 gap-4'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
             {materials.map(material => (
               <MaterialCard
                 key={material.id}
@@ -178,46 +200,68 @@ export function MaterialLibrary() {
                 onSelect={handleSelect}
               />
             ))}
+            <button
+              type='button'
+              onClick={() => fileInputRef.current?.click()}
+              className='aspect-[4/5] flex flex-col items-center justify-center gap-4 bg-[#1c1b1c]/30 border-dashed border-2 border-[#3a494b]/30 hover:border-[#00f2ff]/50 hover:bg-[#00f2ff]/5 transition-all rounded-2xl group'
+            >
+              <div className='w-16 h-16 rounded-full bg-[#00f2ff]/10 flex items-center justify-center text-[#00f2ff] group-hover:scale-110 transition-transform duration-500'>
+                <span className='text-4xl'>+</span>
+              </div>
+              <div className='text-center'>
+                <span className='block text-sm font-bold uppercase tracking-widest text-[#e5e2e3]'>
+                  上传素材
+                </span>
+                <span className='block text-[10px] text-[#b9cacb] mt-1 uppercase'>
+                  支持 JPG, PNG, MP4, OBJ
+                </span>
+              </div>
+            </button>
           </div>
         ) : (
-          <EmptyState />
+          <EmptyState onUploadClick={() => fileInputRef.current?.click()} />
         )}
-      </div>
 
-      <div className='border-t border-white/5 bg-[#0f1419] p-4'>
-        <div className='flex items-center justify-between max-w-7xl mx-auto'>
-          <div className='flex items-center gap-4'>
-            <div className='flex items-center gap-2'>
-              <div className='w-3 h-3 rounded-full bg-cyan-400' />
-              <span className='text-sm text-gray-400'>存储空间</span>
+        <div className='mt-16 grid grid-cols-1 md:grid-cols-3 gap-8'>
+          <div className='bg-[#353436]/40 backdrop-blur-xl border border-[#00f2ff]/10 p-6 rounded-2xl'>
+            <div className='flex items-center gap-4 mb-4'>
+              <span className='text-[#00f2ff] text-2xl'>💾</span>
+              <h5 className='font-bold text-lg text-white'>存储空间</h5>
             </div>
-            <div className='w-48 h-2 bg-[#1a1f2e] rounded-full overflow-hidden'>
-              <div className='h-full w-1/3 bg-linear-to-r from-cyan-400 to-teal-400' />
+            <div className='w-full h-1.5 bg-[#353436] rounded-full overflow-hidden mb-3'>
+              <div className='h-full bg-[#00f2ff] w-[65%] shadow-[0_0_15px_rgba(0,242,255,0.4)]' />
             </div>
-            <span className='text-xs text-gray-500'>已使用 12.4 GB</span>
-            <span className='text-xs text-cyan-400'>共计 20 GB</span>
+            <div className='flex justify-between text-xs font-medium'>
+              <span className='text-[#b9cacb]'>已使用 12.4 GB</span>
+              <span className='text-[#00f2ff]'>总计 20 GB</span>
+            </div>
           </div>
 
-          <div className='flex items-center gap-4'>
-            <div className='flex items-center gap-2'>
-              <div className='w-3 h-3 rounded-full bg-purple-400' />
-              <span className='text-sm text-gray-400'>任务队列</span>
+          <div className='bg-[#353436]/40 backdrop-blur-xl border border-[#00f2ff]/10 p-6 rounded-2xl'>
+            <div className='flex items-center gap-4 mb-4'>
+              <span className='text-[#d0bcff] text-2xl'>⏳</span>
+              <h5 className='font-bold text-lg text-white'>任务队列</h5>
             </div>
-            <span className='text-xs text-gray-500'>
-              正在渲染 "北欧风列表广告" 广告素材...
-            </span>
+            <div className='flex items-center gap-3'>
+              <div className='animate-pulse w-2 h-2 rounded-full bg-[#d0bcff] shadow-[0_0_8px_#d0bcff]' />
+              <span className='text-sm text-[#e5e2e3]'>正在渲染 "北极系列" 广告活动...</span>
+            </div>
           </div>
 
-          <div className='text-right'>
-            <p className='text-sm text-cyan-400 mb-1'>AI 智能管家</p>
-            <p className='text-xs text-gray-500'>
-              经测到 12 张类似图片可以进行自动标签或建议去重。
+          <div className='bg-[#353436]/40 backdrop-blur-xl border border-[#00f2ff]/10 p-6 rounded-2xl'>
+            <div className='flex items-center gap-4 mb-4'>
+              <span className='text-[#00dbe7] text-2xl'>✨</span>
+              <h5 className='font-bold text-lg text-white'>AI 智能管家</h5>
+            </div>
+            <p className='text-sm text-[#b9cacb] leading-relaxed'>
+              检测到 12 张原始照片可以进行自动<b className='text-white'>环境重照明</b>
+              优化。建议立即处理以提升渲染品质。
             </p>
             <button
               type='button'
-              className='text-xs text-cyan-400 hover:text-cyan-300 mt-1 flex items-center gap-1'
+              className='mt-4 text-[#00f2ff] text-xs font-bold uppercase tracking-widest flex items-center gap-2 hover:gap-3 transition-all'
             >
-              处理全部素材 →
+              处理全部素材 <span>→</span>
             </button>
           </div>
         </div>

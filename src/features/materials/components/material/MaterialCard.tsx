@@ -18,49 +18,68 @@ function MaterialContent({ material }: { material: Material }) {
 
 export function MaterialCard({ material, isSelected, onSelect }: MaterialCardProps) {
   const isVideo = material.type === 'video'
-  const tagLabel = material.tags[0] || (isVideo ? '无标签' : '成品渲染')
-  const tagColor = isVideo ? 'bg-purple-500/20 text-purple-400' : 'bg-cyan-500/20 text-cyan-400'
+  const tagLabel = material.tags[0] || (isVideo ? '无背景' : '成品海报')
+  const tagColorClass = isVideo
+    ? 'bg-[#571bc1]/30 backdrop-blur-md text-[#d0bcff]'
+    : 'bg-[#00f2ff]/20 backdrop-blur-md text-[#00f2ff]'
 
   return (
     <div
       className={cn(
-        'relative group rounded-lg overflow-hidden transition-all duration-200 bg-[#1a1f2e] border border-white/10',
-        isSelected && 'ring-2 ring-cyan-400 border-cyan-400'
+        'relative overflow-hidden rounded-2xl bg-[#1c1b1c] border transition-all duration-300 group',
+        'aspect-[4/5]',
+        isSelected
+          ? 'border-[#00f2ff] shadow-[0_0_20px_rgba(0,242,255,0.15)]'
+          : 'border-[#3a494b]/50 hover:border-[#00f2ff] hover:shadow-[0_0_20px_rgba(0,242,255,0.15)] hover:-translate-y-1'
       )}
     >
-      <div className='aspect-square bg-[#0f1419] relative'>
-        <MaterialContent material={material} />
-
-        <div className='absolute top-2 left-2'>
-          <span className={cn('px-2 py-1 text-[10px] rounded-md font-medium', tagColor)}>
-            {tagLabel}
-          </span>
+      <div className='absolute inset-0'>
+        <div className='w-full h-full group-hover:scale-110 transition-transform duration-700 overflow-hidden'>
+          <MaterialContent material={material} />
         </div>
-
-        <button
-          type='button'
-          onClick={e => {
-            e.stopPropagation()
-            onSelect(material.id)
-          }}
-          className='absolute top-2 right-2 p-0.5 rounded-full cursor-pointer transition-all'
-          aria-label={isSelected ? '取消选择' : '选择'}
-        >
-          {isSelected ? (
-            <CheckCircle className='w-5 h-5 text-cyan-400 fill-cyan-400' />
-          ) : (
-            <div className='w-5 h-5 rounded-full border-2 border-white/30 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity' />
-          )}
-        </button>
-
-        <div className='absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity' />
       </div>
 
-      <div className='p-3'>
-        <p className='text-sm text-white font-medium truncate mb-1'>{material.filename}</p>
-        <p className='text-xs text-gray-500'>
-          {isVideo ? 'PNG' : '4K'} · {isVideo ? '已上传' : '2小时前生成'}
+      <div className='absolute inset-0 bg-linear-to-t from-[#131314] via-[#131314]/20 to-transparent' />
+
+      <div className='absolute top-4 left-4'>
+        <span className={cn('text-[10px] font-bold px-2 py-1 rounded uppercase', tagColorClass)}>
+          {tagLabel}
+        </span>
+      </div>
+
+      <button
+        type='button'
+        onClick={e => {
+          e.stopPropagation()
+          onSelect(material.id)
+        }}
+        className='absolute top-4 right-4 transition-all'
+        aria-label={isSelected ? '取消选择' : '选择'}
+      >
+        {isSelected && (
+          <CheckCircle className='w-5 h-5 text-[#00f2ff] fill-[#00f2ff]' />
+        )}
+      </button>
+
+      <div className='absolute bottom-0 p-5 w-full'>
+        <h3 className='font-bold text-lg text-white'>{material.filename}</h3>
+        <p className='text-[#b9cacb] text-xs mt-1'>
+          {isVideo ? 'PNG • 透明背景' : '4K • 2小时前生成'}
         </p>
+        <div className='mt-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity'>
+          <button
+            type='button'
+            className='flex-1 bg-[#00f2ff] text-[#00363a] py-2 rounded-lg text-xs font-bold uppercase tracking-widest hover:shadow-[0_0_15px_rgba(0,242,255,0.4)] transition-all'
+          >
+            下载
+          </button>
+          <button
+            type='button'
+            className='p-2 bg-[#353436] text-white rounded-lg hover:bg-[#2a2a2b] transition-colors'
+          >
+            <span className='text-sm'>⋯</span>
+          </button>
+        </div>
       </div>
     </div>
   )

@@ -11,12 +11,12 @@ export function Sidebar() {
   const navItems = [
     {
       path: '/tools',
-      icon: X,
+      icon: Sparkles,
       label: '工具箱',
     },
     {
       path: '/materials',
-      icon: Tag,
+      icon: FolderOpen,
       label: '素材库',
     },
     {
@@ -32,14 +32,14 @@ export function Sidebar() {
   }
 
   return (
-    <aside className='fixed left-0 top-0 bottom-0 z-50 w-52 bg-[#0f1419] border-r border-white/5 flex flex-col'>
-      <div className='p-6'>
-        <div className='mb-1'>
-          <h1 className='text-cyan-400 text-base font-bold tracking-wide'>AIGC Toolset</h1>
+    <aside className='fixed left-0 top-0 h-screen w-64 bg-[#131314] border-r border-[#00f2ff]/10 flex flex-col py-6 z-50 shadow-[0px_0px_40px_rgba(0,242,255,0.06)]'>
+      <div className='px-6 mb-10'>
+        <div className='text-xl font-bold tracking-tighter text-[#00f2ff] mb-1'>
+          AIGC Toolset
         </div>
-        <p className='text-[10px] text-gray-500 uppercase tracking-widest'>
-          THE SYNTHETIC ARCHITECT
-        </p>
+        <div className='text-[0.6875rem] font-bold tracking-[0.1em] uppercase text-[#b9cacb]'>
+          The Synthetic Architect
+        </div>
       </div>
 
       <nav className='flex-1 px-3 space-y-1'>
@@ -52,41 +52,47 @@ export function Sidebar() {
               key={item.path}
               to={item.path}
               className={cn(
-                'flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200',
+                'flex items-center gap-4 px-4 py-3 transition-all rounded-xl group',
                 isActive
-                  ? 'bg-cyan-500/10 text-cyan-400 border-l-2 border-cyan-400'
-                  : 'text-gray-400 hover:text-gray-200 hover:bg-white/5'
+                  ? 'bg-[#1c1b1c] text-[#00f2ff] border-r-4 border-[#00f2ff] shadow-[0px_0px_15px_rgba(0,242,255,0.2)]'
+                  : 'text-[#b9cacb] hover:bg-[#2a2a2b] hover:text-[#00f2ff]'
               )}
             >
-              <Icon className='w-4 h-4' />
-              <span className='text-sm'>{item.label}</span>
+              <Icon
+                className={cn(
+                  'w-5 h-5 transition-transform',
+                  !isActive && 'group-hover:scale-110'
+                )}
+              />
+              <span className='font-medium text-sm'>{item.label}</span>
             </NavLink>
           )
         })}
       </nav>
 
-      <div className='p-4 border-t border-white/5'>
+      <div className='px-6 mt-auto space-y-4'>
         <button
           type='button'
-          className='w-full px-4 py-3 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 text-sm font-medium transition-colors'
+          className='w-full bg-[#1c1b1c] border border-[#00f2ff]/20 text-[#00f2ff] font-bold py-3 rounded-xl uppercase tracking-tighter text-xs hover:bg-[#00f2ff]/5 transition-all active:scale-[0.98]'
         >
-          NEW PROJECT
+          New Project
         </button>
-      </div>
 
-      <div className='p-3 border-t border-white/5 flex items-center justify-between'>
-        <div className='flex items-center gap-2'>
-          <div className='w-8 h-8 rounded-full bg-linear-to-br from-cyan-400 to-teal-400' />
-          <span className='text-xs text-gray-400'>管理员</span>
+        <div className='pt-6 border-t border-[#1c1b1c] flex items-center gap-3'>
+          <div className='w-8 h-8 rounded-full border border-[#00f2ff]/20 bg-linear-to-br from-[#00f2ff] to-[#00dbe7]' />
+          <div className='overflow-hidden flex-1'>
+            <div className='text-xs font-bold text-[#e5e2e3] truncate'>管理员</div>
+            <div className='text-[10px] text-[#b9cacb] truncate'>专业版计划</div>
+          </div>
+          <button
+            type='button'
+            onClick={handleLogout}
+            className='text-[#b9cacb] hover:text-[#00f2ff] cursor-pointer transition-colors'
+            title='设置'
+          >
+            <Settings className='w-4 h-4' />
+          </button>
         </div>
-        <button
-          type='button'
-          onClick={handleLogout}
-          className='p-2 hover:bg-white/5 rounded-lg transition-colors'
-          title='设置'
-        >
-          <Settings className='w-4 h-4 text-gray-400' />
-        </button>
       </div>
     </aside>
   )

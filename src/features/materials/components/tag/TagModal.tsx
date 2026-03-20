@@ -1,4 +1,4 @@
-import { AlertTriangle, Check, Pencil, Plus, Search, X } from 'lucide-react'
+import { AlertTriangle, Pencil, Plus, Search, X } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { Button } from '@/shared/components/ui/button'
 import {
@@ -22,7 +22,6 @@ import {
 import { ALL_TAGS_GROUP_ID } from '../../types'
 import { TagGrid } from './TagGrid'
 import { TagGroupSidebar } from './TagGroupSidebar'
-import { TagSelectedChips } from './TagSelectedChips'
 
 interface TagModalProps {
   open: boolean
@@ -53,9 +52,9 @@ function EditDialog({ open, onOpenChange, title, initialValue, onSubmit }: EditD
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='max-w-sm bg-[#1a1f2e] border-white/10'>
+      <DialogContent className='max-w-sm bg-[#1c1b1c]/90 backdrop-blur-xl border-[#3a494b]/20'>
         <DialogHeader>
-          <DialogTitle className='text-white flex items-center gap-2'>
+          <DialogTitle className='text-[#e5e2e3] flex items-center gap-2'>
             <Pencil className='w-5 h-5' />
             {title}
           </DialogTitle>
@@ -65,7 +64,7 @@ function EditDialog({ open, onOpenChange, title, initialValue, onSubmit }: EditD
             value={name}
             onChange={e => setName(e.target.value)}
             placeholder='请输入名称'
-            className='bg-[#0f1419] border-white/10 text-white'
+            className='bg-[#0e0e0f] border-[#3a494b]/20 text-[#e5e2e3] focus:ring-[#00f2ff]/50'
             autoFocus
           />
         </div>
@@ -73,14 +72,14 @@ function EditDialog({ open, onOpenChange, title, initialValue, onSubmit }: EditD
           <Button
             variant='outline'
             onClick={() => onOpenChange(false)}
-            className='bg-transparent border-white/10 text-gray-400 hover:text-white'
+            className='bg-transparent border-[#3a494b]/20 text-[#b9cacb] hover:text-[#e5e2e3]'
           >
             取消
           </Button>
           <Button
             onClick={handleSubmit}
             disabled={!name.trim()}
-            className='bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/30'
+            className='bg-[#00f2ff]/10 border border-[#00f2ff]/40 text-[#00f2ff] hover:bg-[#00f2ff]/20'
           >
             保存
           </Button>
@@ -112,16 +111,16 @@ function CreateDialog({ open, onOpenChange, title, placeholder, onSubmit }: Crea
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='max-w-sm bg-[#1a1f2e] border-white/10'>
+      <DialogContent className='max-w-sm bg-[#1c1b1c]/90 backdrop-blur-xl border-[#3a494b]/20'>
         <DialogHeader>
-          <DialogTitle className='text-white'>{title}</DialogTitle>
+          <DialogTitle className='text-[#e5e2e3]'>{title}</DialogTitle>
         </DialogHeader>
         <div className='py-4'>
           <Input
             value={name}
             onChange={e => setName(e.target.value)}
             placeholder={placeholder}
-            className='bg-[#0f1419] border-white/10 text-white'
+            className='bg-[#0e0e0f] border-[#3a494b]/20 text-[#e5e2e3] focus:ring-[#00f2ff]/50'
             autoFocus
           />
         </div>
@@ -129,14 +128,14 @@ function CreateDialog({ open, onOpenChange, title, placeholder, onSubmit }: Crea
           <Button
             variant='outline'
             onClick={() => onOpenChange(false)}
-            className='bg-transparent border-white/10 text-gray-400 hover:text-white'
+            className='bg-transparent border-[#3a494b]/20 text-[#b9cacb] hover:text-[#e5e2e3]'
           >
             取消
           </Button>
           <Button
             onClick={handleSubmit}
             disabled={!name.trim()}
-            className='bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/30'
+            className='bg-[#00f2ff]/10 border border-[#00f2ff]/40 text-[#00f2ff] hover:bg-[#00f2ff]/20'
           >
             创建
           </Button>
@@ -163,19 +162,19 @@ function DeleteConfirmDialog({
 }: DeleteConfirmDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='max-w-sm bg-[#1a1f2e] border-white/10'>
+      <DialogContent className='max-w-sm bg-[#1c1b1c]/90 backdrop-blur-xl border-[#3a494b]/20'>
         <DialogHeader>
-          <DialogTitle className='text-white flex items-center gap-2'>
-            <AlertTriangle className='w-5 h-5 text-red-400' />
+          <DialogTitle className='text-[#e5e2e3] flex items-center gap-2'>
+            <AlertTriangle className='w-5 h-5 text-[#ffb4ab]' />
             {title}
           </DialogTitle>
-          <DialogDescription className='text-gray-400'>{description}</DialogDescription>
+          <DialogDescription className='text-[#b9cacb]'>{description}</DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <Button
             variant='outline'
             onClick={() => onOpenChange(false)}
-            className='bg-transparent border-white/10 text-gray-400 hover:text-white'
+            className='bg-transparent border-[#3a494b]/20 text-[#b9cacb] hover:text-[#e5e2e3]'
           >
             取消
           </Button>
@@ -184,7 +183,7 @@ function DeleteConfirmDialog({
               onConfirm()
               onOpenChange(false)
             }}
-            className='bg-red-500/20 border border-red-500/30 text-red-400 hover:bg-red-500/30'
+            className='bg-[#93000a]/20 border border-[#ffb4ab]/30 text-[#ffb4ab] hover:bg-[#93000a]/30'
           >
             删除
           </Button>
@@ -316,7 +315,7 @@ export function TagModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='max-w-4xl h-[600px] p-0 flex flex-col bg-[#0f1419] border-white/10'>
+      <DialogContent className='max-w-5xl h-[819px] p-0 flex flex-col bg-[#1c1b1c]/60 backdrop-blur-xl border-[#3a494b]/15 shadow-[0_0_40px_rgba(0,242,255,0.06)]'>
         <div className='flex flex-1 overflow-hidden'>
           <TagGroupSidebar
             groups={groups}
@@ -328,94 +327,68 @@ export function TagModal({
             onEditGroup={handleEditGroup}
           />
 
-          <div className='flex-1 p-6 flex flex-col overflow-hidden bg-[#0a0e14]'>
-            <div className='mb-6'>
-              <h2 className='text-lg font-bold text-white mb-1'>标签管理</h2>
-              <p className='text-xs text-gray-500 uppercase tracking-wider'>TAG NAVIGATOR</p>
-            </div>
-
-            <div className='flex items-center gap-3 mb-6'>
-              <div className='relative flex-1'>
-                <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500' />
+          <div className='flex-1 flex flex-col bg-[#131314]/30 backdrop-blur-sm overflow-hidden'>
+            <div className='p-6 border-b border-[#3a494b]/10'>
+              <div className='relative group'>
+                <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#b9cacb] group-focus-within:text-[#00f2ff] transition-colors' />
                 <Input
                   value={searchKeyword}
                   onChange={e => setSearchKeyword(e.target.value)}
-                  placeholder='搜索标签和分组或标签名...'
-                  className='h-10 pl-10 bg-[#1a1f2e] border-white/10 text-white placeholder:text-gray-500'
+                  placeholder='搜索当前分组下的标签...'
+                  className='h-10 pl-10 bg-[#0e0e0f] border-none focus:ring-1 focus:ring-[#00f2ff]/50 text-[#e5e2e3] placeholder:text-[#b9cacb]/50'
                 />
               </div>
-              <Button
-                variant='outline'
-                className='bg-[#1a1f2e] border-white/10 text-gray-400 hover:text-white'
-              >
-                筛选
-              </Button>
-              <Button
-                variant='outline'
-                className='bg-[#1a1f2e] border-white/10 text-gray-400 hover:text-white'
-              >
-                排序
-              </Button>
             </div>
 
-            <TagGrid
-              tags={filteredTags}
-              selectedTagIds={localSelectedTagIds}
-              isLoading={isLoading}
-              onTagToggle={toggleTag}
-              onNewTagClick={() => setShowNewTagDialog(true)}
-              onDeleteTag={handleDeleteTag}
-              onEditTag={handleEditTag}
-            />
+            <div className='flex-1 overflow-y-auto p-6'>
+              <TagGrid
+                tags={filteredTags}
+                selectedTagIds={localSelectedTagIds}
+                isLoading={isLoading}
+                onTagToggle={toggleTag}
+                onNewTagClick={() => setShowNewTagDialog(true)}
+                onDeleteTag={handleDeleteTag}
+                onEditTag={handleEditTag}
+              />
+            </div>
 
-            <div className='mt-auto pt-4 border-t border-white/10'>
-              <div className='flex items-center justify-between mb-4'>
-                <div className='flex items-center gap-2'>
-                  <div className='w-3 h-3 rounded-full bg-cyan-400' />
-                  <span className='text-sm text-gray-400'>
-                    已选择 {localSelectedTagIds.length} 个标签
-                  </span>
-                </div>
-                <div className='flex gap-2'>
-                  {localSelectedTagIds.map(id => {
-                    const tag = allTags.find(t => t.id === id)
-                    if (!tag) return null
-                    return (
-                      <span
-                        key={id}
-                        className='px-3 py-1 bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 rounded-md text-xs flex items-center gap-2'
-                      >
-                        {tag.name}
-                        <button
-                          type='button'
-                          onClick={() =>
-                            setLocalSelectedTagIds(prev => prev.filter(tid => tid !== id))
-                          }
-                          className='hover:text-cyan-300'
-                        >
-                          <X className='w-3 h-3' />
-                        </button>
-                      </span>
-                    )
-                  })}
-                </div>
+            <div className='p-6 bg-[#1c1b1c]/80 border-t border-[#3a494b]/10 flex flex-col sm:flex-row gap-4 items-center justify-between'>
+              <div className='flex flex-wrap items-center gap-2'>
+                <span className='text-xs text-[#b9cacb] mr-2'>已选择:</span>
+                {selectedTags.map(tag => (
+                  <div
+                    key={tag.id}
+                    className='flex items-center gap-1.5 bg-[#00f2ff]/20 text-[#00f2ff] px-3 py-1 rounded-full text-xs font-medium border border-[#00f2ff]/20'
+                  >
+                    {tag.name}
+                    <button
+                      type='button'
+                      onClick={() =>
+                        setLocalSelectedTagIds(prev => prev.filter(id => id !== tag.id))
+                      }
+                      className='hover:text-white transition-colors'
+                    >
+                      <X className='w-3 h-3' />
+                    </button>
+                  </div>
+                ))}
               </div>
-
-              <div className='flex items-center justify-between'>
-                <Button
-                  variant='outline'
+              <div className='flex items-center gap-4'>
+                <button
+                  type='button'
                   onClick={() => setLocalSelectedTagIds([])}
                   disabled={localSelectedTagIds.length === 0}
-                  className='bg-transparent border-white/10 text-gray-400 hover:text-white'
+                  className='text-sm text-[#b9cacb] hover:text-[#ffb4ab] transition-colors px-4 py-2 font-medium disabled:opacity-50'
                 >
                   清空
-                </Button>
-                <Button
+                </button>
+                <button
+                  type='button'
                   onClick={() => onConfirm(localSelectedTagIds)}
-                  className='bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/30'
+                  className='bg-[#00f2ff] text-[#00363a] font-bold px-8 py-2.5 rounded-xl hover:shadow-[0_0_20px_rgba(0,242,255,0.4)] transition-all active:scale-95 text-sm uppercase tracking-wider'
                 >
                   确认选择
-                </Button>
+                </button>
               </div>
             </div>
           </div>
