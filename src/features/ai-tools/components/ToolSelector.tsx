@@ -44,7 +44,7 @@ interface ToolSelectorProps {
 
 export function ToolSelector({ onSelect }: ToolSelectorProps) {
   return (
-    <div className='grid grid-cols-3 gap-4 p-8 max-w-3xl'>
+    <div className='grid grid-cols-3 gap-6 p-8 max-w-3xl'>
       {tools.map(tool => {
         const Icon = tool.icon
         return (
