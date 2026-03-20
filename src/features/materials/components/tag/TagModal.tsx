@@ -334,22 +334,22 @@ export function TagModal({
               groups={groups}
               onRemoveTag={tagId => setLocalSelectedTagIds(prev => prev.filter(id => id !== tagId))}
             />
-          </div>
-        </div>
 
-        <div className='h-14 px-4 flex items-center justify-between border-t border-border'>
-          <span className='text-sm text-muted-foreground'>
-            已选择 <span className='text-primary'>{localSelectedTagIds.length}</span> 个标签
-          </span>
-          <div className='flex gap-2'>
-            <Button
-              variant='outline'
-              onClick={() => setLocalSelectedTagIds([])}
-              disabled={localSelectedTagIds.length === 0}
-            >
-              清空
-            </Button>
-            <Button onClick={() => onConfirm(localSelectedTagIds)}>确认</Button>
+            <div className='pt-4 mt-auto flex items-center justify-between border-t border-border'>
+              <span className='text-sm text-muted-foreground'>
+                已选择 <span className='text-primary'>{localSelectedTagIds.length}</span> 个标签
+              </span>
+              <div className='flex gap-2'>
+                <Button
+                  variant='outline'
+                  onClick={() => setLocalSelectedTagIds([])}
+                  disabled={localSelectedTagIds.length === 0}
+                >
+                  清空
+                </Button>
+                <Button onClick={() => onConfirm(localSelectedTagIds)}>确认</Button>
+              </div>
+            </div>
           </div>
         </div>
       </DialogContent>
