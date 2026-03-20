@@ -1,21 +1,18 @@
-import { Filter, FolderOpen, Search, Tag } from 'lucide-react'
+import { Filter, FolderOpen, Search } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
-import { Button } from '@/shared/components/ui/button'
 import { useDeleteMaterial, useMaterials, useTagGroups, useUploadMaterial } from '../../hooks'
 import { TagModal } from '../tag/TagModal'
 import { MaterialBatchToolbar } from './MaterialBatchToolbar'
 import { MaterialCard } from './MaterialCard'
 
 function MaterialsHeader({
-  materialsCount,
   search,
   onSearchChange,
   filterTagCount,
   onFilterClick,
 }: {
-  materialsCount: number
   search: string
   onSearchChange: (value: string) => void
   filterTagCount: number
@@ -24,13 +21,13 @@ function MaterialsHeader({
   return (
     <div className='mb-8'>
       <div className='flex items-center gap-3 mb-4'>
-        <div className='flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30'>
+        <div className='flex items-center justify-center w-12 h-12 rounded-xl bg-linear-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30'>
           <FolderOpen className='w-6 h-6 text-purple-400' />
         </div>
         <div>
           <h1 className='text-3xl font-bold text-on-surface tracking-tight'>素材库</h1>
           <p className='text-sm text-on-surface-variant mt-1'>
-            管理你的图片和视频素材 · {materialsCount} 个
+            管理你的图片和视频素材
           </p>
         </div>
       </div>
@@ -144,7 +141,6 @@ export function MaterialLibrary() {
     <div className='flex min-h-screen flex-col bg-surface'>
       <div className='flex-1 pt-12 px-12 pb-12'>
         <MaterialsHeader
-          materialsCount={materials.length}
           search={search}
           onSearchChange={setSearch}
           filterTagCount={filterTagIds.length}
@@ -176,7 +172,7 @@ export function MaterialLibrary() {
             <button
               type='button'
               onClick={() => fileInputRef.current?.click()}
-              className='aspect-[2/3] flex flex-col items-center justify-center gap-4 bg-surface-container-low/30 border-dashed border-2 border-outline-variant/30 hover:border-primary-container/50 hover:bg-primary-container/5 transition-all rounded-2xl group'
+              className='aspect-2/3 flex flex-col items-center justify-center gap-4 bg-surface-container-low/30 border-dashed border-2 border-outline-variant/30 hover:border-primary-container/50 hover:bg-primary-container/5 transition-all rounded-2xl group'
             >
               <div className='w-16 h-16 rounded-full bg-primary-container/10 flex items-center justify-center text-primary-container group-hover:scale-110 transition-transform duration-500'>
                 <span className='text-4xl'>+</span>
@@ -194,50 +190,6 @@ export function MaterialLibrary() {
         ) : (
           <EmptyState onUploadClick={() => fileInputRef.current?.click()} />
         )}
-
-        <div className='mt-16 grid grid-cols-1 md:grid-cols-3 gap-8'>
-          <div className='bg-surface-container-high/40 backdrop-blur-xl border border-primary-container/10 p-6 rounded-2xl'>
-            <div className='flex items-center gap-4 mb-4'>
-              <span className='text-primary text-2xl'>💾</span>
-              <h5 className='font-bold text-lg text-on-surface'>存储空间</h5>
-            </div>
-            <div className='w-full h-1.5 bg-surface-container rounded-full overflow-hidden mb-3'>
-              <div className='h-full bg-primary w-[65%] shadow-[0_0_15px_rgba(0,242,255,0.4)]' />
-            </div>
-            <div className='flex justify-between text-xs font-medium'>
-              <span className='text-on-surface-variant'>已使用 12.4 GB</span>
-              <span className='text-primary'>总计 20 GB</span>
-            </div>
-          </div>
-
-          <div className='bg-surface-container-high/40 backdrop-blur-xl border border-primary-container/10 p-6 rounded-2xl'>
-            <div className='flex items-center gap-4 mb-4'>
-              <span className='text-secondary text-2xl'>⏳</span>
-              <h5 className='font-bold text-lg text-on-surface'>任务队列</h5>
-            </div>
-            <div className='flex items-center gap-3'>
-              <div className='animate-pulse w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_hsl(var(--secondary))]' />
-              <span className='text-sm text-on-surface'>正在渲染 "北极系列" 广告活动...</span>
-            </div>
-          </div>
-
-          <div className='bg-surface-container-high/40 backdrop-blur-xl border border-primary-container/10 p-6 rounded-2xl'>
-            <div className='flex items-center gap-4 mb-4'>
-              <span className='text-tertiary text-2xl'>✨</span>
-              <h5 className='font-bold text-lg text-on-surface'>AI 智能管家</h5>
-            </div>
-            <p className='text-sm text-on-surface-variant leading-relaxed'>
-              检测到 12 张原始照片可以进行自动<b className='text-on-surface'>环境重照明</b>
-              优化。建议立即处理以提升渲染品质。
-            </p>
-            <button
-              type='button'
-              className='mt-4 text-primary text-xs font-bold uppercase tracking-widest flex items-center gap-2 hover:gap-3 transition-all'
-            >
-              处理全部素材 <span>→</span>
-            </button>
-          </div>
-        </div>
       </div>
 
       <MaterialBatchToolbar

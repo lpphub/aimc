@@ -1,4 +1,4 @@
-import { AlertTriangle, Pencil, Plus, Search, X } from 'lucide-react'
+import { AlertTriangle, Pencil, Search, X } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { Button } from '@/shared/components/ui/button'
 import {
@@ -315,7 +315,7 @@ export function TagModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='max-w-5xl h-[819px] p-0 flex flex-col bg-surface-container-low/60 backdrop-blur-xl border-outline-variant/15 shadow-[0_0_40px_rgba(0,242,255,0.06)]'>
+      <DialogContent className='max-w-5xl h-205 p-0 flex flex-col bg-surface-container-low/60 backdrop-blur-xl border-outline-variant/15 shadow-[0_0_40px_rgba(0,242,255,0.06)]'>
         <div className='flex flex-1 overflow-hidden'>
           <TagGroupSidebar
             groups={groups}
@@ -334,7 +334,7 @@ export function TagModal({
                 <Input
                   value={searchKeyword}
                   onChange={e => setSearchKeyword(e.target.value)}
-                  placeholder='搜索当前分组下的标签...'
+                  placeholder='搜索标签...'
                   className='h-10 pl-10 pr-4 bg-surface-container-low border border-outline-variant/20 focus:ring-1 focus:ring-primary-container/50 focus:border-primary-container/50 text-on-surface placeholder:text-on-surface-variant/50'
                 />
               </div>

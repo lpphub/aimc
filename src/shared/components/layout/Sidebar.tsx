@@ -1,4 +1,4 @@
-import { Clock, FolderOpen, Settings, Sparkles, Tag, X } from 'lucide-react'
+import { Clock, FolderOpen, LogOut, Sparkles} from 'lucide-react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { useLogout } from '@/features/auth'
 import { cn } from '@/lib/utils'
@@ -37,7 +37,7 @@ export function Sidebar() {
         <div className='text-xl font-bold tracking-tighter text-primary mb-1'>
           AIGC Toolset
         </div>
-        <div className='text-[0.6875rem] font-bold tracking-[0.1em] uppercase text-on-surface-variant'>
+        <div className='text-[0.6875rem] font-bold tracking-widest uppercase text-on-surface-variant'>
           The Synthetic Architect
         </div>
       </div>
@@ -71,26 +71,17 @@ export function Sidebar() {
       </nav>
 
       <div className='px-6 mt-auto space-y-4'>
-        <button
-          type='button'
-          className='w-full bg-surface-container-high border border-primary-container/20 text-primary font-bold py-3 rounded-xl uppercase tracking-tighter text-xs hover:bg-primary-container/5 transition-all active:scale-[0.98]'
-        >
-          New Project
-        </button>
-
-        <div className='pt-6 border-t border-outline-variant/10 flex items-center gap-3'>
-          <div className='w-8 h-8 rounded-full border border-primary-container/20 bg-gradient-to-br from-primary to-tertiary' />
+        <div className='pt-6 border-t border-outline-variant/10 flex items-center'>
           <div className='overflow-hidden flex-1'>
-            <div className='text-xs font-bold text-on-surface truncate'>管理员</div>
-            <div className='text-[10px] text-on-surface-variant truncate'>专业版计划</div>
+            <div className='text-xs text-on-surface truncate'>管理员</div>
           </div>
           <button
             type='button'
             onClick={handleLogout}
             className='text-on-surface-variant hover:text-primary cursor-pointer transition-colors'
-            title='设置'
+            title='退出登录'
           >
-            <Settings className='w-4 h-4' />
+            <LogOut className='w-4 h-4' />
           </button>
         </div>
       </div>
