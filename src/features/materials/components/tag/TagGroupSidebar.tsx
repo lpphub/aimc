@@ -64,7 +64,7 @@ export function TagGroupSidebar({
           onClick={() => onGroupSelect(ALL_TAGS_GROUP_ID)}
           className={getButtonClassName(ALL_TAGS_GROUP_ID)}
         >
-          <span className='font-medium flex-1 text-left'>全部标签</span>
+          <span className='font-medium flex-1 text-left'>全部</span>
         </button>
 
         {groups.length > 0 && (
