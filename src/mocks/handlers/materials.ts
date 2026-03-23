@@ -59,19 +59,27 @@ export const materialsHandlers = [
 
   http.patch<
     never,
-    { ids: string[]; tags: string[]; mode: 'add' | 'replace' },
+    { ids: string[]; tagIds: number[]; mode: 'add' | 'replace' },
     ApiResponse<Material[]>
   >(`${API_BASE}/materials/batch-tags`, async ({ request }) => {
-    const { ids, tags, mode } = await request.json()
-    const updated: Material[] = []
+    const { ids, tagIds, mode } = await request.json()
 
+    const tagNames: string[] = []
+    for (const tagId of tagIds) {
+      for (const group of tagGroups) {
+        const tag = group.tags.find(t => t.id === tagId)
+        if (tag) tagNames.push(tag.name)
+      }
+    }
+
+    const updated: Material[] = []
     for (const id of ids) {
       const material = materials.find(m => m.id === id)
       if (material) {
         if (mode === 'replace') {
-          material.tags = tags
+          material.tags = tagNames
         } else {
-          material.tags = [...new Set([...material.tags, ...tags])]
+          material.tags = [...new Set([...material.tags, ...tagNames])]
         }
         updated.push(material)
       }
@@ -89,28 +97,4 @@ export const materialsHandlers = [
     })
     return HttpResponse.json(success([...allTags]))
   }),
-
-  http.post<never, { materialIds: string[]; tagIds: number[] }, ApiResponse<null>>(
-    `${API_BASE}/materials/tags`,
-    async ({ request }) => {
-      const { materialIds, tagIds } = await request.json()
-
-      const tagNames: string[] = []
-      for (const groupId of tagIds) {
-        for (const group of tagGroups) {
-          const tag = group.tags.find(t => t.id === groupId)
-          if (tag) tagNames.push(tag.name)
-        }
-      }
-
-      for (const id of materialIds) {
-        const material = materials.find(m => m.id === id)
-        if (material) {
-          material.tags = [...new Set([...material.tags, ...tagNames])]
-        }
-      }
-
-      return HttpResponse.json(success(null))
-    }
-  ),
 ]

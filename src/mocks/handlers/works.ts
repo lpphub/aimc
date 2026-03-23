@@ -1,5 +1,5 @@
 import { delay, HttpResponse, http } from 'msw'
-import type { CreateWorkRequest, Work } from '@/features/portfolio/types'
+import type { CreateWorkReq, Work } from '@/features/projects/types'
 import type { ApiResponse } from '@/lib/api'
 import { mockWorks } from '../db'
 
@@ -13,7 +13,7 @@ function error(message: string, code = 400): ApiResponse<null> {
   return { code, message, data: null as unknown as null }
 }
 
-export const portfolioHandlers = [
+export const worksHandlers = [
   http.get<never, never, ApiResponse<Work[]>>(`${API_BASE}/works`, async ({ request }) => {
     await delay(200)
     const url = new URL(request.url)
@@ -40,20 +40,17 @@ export const portfolioHandlers = [
     return HttpResponse.json(success(works))
   }),
 
-  http.post<never, CreateWorkRequest, ApiResponse<Work>>(
-    `${API_BASE}/works`,
-    async ({ request }) => {
-      await delay(300)
-      const body = await request.json()
-      const newWork: Work = {
-        id: `w${Date.now()}`,
-        ...body,
-        createdAt: new Date().toISOString(),
-      }
-      mockWorks.push(newWork)
-      return HttpResponse.json(success(newWork))
+  http.post<never, CreateWorkReq, ApiResponse<Work>>(`${API_BASE}/works`, async ({ request }) => {
+    await delay(300)
+    const body = await request.json()
+    const newWork: Work = {
+      id: `w${Date.now()}`,
+      ...body,
+      createdAt: new Date().toISOString(),
     }
-  ),
+    mockWorks.push(newWork)
+    return HttpResponse.json(success(newWork))
+  }),
 
   http.delete<{ id: string }, never, ApiResponse<null>>(
     `${API_BASE}/works/:id`,

@@ -1,3 +1,3 @@
 export { CollectDialog } from './CollectDialog'
-export { Portfolio } from './Portfolio'
+export { Projects } from './Portfolio'
 export { WorkCard } from './WorkCard'

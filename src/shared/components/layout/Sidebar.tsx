@@ -1,4 +1,4 @@
-import { Clock, FolderOpen, LogOut, Sparkles} from 'lucide-react'
+import { Clock, FolderOpen, LogOut, Sparkles } from 'lucide-react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { useLogout } from '@/features/auth'
 import { cn } from '@/lib/utils'
@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils'
 export function Sidebar() {
   const location = useLocation()
   const navigate = useNavigate()
-  const logoutMutation = useLogout()
+  const logout = useLogout()
 
   const navItems = [
     {
@@ -20,23 +20,21 @@ export function Sidebar() {
       label: '素材库',
     },
     {
-      path: '/portfolio',
+      path: '/projects',
       icon: Clock,
-      label: '项目日志',
+      label: '项目',
     },
   ]
 
   const handleLogout = () => {
-    logoutMutation.mutate()
+    logout()
     navigate('/login', { replace: true })
   }
 
   return (
     <aside className='fixed left-0 top-0 h-screen w-64 bg-surface-container-lowest border-r border-primary-container/10 flex flex-col py-6 z-50 shadow-[0_0_40px_rgba(0,242,255,0.06)]'>
       <div className='px-6 mb-10'>
-        <div className='text-xl font-bold tracking-tighter text-primary mb-1'>
-          AIGC Toolset
-        </div>
+        <div className='text-xl font-bold tracking-tighter text-primary mb-1'>AIGC Toolset</div>
         <div className='text-[0.6875rem] font-bold tracking-widest uppercase text-on-surface-variant'>
           The Synthetic Architect
         </div>
@@ -59,10 +57,7 @@ export function Sidebar() {
               )}
             >
               <Icon
-                className={cn(
-                  'w-5 h-5 transition-transform',
-                  !isActive && 'group-hover:scale-110'
-                )}
+                className={cn('w-5 h-5 transition-transform', !isActive && 'group-hover:scale-110')}
               />
               <span className='font-medium text-sm'>{item.label}</span>
             </NavLink>

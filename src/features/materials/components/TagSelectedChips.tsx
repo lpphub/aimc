@@ -1,6 +1,6 @@
 import { X } from 'lucide-react'
 import { useMemo } from 'react'
-import type { Tag, TagGroup } from '../../types'
+import type { Tag, TagGroup } from '../types'
 
 interface TagSelectedChipsProps {
   selectedTags: Tag[]

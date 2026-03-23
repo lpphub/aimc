@@ -1,8 +1,8 @@
 import { MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
-import type { TagGroup } from '../../types'
-import { ALL_TAGS_GROUP_ID } from '../../types'
+import type { TagGroup } from '../types'
+import { ALL_TAGS_GROUP_ID } from '../types'
 
 interface TagGroupSidebarProps {
   groups: TagGroup[]

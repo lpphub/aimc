@@ -18,8 +18,8 @@ import {
   useTagGroups,
   useUpdateTag,
   useUpdateTagGroup,
-} from '../../hooks'
-import { ALL_TAGS_GROUP_ID } from '../../types'
+} from '../hooks'
+import { ALL_TAGS_GROUP_ID } from '../types'
 import { TagGrid } from './TagGrid'
 import { TagGroupSidebar } from './TagGroupSidebar'
 

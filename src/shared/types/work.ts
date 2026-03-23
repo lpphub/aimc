@@ -21,7 +21,7 @@ export interface Work {
   createdAt: string
 }
 
-export interface CreateWorkRequest {
+export interface CreateWorkReq {
   projectId?: string
   type: WorkType
   content: string
@@ -33,4 +33,28 @@ export interface WorksFilter {
   projectId?: string
   type?: WorkType
   search?: string
+}
+
+export interface CreateProjectReq {
+  name: string
+  description?: string
+  tags?: string[]
+  presetTemplateIds?: string[]
+}
+
+export interface Template {
+  id: string
+  name: string
+  type: 'copy' | 'image' | 'video'
+  content: string
+}
+
+export interface CreationRecord {
+  id: string
+  projectId: string
+  type: 'copy' | 'image' | 'video'
+  title: string
+  content: string
+  metadata?: Record<string, unknown>
+  createdAt: string
 }

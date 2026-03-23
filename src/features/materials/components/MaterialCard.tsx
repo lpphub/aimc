@@ -1,6 +1,6 @@
 import { Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import type { Material } from '../../types'
+import type { Material } from '../types'
 
 interface MaterialCardProps {
   material: Material
@@ -15,11 +15,11 @@ export function MaterialCard({ material, isSelected, onSelect }: MaterialCardPro
   return (
     <div
       className={cn(
-        'relative overflow-hidden rounded-xl bg-surface-container-low border transition-all duration-300 group',
-        'aspect-2/3',
+        'relative overflow-hidden rounded-md bg-surface-container-low border transition-all duration-300 group',
+        'aspect-4/5',
         isSelected
-          ? 'border-primary-container shadow-[0_0_20px_rgba(0,242,255,0.15)]'
-          : 'border-outline-variant/50 hover:border-primary-container hover:shadow-[0_0_20px_rgba(0,242,255,0.15)] hover:-translate-y-1'
+          ? 'border-primary-container shadow-[0_0_15px_rgba(0,242,255,0.12)]'
+          : 'border-outline-variant/50 hover:border-primary-container hover:shadow-[0_0_15px_rgba(0,242,255,0.12)]'
       )}
     >
       <div className='absolute inset-0'>
@@ -41,7 +41,7 @@ export function MaterialCard({ material, isSelected, onSelect }: MaterialCardPro
       <button
         type='button'
         className={cn(
-          'absolute top-3 left-3 w-5 h-5 rounded border-2 flex items-center justify-center transition-all',
+          'absolute top-1.5 left-1.5 w-3.5 h-3.5 rounded-sm border flex items-center justify-center transition-all',
           isSelected
             ? 'bg-primary-container border-primary-container'
             : 'border-on-surface/30 bg-surface/20 opacity-0 group-hover:opacity-100'
@@ -51,22 +51,22 @@ export function MaterialCard({ material, isSelected, onSelect }: MaterialCardPro
           onSelect(material.id)
         }}
       >
-        {isSelected && <Check className='w-3 h-3 text-on-primary' />}
+        {isSelected && <Check className='w-2 h-2 text-on-primary' />}
       </button>
 
-      <div className='absolute bottom-0 p-3 w-full'>
-        <h3 className='font-medium text-sm text-on-surface truncate'>{material.filename}</h3>
-        <div className='flex flex-wrap gap-1.5 mt-2'>
+      <div className='absolute bottom-0 p-1.5 w-full'>
+        <h3 className='font-medium text-[11px] text-on-surface truncate'>{material.filename}</h3>
+        <div className='flex flex-wrap gap-0.5 mt-0.5'>
           {displayTags.map(tag => (
             <span
               key={tag}
-              className='text-[10px] font-bold px-2 py-1 rounded uppercase bg-primary-container/20 backdrop-blur-md text-primary-container border border-primary-container/30'
+              className='text-[8px] font-bold px-1 py-px rounded-sm uppercase bg-primary-container/20 backdrop-blur-md text-primary-container border border-primary-container/30'
             >
               {tag}
             </span>
           ))}
           {remainingCount > 0 && (
-            <span className='text-[10px] font-bold px-2 py-1 rounded uppercase bg-secondary-container/20 backdrop-blur-md text-secondary border border-secondary-container/30'>
+            <span className='text-[8px] font-bold px-1 py-px rounded-sm uppercase bg-secondary-container/20 backdrop-blur-md text-secondary border border-secondary-container/30'>
               +{remainingCount}
             </span>
           )}

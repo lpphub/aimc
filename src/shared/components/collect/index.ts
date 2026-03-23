@@ -1,0 +1,1 @@
+export { CollectDialog } from './CollectDialog'

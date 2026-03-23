@@ -10,8 +10,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/shared/components/ui/dialog'
-import { useCreateWork, useProjects } from '../hooks'
-import type { WorkType } from '../types'
+import type { WorkType } from '@/shared/types'
+
+interface Project {
+  id: string
+  name: string
+}
 
 interface CollectDialogProps {
   open: boolean
@@ -20,7 +24,15 @@ interface CollectDialogProps {
   content: string
   prompt: string
   engine?: string
-  onSuccess?: () => void
+  projects: Project[]
+  isPending: boolean
+  onCollect: (data: {
+    projectId?: string
+    type: WorkType
+    content: string
+    prompt: string
+    engine?: string
+  }) => void
 }
 
 export function CollectDialog({
@@ -30,28 +42,14 @@ export function CollectDialog({
   content,
   prompt,
   engine,
-  onSuccess,
+  projects,
+  isPending,
+  onCollect,
 }: CollectDialogProps) {
   const [selectedProject, setSelectedProject] = useState<string | undefined>(undefined)
-  const { data: projects = [] } = useProjects()
-  const createWork = useCreateWork()
 
   const handleCollect = () => {
-    createWork.mutate(
-      {
-        projectId: selectedProject,
-        type,
-        content,
-        prompt,
-        engine,
-      },
-      {
-        onSuccess: () => {
-          onOpenChange(false)
-          onSuccess?.()
-        },
-      }
-    )
+    onCollect({ projectId: selectedProject, type, content, prompt, engine })
   }
 
   return (
@@ -114,10 +112,10 @@ export function CollectDialog({
           </Button>
           <Button
             onClick={handleCollect}
-            disabled={createWork.isPending}
+            disabled={isPending}
             className='bg-primary text-primary-foreground hover:bg-primary/90'
           >
-            {createWork.isPending ? (
+            {isPending ? (
               <>
                 <Loader2 className='w-4 h-4 mr-2 animate-spin' />
                 收藏中...

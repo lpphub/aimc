@@ -1,10 +1,7 @@
-'use client'
-
 import { Heart, Image, Sparkles } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { CollectDialog } from '@/features/portfolio/components/CollectDialog'
-import type { WorkType } from '@/features/portfolio/types'
+import { CollectDialog } from '@/shared/components/collect'
 import { Button } from '@/shared/components/ui/button'
 import { Card } from '@/shared/components/ui/card'
 import {
@@ -15,6 +12,8 @@ import {
   SelectValue,
 } from '@/shared/components/ui/select'
 import { Textarea } from '@/shared/components/ui/textarea'
+import { useCreateWork, useProjects } from '@/shared/hooks'
+import type { WorkType } from '@/shared/types'
 import { ToolHeader } from './ToolSelector'
 
 interface PosterToolProps {
@@ -27,6 +26,9 @@ export function PosterTool({ onBack }: PosterToolProps) {
   const [referenceImages, _setReferenceImages] = useState<File[]>([])
   const [generatedContent, setGeneratedContent] = useState<string | null>(null)
   const [collectDialogOpen, setCollectDialogOpen] = useState(false)
+
+  const { data: projects = [] } = useProjects()
+  const createWork = useCreateWork()
 
   const aspectRatios = [
     { value: '1:1', label: '1:1' },
@@ -45,9 +47,20 @@ export function PosterTool({ onBack }: PosterToolProps) {
     toast.success('图片生成成功！')
   }
 
-  const handleCollect = () => {
-    if (!generatedContent) return
-    setCollectDialogOpen(true)
+  const handleCollect = (data: {
+    projectId?: string
+    type: WorkType
+    content: string
+    prompt: string
+    engine?: string
+  }) => {
+    createWork.mutate(data, {
+      onSuccess: () => {
+        setCollectDialogOpen(false)
+        toast.success('作品已收藏到作品集')
+      },
+      onError: () => toast.error('收藏失败'),
+    })
   }
 
   return (
@@ -159,7 +172,7 @@ export function PosterTool({ onBack }: PosterToolProps) {
                         className='max-w-full max-h-[calc(100%-80px)] rounded-lg object-contain'
                       />
                       <Button
-                        onClick={handleCollect}
+                        onClick={() => setCollectDialogOpen(true)}
                         className='self-end mt-4 bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg'
                       >
                         <Heart className='w-4 h-4 mr-2' />
@@ -184,10 +197,12 @@ export function PosterTool({ onBack }: PosterToolProps) {
       <CollectDialog
         open={collectDialogOpen}
         onOpenChange={setCollectDialogOpen}
-        type={'image' as WorkType}
+        type='image'
         content={generatedContent || ''}
         prompt={prompt}
-        onSuccess={() => toast.success('作品已收藏到作品集')}
+        projects={projects}
+        isPending={createWork.isPending}
+        onCollect={handleCollect}
       />
     </>
   )

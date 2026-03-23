@@ -1,29 +1,24 @@
 import { Tag, X } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/shared/components/ui/button'
-import { useAddTagsToMaterials } from '../../hooks'
-import { TagModal } from '../tag/TagModal'
+import { useBatchUpdateTags } from '../hooks'
+import { TagModal } from './TagModal'
 
-interface MaterialBatchToolbarProps {
+interface MaterialToolbarProps {
   selectedIds: string[]
   onClear: () => void
   onDelete: (ids: string[]) => void
 }
 
-export function MaterialBatchToolbar({
-  selectedIds,
-  onClear,
-  onDelete,
-}: MaterialBatchToolbarProps) {
+export function MaterialToolbar({ selectedIds, onClear, onDelete }: MaterialToolbarProps) {
   const [showTagModal, setShowTagModal] = useState(false)
-  const addTags = useAddTagsToMaterials()
+  const batchUpdate = useBatchUpdateTags()
 
   if (selectedIds.length === 0) return null
 
-  const handleAddTags = (tagIds: number[]) => {
-    if (tagIds.length === 0) return
-    addTags.mutate(
-      { materialIds: selectedIds, tagIds },
+  const handleConfirm = (tagIds: number[]) => {
+    batchUpdate.mutate(
+      { ids: selectedIds, tagIds, mode: 'replace' },
       {
         onSuccess: () => {
           setShowTagModal(false)
@@ -50,7 +45,7 @@ export function MaterialBatchToolbar({
             className='border-outline-variant/30 text-on-surface-variant hover:text-primary hover:border-primary-container/50'
           >
             <Tag className='w-4 h-4 mr-2' />
-            添加标签
+            标签
           </Button>
 
           <Button size='sm' variant='destructive' onClick={() => onDelete(selectedIds)}>
@@ -74,7 +69,7 @@ export function MaterialBatchToolbar({
         open={showTagModal}
         onOpenChange={setShowTagModal}
         selectedTagIds={[]}
-        onConfirm={handleAddTags}
+        onConfirm={handleConfirm}
       />
     </>
   )

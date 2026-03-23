@@ -62,16 +62,3 @@ export function useMaterialTags() {
     gcTime: 10 * 60 * 1000,
   })
 }
-
-export function useAddTagsToMaterials() {
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: (params: { materialIds: string[]; tagIds: number[] }) =>
-      api.addTagsToMaterials(params),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: materialKeys.all })
-      toast.success('标签添加成功')
-    },
-    onError: () => toast.error('标签添加失败'),
-  })
-}

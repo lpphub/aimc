@@ -1,7 +1,7 @@
 import { Check, Circle, MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
-import type { Tag } from '../../types'
+import type { Tag } from '../types'
 
 interface TagGridProps {
   tags: Tag[]
@@ -69,7 +69,9 @@ export function TagGrid({
               <span
                 className={cn(
                   'text-sm font-medium transition-colors',
-                  isSelected ? 'text-primary-container' : 'text-on-surface-variant group-hover:text-on-surface'
+                  isSelected
+                    ? 'text-primary-container'
+                    : 'text-on-surface-variant group-hover:text-on-surface'
                 )}
               >
                 {tag.name}

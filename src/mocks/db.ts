@@ -1,7 +1,6 @@
 import type { User } from '@/features/auth/types'
 import type { Material, TagGroup } from '@/features/materials/types'
-import type { Work } from '@/features/portfolio/types'
-import type { CreationRecord, Project, Template } from '@/features/project/types'
+import type { CreationRecord, Project, Template, Work } from '@/features/projects/types'
 
 const users: Map<string, { password: string; user: User }> = new Map()
 

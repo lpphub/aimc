@@ -48,12 +48,12 @@ export function WorkCard({ work, onDelete }: WorkCardProps) {
           </Badge>
         </div>
 
-        <div className='absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center'>
+        <div className='absolute inset-0 bg-background/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center'>
           <Button
             variant='ghost'
             size='icon'
             onClick={() => onDelete?.(work.id)}
-            className='text-red-400 hover:text-red-300 hover:bg-red-500/20'
+            className='text-destructive hover:text-destructive hover:bg-destructive/20'
           >
             <Trash2 className='w-5 h-5' />
           </Button>
@@ -61,9 +61,11 @@ export function WorkCard({ work, onDelete }: WorkCardProps) {
       </div>
 
       <div className='p-3'>
-        {work.projectName && <p className='text-xs text-gray-500 mb-1'>来自: {work.projectName}</p>}
-        <p className='text-sm text-gray-400 line-clamp-2'>{work.prompt}</p>
-        <p className='text-xs text-gray-600 mt-2'>
+        {work.projectName && (
+          <p className='text-xs text-muted-foreground mb-1'>来自: {work.projectName}</p>
+        )}
+        <p className='text-sm text-on-surface-variant line-clamp-2'>{work.prompt}</p>
+        <p className='text-xs text-on-surface-variant/60 mt-2'>
           {new Date(work.createdAt).toLocaleDateString()}
         </p>
       </div>

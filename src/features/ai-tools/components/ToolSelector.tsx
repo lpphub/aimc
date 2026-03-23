@@ -1,13 +1,7 @@
-'use client'
-
 import { ArrowLeft, Image, Type, Video } from 'lucide-react'
 import { Button } from '@/shared/components/ui/button'
 import { Card } from '@/shared/components/ui/card'
-
-// =========================
-// Types
-// =========================
-type ToolType = 'text' | 'image' | 'video'
+import type { ToolType } from '../types'
 
 interface ToolCard {
   id: string
@@ -17,9 +11,6 @@ interface ToolCard {
   icon: React.ComponentType<{ className?: string }>
 }
 
-// =========================
-// Data
-// =========================
 const tools: ToolCard[] = [
   {
     id: 'text',
@@ -44,9 +35,6 @@ const tools: ToolCard[] = [
   },
 ]
 
-// =========================
-// Tool Card
-// =========================
 function ToolItem({ tool, onSelect }: { tool: ToolCard; onSelect: (t: ToolType) => void }) {
   const Icon = tool.icon
 
@@ -58,14 +46,12 @@ function ToolItem({ tool, onSelect }: { tool: ToolCard; onSelect: (t: ToolType) 
                  hover:border-primary/40 hover:shadow-xl hover:shadow-primary/10
                  hover:-translate-y-1 rounded-2xl overflow-hidden'
     >
-      {/* Hover Glow */}
       <div
         className='absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity
                       bg-linear-to-br from-primary/10 via-transparent to-transparent'
       />
 
       <div className='relative z-10 flex flex-col h-full items-center text-left'>
-        {/* Icon */}
         <div
           className='w-20 h-20 rounded-2xl flex items-center justify-center
                         bg-primary/10 mb-8 mt-2 group-hover:scale-110 transition-transform'
@@ -73,7 +59,6 @@ function ToolItem({ tool, onSelect }: { tool: ToolCard; onSelect: (t: ToolType) 
           <Icon className='w-10 h-10 text-primary' />
         </div>
 
-        {/* Content */}
         <div className='mt-auto w-full'>
           <h3 className='text-lg font-semibold text-foreground mb-2'>{tool.title}</h3>
 
@@ -82,7 +67,6 @@ function ToolItem({ tool, onSelect }: { tool: ToolCard; onSelect: (t: ToolType) 
           </p>
         </div>
 
-        {/* Bottom subtle line */}
         <div className='w-full pt-6 opacity-0 group-hover:opacity-100 transition-opacity'>
           <div className='h-0.5 w-full bg-linear-to-br from-transparent via-primary/40 to-transparent' />
         </div>
@@ -91,13 +75,9 @@ function ToolItem({ tool, onSelect }: { tool: ToolCard; onSelect: (t: ToolType) 
   )
 }
 
-// =========================
-// Selector (核心)
-// =========================
 export function ToolSelector({ onSelect }: { onSelect: (tool: ToolType) => void }) {
   return (
     <div className='w-full max-w-7xl mx-auto px-6 py-10'>
-      {/* Grid */}
       <div
         className='grid gap-8
                    grid-cols-1
@@ -114,9 +94,6 @@ export function ToolSelector({ onSelect }: { onSelect: (tool: ToolType) => void 
   )
 }
 
-// =========================
-// Header（进入工具页用）
-// =========================
 export function ToolHeader({
   title,
   icon: Icon,
@@ -148,4 +125,3 @@ export function ToolHeader({
 }
 
 export { tools }
-export type { ToolType }

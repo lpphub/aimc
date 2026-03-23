@@ -1,13 +1,12 @@
-'use client'
-
 import { Heart, Sparkles, Type } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { CollectDialog } from '@/features/portfolio/components/CollectDialog'
-import type { WorkType } from '@/features/portfolio/types'
+import { CollectDialog } from '@/shared/components/collect'
 import { Button } from '@/shared/components/ui/button'
 import { Card } from '@/shared/components/ui/card'
 import { Textarea } from '@/shared/components/ui/textarea'
+import { useCreateWork, useProjects } from '@/shared/hooks'
+import type { WorkType } from '@/shared/types'
 import { ToolHeader } from './ToolSelector'
 
 interface MarketingCopyToolProps {
@@ -19,6 +18,9 @@ export function MarketingCopyTool({ onBack }: MarketingCopyToolProps) {
   const [generatedContent, setGeneratedContent] = useState<string | null>(null)
   const [collectDialogOpen, setCollectDialogOpen] = useState(false)
 
+  const { data: projects = [] } = useProjects()
+  const createWork = useCreateWork()
+
   const handleGenerate = () => {
     const placeholderContent =
       '在 2147 年的新东京，霓虹灯闪烁的街道上，一台老旧的机器人正在修理自己的核心电路。它的机械手指颤抖着，微小的电火花在指间跳跃。周围是全息广告牌，播放着最新的脑机接口广告。'
@@ -26,9 +28,20 @@ export function MarketingCopyTool({ onBack }: MarketingCopyToolProps) {
     toast.success('文本生成成功！')
   }
 
-  const handleCollect = () => {
-    if (!generatedContent) return
-    setCollectDialogOpen(true)
+  const handleCollect = (data: {
+    projectId?: string
+    type: WorkType
+    content: string
+    prompt: string
+    engine?: string
+  }) => {
+    createWork.mutate(data, {
+      onSuccess: () => {
+        setCollectDialogOpen(false)
+        toast.success('作品已收藏到作品集')
+      },
+      onError: () => toast.error('收藏失败'),
+    })
   }
 
   return (
@@ -95,7 +108,7 @@ export function MarketingCopyTool({ onBack }: MarketingCopyToolProps) {
                         <p className='text-foreground whitespace-pre-wrap'>{generatedContent}</p>
                       </div>
                       <Button
-                        onClick={handleCollect}
+                        onClick={() => setCollectDialogOpen(true)}
                         className='self-end mt-4 bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg'
                       >
                         <Heart className='w-4 h-4 mr-2' />
@@ -120,10 +133,12 @@ export function MarketingCopyTool({ onBack }: MarketingCopyToolProps) {
       <CollectDialog
         open={collectDialogOpen}
         onOpenChange={setCollectDialogOpen}
-        type={'text' as WorkType}
+        type='text'
         content={generatedContent || ''}
         prompt={prompt}
-        onSuccess={() => toast.success('作品已收藏到作品集')}
+        projects={projects}
+        isPending={createWork.isPending}
+        onCollect={handleCollect}
       />
     </>
   )

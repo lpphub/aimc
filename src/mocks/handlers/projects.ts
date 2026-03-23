@@ -1,5 +1,5 @@
 import { delay, HttpResponse, http } from 'msw'
-import type { CreationRecord, Project, Template } from '@/features/project/types'
+import type { CreationRecord, Project, Template } from '@/features/projects/types'
 import type { ApiResponse } from '@/lib/api'
 import { generateId, projects, records, templates } from '../db'
 

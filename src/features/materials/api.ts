@@ -69,7 +69,7 @@ export async function updateTag(tagId: number, name: string): Promise<Tag> {
 }
 
 export async function deleteTag(tagId: number): Promise<void> {
-  return api.delete(`tags/${tagId}`)
+  await api.delete(`tags/${tagId}`)
 }
 
 export async function addTagsToMaterials(params: {

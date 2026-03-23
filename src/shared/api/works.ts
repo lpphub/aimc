@@ -1,14 +1,7 @@
 import api from '@/lib/api'
-import type { CreateWorkRequest, Project, Work, WorksFilter } from './types'
+import type { CreateProjectReq, CreateWorkReq, Project, Work, WorksFilter } from '@/shared/types'
 
-export interface CreateProjectReq {
-  name: string
-  description?: string
-  tags?: string[]
-  presetTemplateIds?: string[]
-}
-
-export const portfolioApi = {
+export const worksApi = {
   list: (filter?: WorksFilter) => {
     const params = new URLSearchParams()
     if (filter?.projectId) params.set('projectId', filter.projectId)
@@ -18,11 +11,12 @@ export const portfolioApi = {
     return api.get<Work[]>(`works${query ? `?${query}` : ''}`)
   },
 
-  create: (data: CreateWorkRequest) => api.post<Work, CreateWorkRequest>('works', data),
+  create: (data: CreateWorkReq) => api.post<Work, CreateWorkReq>('works', data),
 
   delete: (id: string) => api.delete<void>(`works/${id}`),
 }
 
-export const projectApi = {
+export const projectsApi = {
   list: () => api.get<Project[]>('projects'),
+  create: (data: CreateProjectReq) => api.post<Project, CreateProjectReq>('projects', data),
 }

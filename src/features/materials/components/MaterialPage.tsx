@@ -2,12 +2,12 @@ import { Filter, Search } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
-import { useDeleteMaterial, useMaterials, useTagGroups, useUploadMaterial } from '../../hooks'
-import { TagModal } from '../tag/TagModal'
-import { MaterialBatchToolbar } from './MaterialBatchToolbar'
+import { useDeleteMaterial, useMaterials, useTagGroups, useUploadMaterial } from '../hooks'
 import { MaterialCard } from './MaterialCard'
+import { MaterialToolbar } from './MaterialToolbar'
+import { TagModal } from './TagModal'
 
-function MaterialToolbar({
+function MaterialSearchToolbar({
   search,
   onSearchChange,
   filterTagCount,
@@ -125,7 +125,7 @@ export function MaterialPage() {
 
   return (
     <div className='flex-1 px-12 pb-12'>
-      <MaterialToolbar
+      <MaterialSearchToolbar
         search={search}
         onSearchChange={setSearch}
         filterTagCount={filterTagIds.length}
@@ -145,7 +145,7 @@ export function MaterialPage() {
           <div className='text-on-surface-variant'>加载中...</div>
         </div>
       ) : materials.length > 0 ? (
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6'>
+        <div className='grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2'>
           {materials.map(material => (
             <MaterialCard
               key={material.id}
@@ -157,17 +157,17 @@ export function MaterialPage() {
           <button
             type='button'
             onClick={() => fileInputRef.current?.click()}
-            className='aspect-2/3 flex flex-col items-center justify-center gap-4 bg-surface-container-low/30 border-dashed border-2 border-outline-variant/30 hover:border-primary-container/50 hover:bg-primary-container/5 transition-all rounded-2xl group'
+            className='aspect-4/5 flex flex-col items-center justify-center gap-2 bg-surface-container-low/30 border-dashed border border-outline-variant/30 hover:border-primary-container/50 hover:bg-primary-container/5 transition-all rounded-md group'
           >
-            <div className='w-16 h-16 rounded-full bg-primary-container/10 flex items-center justify-center text-primary-container group-hover:scale-110 transition-transform duration-500'>
-              <span className='text-4xl'>+</span>
+            <div className='w-10 h-10 rounded-full bg-primary-container/10 flex items-center justify-center text-primary-container group-hover:scale-110 transition-transform duration-500'>
+              <span className='text-xl'>+</span>
             </div>
             <div className='text-center'>
               <span className='block text-sm font-bold uppercase tracking-widest text-on-surface'>
                 上传素材
               </span>
-              <span className='block text-[10px] text-on-surface-variant mt-1 uppercase'>
-                支持 JPG, PNG, MP4, OBJ
+              <span className='block text-xs text-on-surface-variant mt-0.5 uppercase'>
+                JPG, PNG, MP4
               </span>
             </div>
           </button>
@@ -176,7 +176,7 @@ export function MaterialPage() {
         <EmptyState onUploadClick={() => fileInputRef.current?.click()} />
       )}
 
-      <MaterialBatchToolbar
+      <MaterialToolbar
         selectedIds={selectedIds}
         onClear={() => setSelectedIds([])}
         onDelete={handleBatchDelete}
