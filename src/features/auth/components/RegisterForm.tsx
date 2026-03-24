@@ -3,11 +3,13 @@ import { ArrowLeft, Eye, EyeOff, Loader2, Lock, Mail, Shield, User } from 'lucid
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 import { z } from 'zod'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { useRegister } from '../hooks'
 import { LoginStateEnum, useLoginStateContext } from './LoginProvider'
+import type { ApiError } from '@/lib/api'
 
 const registerSchema = z
   .object({
@@ -47,7 +49,8 @@ export function RegisterForm() {
       await registerMutation.mutateAsync(values)
       navigate('/', { replace: true })
     } catch (error) {
-      console.error('注册失败:', error)
+      const { message } = error as ApiError
+      toast.error('注册失败', { description: message })
     }
   }
 
