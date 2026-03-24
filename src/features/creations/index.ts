@@ -1,11 +1,11 @@
 export * from './api'
 export {
-  AiToolsPage,
-  MarketingCopyTool,
+  CreationsPage,
+  OcrTool,
   PosterTool,
+  TextTool,
+  ToolGrid,
   ToolHeader,
-  ToolSelector,
-  VideoTool,
 } from './components'
 export * from './hooks'
 export * from './types'

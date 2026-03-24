@@ -56,7 +56,7 @@ export default function LoginPage() {
               {
                 icon: Sparkles,
                 title: '工具集成',
-                desc: '丰富的 AI 工具箱，一站式体验',
+                desc: '丰富的 AI 创作中心，一站式体验',
               },
             ].map(item => (
               <div

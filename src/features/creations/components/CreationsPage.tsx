@@ -1,23 +1,23 @@
 import { useState } from 'react'
 import type { ToolType } from '../types'
-import { MarketingCopyTool } from './MarketingCopyTool'
+import { OcrTool } from './OcrTool'
 import { PosterTool } from './PosterTool'
-import { ToolSelector } from './ToolSelector'
-import { VideoTool } from './VideoTool'
+import { TextTool } from './TextTool'
+import { ToolGrid } from './ToolGrid'
 
-export function AiToolsPage() {
+export function CreationsPage() {
   const [selectedTool, setSelectedTool] = useState<ToolType | null>(null)
 
   return (
     <div className='flex-1 flex flex-col'>
       {!selectedTool ? (
-        <ToolSelector onSelect={setSelectedTool} />
+        <ToolGrid onSelect={setSelectedTool} />
       ) : selectedTool === 'text' ? (
-        <MarketingCopyTool onBack={() => setSelectedTool(null)} />
+        <TextTool onBack={() => setSelectedTool(null)} />
       ) : selectedTool === 'image' ? (
         <PosterTool onBack={() => setSelectedTool(null)} />
       ) : (
-        <VideoTool onBack={() => setSelectedTool(null)} />
+        <OcrTool onBack={() => setSelectedTool(null)} />
       )}
     </div>
   )

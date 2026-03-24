@@ -18,7 +18,7 @@ export const worksHandlers = [
     await delay(200)
     const url = new URL(request.url)
     const projectId = url.searchParams.get('projectId')
-    const type = url.searchParams.get('type') as 'text' | 'image' | 'video' | null
+    const type = url.searchParams.get('type') as 'text' | 'image' | 'ocr' | null
     const search = url.searchParams.get('search')
 
     let works = [...mockWorks]

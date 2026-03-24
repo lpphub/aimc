@@ -54,7 +54,7 @@ function WorksToolbar({
           <SelectItem value='all'>全部类型</SelectItem>
           <SelectItem value='text'>文本</SelectItem>
           <SelectItem value='image'>图片</SelectItem>
-          <SelectItem value='video'>视频</SelectItem>
+          <SelectItem value='ocr'>OCR</SelectItem>
         </SelectContent>
       </Select>
 
@@ -85,11 +85,11 @@ function EmptyState() {
         <p className='text-on-surface text-lg'>暂无作品</p>
         <p className='text-on-surface-variant text-sm mt-2'>使用 AI 工具创作并收藏你的第一个作品</p>
         <Button
-          onClick={() => (window.location.href = '/tools')}
+          onClick={() => (window.location.href = '/creations')}
           variant='outline'
           className='mt-4 bg-primary-container/10 border-primary-container/30 text-primary-container hover:bg-primary-container/20'
         >
-          前往工具箱
+          前往创作中心
         </Button>
       </div>
     </div>

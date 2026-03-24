@@ -20,11 +20,11 @@ export interface GenerateImageResp {
   imageUrl: string
 }
 
-export interface GenerateVideoReq {
-  prompt: string
-  engine?: string
+export interface OcrReq {
+  imageUrl: string
 }
 
-export interface GenerateVideoResp {
-  videoUrl: string
+export interface OcrResp {
+  text: string
+  confidence: number
 }

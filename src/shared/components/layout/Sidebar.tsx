@@ -10,9 +10,9 @@ export function Sidebar() {
 
   const navItems = [
     {
-      path: '/tools',
+      path: '/creations',
       icon: Sparkles,
-      label: '工具箱',
+      label: '创作中心',
     },
     {
       path: '/materials',

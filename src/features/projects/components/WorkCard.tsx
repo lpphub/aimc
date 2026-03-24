@@ -1,4 +1,4 @@
-import { FileText, Film, Image, Trash2 } from 'lucide-react'
+import { FileText, Image, ScanText, Trash2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Badge } from '@/shared/components/ui/badge'
 import { Button } from '@/shared/components/ui/button'
@@ -17,9 +17,9 @@ const typeConfig = {
     label: '图片',
     color: 'text-green-400 bg-green-500/10 border-green-500/30',
   },
-  video: {
-    icon: Film,
-    label: '视频',
+  ocr: {
+    icon: ScanText,
+    label: 'OCR',
     color: 'text-purple-400 bg-purple-500/10 border-purple-500/30',
   },
 }
@@ -33,8 +33,10 @@ export function WorkCard({ work, onDelete }: WorkCardProps) {
       <div className='aspect-square relative'>
         {work.type === 'image' && work.content ? (
           <img src={work.content} alt={work.prompt} className='w-full h-full object-cover' />
-        ) : work.type === 'video' && work.content ? (
-          <video src={work.content} className='w-full h-full object-cover' muted />
+        ) : work.type === 'ocr' && work.content ? (
+          <div className='w-full h-full flex items-center justify-center bg-muted/50 p-4'>
+            <p className='text-xs text-muted-foreground line-clamp-6'>{work.content}</p>
+          </div>
         ) : (
           <div className='w-full h-full flex items-center justify-center bg-muted/50'>
             <Icon className='w-12 h-12 text-muted-foreground' />

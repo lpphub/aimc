@@ -1,4 +1,4 @@
-export type WorkType = 'text' | 'image' | 'video'
+export type WorkType = 'text' | 'image' | 'ocr'
 
 export interface Project {
   id: string
@@ -45,14 +45,14 @@ export interface CreateProjectReq {
 export interface Template {
   id: string
   name: string
-  type: 'copy' | 'image' | 'video'
+  type: 'copy' | 'image' | 'ocr'
   content: string
 }
 
 export interface CreationRecord {
   id: string
   projectId: string
-  type: 'copy' | 'image' | 'video'
+  type: 'copy' | 'image' | 'ocr'
   title: string
   content: string
   metadata?: Record<string, unknown>
