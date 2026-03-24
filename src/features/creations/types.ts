@@ -1,6 +1,4 @@
-import type { WorkType } from '@/shared/types'
-
-export type ToolType = WorkType
+export type ToolType = 'text' | 'image' | 'ocr'
 
 export interface GenerateTextReq {
   prompt: string

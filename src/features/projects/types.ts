@@ -1,6 +1,4 @@
-import type { WorkType } from '@/shared/types'
-
-export type { WorkType } from '@/shared/types'
+export type WorkType = 'text' | 'image' | 'ocr'
 
 export interface Project {
   id: string
