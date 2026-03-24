@@ -63,7 +63,7 @@ export function TagInput({
           variant='outline'
           role='combobox'
           aria-expanded={open}
-          className='w-full h-auto min-h-[40px] justify-between bg-background border-border text-foreground hover:bg-accent'
+          className='w-full h-auto min-h-[40px] justify-between bg-background border-border text-foreground hover:bg-muted'
         >
           <div className='flex flex-wrap gap-1 flex-1'>
             {value.length === 0 ? (
@@ -88,7 +88,7 @@ export function TagInput({
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className='w-[--radix-popover-trigger-width] p-0 bg-popover border-border'
+        className='w-[--radix-popover-trigger-width] p-0 bg-card border-border'
         align='start'
       >
         <Command className='bg-transparent'>
@@ -112,7 +112,7 @@ export function TagInput({
                   key={option}
                   value={option}
                   onSelect={() => handleSelect(option)}
-                  className='text-foreground hover:bg-accent cursor-pointer'
+                  className='text-foreground hover:bg-muted cursor-pointer'
                 >
                   <Check
                     className={cn(

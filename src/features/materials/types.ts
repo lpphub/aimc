@@ -22,7 +22,7 @@ export interface MaterialsFilter {
 
 export interface BatchUpdateTagsRequest {
   ids: string[]
-  tags: string[]
+  tagIds: number[]
   mode: 'add' | 'replace'
 }
 

@@ -1,7 +1,6 @@
 import type { User } from '@/features/auth/types'
 import type { Material, TagGroup } from '@/features/materials/types'
-import type { Work } from '@/features/portfolio/types'
-import type { CreationRecord, Project, Template } from '@/features/project/types'
+import type { CreationRecord, Project, Template, Work } from '@/features/projects/types'
 
 const users: Map<string, { password: string; user: User }> = new Map()
 
@@ -28,10 +27,10 @@ const mockWorks: Work[] = [
     id: '2',
     projectId: 'p1',
     projectName: '夏季新品推广',
-    type: 'video',
-    content: 'https://example.com/video.mp4',
-    prompt: '机器人在城市中行走',
-    engine: 'veo',
+    type: 'ocr',
+    content: '提取的文本内容：项目名称：极光边缘计算节点架构设计',
+    prompt: 'ocr-提取文字',
+    engine: 'lumina-ocr',
     createdAt: '2024-03-14T14:30:00Z',
   },
   {
@@ -143,7 +142,7 @@ function seedMockTemplates(): void {
     { id: 't1', name: '文案模板A', type: 'copy', content: '模板内容A...' },
     { id: 't2', name: '文案模板B', type: 'copy', content: '模板内容B...' },
     { id: 't3', name: '图片模板A', type: 'image', content: '图片描述...' },
-    { id: 't4', name: '视频模板A', type: 'video', content: '视频脚本...' },
+    { id: 't4', name: 'OCR模板A', type: 'ocr', content: 'OCR识别模板...' },
   ]
 
   for (const t of mockTemplates) {

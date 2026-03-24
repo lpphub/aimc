@@ -5,9 +5,9 @@ import { Layout } from '@/shared/components/layout'
 import { AuthGuard } from './guard'
 
 const Login = lazy(() => import('@/pages/Login'))
-const Portfolio = lazy(() => import('@/pages/Portfolio'))
+const Projects = lazy(() => import('@/pages/Projects'))
 const Materials = lazy(() => import('@/pages/Materials'))
-const AiTools = lazy(() => import('@/features/ai-tools').then(m => ({ default: m.AiTools })))
+const Creations = lazy(() => import('@/pages/Creations'))
 
 const router = createBrowserRouter([
   {
@@ -28,19 +28,19 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to='/portfolio' replace />,
+        element: <Navigate to='/creations' replace />,
       },
       {
-        path: 'tools',
-        element: <AiTools />,
-      },
-      {
-        path: 'portfolio',
-        element: <Portfolio />,
+        path: 'creations',
+        element: <Creations />,
       },
       {
         path: 'materials',
         element: <Materials />,
+      },
+      {
+        path: 'projects',
+        element: <Projects />,
       },
     ],
   },

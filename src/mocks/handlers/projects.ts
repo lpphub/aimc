@@ -1,5 +1,5 @@
 import { delay, HttpResponse, http } from 'msw'
-import type { CreationRecord, Project, Template } from '@/features/project/types'
+import type { CreationRecord, Project, Template } from '@/features/projects/types'
 import type { ApiResponse } from '@/lib/api'
 import { generateId, projects, records, templates } from '../db'
 
@@ -95,7 +95,7 @@ export const projectHandlers = [
   http.get<never, never, ApiResponse<Template[]>>(`${API_BASE}/templates`, async ({ request }) => {
     await delay(200)
     const url = new URL(request.url)
-    const type = url.searchParams.get('type') as 'copy' | 'image' | 'video' | null
+    const type = url.searchParams.get('type') as 'copy' | 'image' | 'ocr' | null
     const templateList = Array.from(templates.values())
     const filtered = type ? templateList.filter(t => t.type === type) : templateList
     return HttpResponse.json(success(filtered))

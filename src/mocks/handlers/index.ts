@@ -1,13 +1,13 @@
 import { authHandlers } from './auth'
 import { materialsHandlers } from './materials'
-import { portfolioHandlers } from './portfolio'
 import { projectHandlers } from './projects'
 import { tagGroupHandlers } from './tag-groups'
+import { worksHandlers } from './works'
 
 export const handlers = [
   ...authHandlers,
   ...projectHandlers,
-  ...portfolioHandlers,
+  ...worksHandlers,
   ...materialsHandlers,
   ...tagGroupHandlers,
 ]

@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ArrowLeft, Eye, EyeOff, Loader2, Lock, Mail, Sparkles, User } from 'lucide-react'
+import { ArrowLeft, Eye, EyeOff, Loader2, Lock, Mail, Shield, User } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -54,168 +54,188 @@ export function RegisterForm() {
   const isLoading = registerMutation.isPending
 
   return (
-    <div className='w-full max-w-md mx-auto'>
+    <>
+      {/* Back Button */}
+      <button
+        type='button'
+        onClick={backToLogin}
+        className='absolute -top-2 -left-2 flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors'
+      >
+        <ArrowLeft className='w-4 h-4' />
+        <span className='text-xs'>返回</span>
+      </button>
+
       {/* Header */}
-      <div className='text-center mb-8'>
-        <div className='relative inline-flex items-center justify-center w-20 h-20 mb-6'>
-          {/* Glow effect */}
-          <div className='absolute inset-0 bg-linear-to-br from-purple-500/30 to-cyan-500/30 rounded-2xl blur-xl animate-pulse' />
-          {/* Icon container */}
-          <div className='relative flex items-center justify-center w-20 h-20 rounded-2xl bg-linear-to-br from-purple-500/20 to-cyan-500/20 border border-purple-500/30 backdrop-blur-sm'>
-            <Sparkles className='w-10 h-10 text-purple-400' />
-          </div>
-        </div>
-        <h1 className='text-3xl font-bold text-white mb-2'>
-          <span className='bg-linear-to-br from-purple-400 to-cyan-400 bg-clip-text text-transparent'>
-            创建账号
-          </span>
-        </h1>
-        <p className='text-gray-500 text-sm'>加入智绘工坊，释放创意潜能</p>
+      <div className='mb-10 text-center'>
+        <h1 className='text-4xl font-bold tracking-tight text-foreground mb-3'>开启创作之旅</h1>
+        <p className='text-muted-foreground text-sm tracking-wide'>
+          加入 AIGC PLATFORM，释放您的 AI 创造力
+        </p>
       </div>
 
       {/* Form */}
-      <form onSubmit={form.handleSubmit(handleFinish)} className='space-y-4'>
-        {/* Username Field */}
-        <div className='space-y-2'>
-          <div className='relative group'>
-            <div className='absolute inset-0 bg-linear-to-br from-purple-500/20 to-cyan-500/20 rounded-xl blur-sm opacity-0 group-focus-within:opacity-100 transition-opacity' />
-            <div className='relative flex items-center'>
-              <User className='absolute left-4 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors' />
+      <form onSubmit={form.handleSubmit(handleFinish)} className='space-y-6'>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+          {/* Username */}
+          <div className='space-y-2'>
+            <label className='block text-[10px] uppercase tracking-widest text-muted-foreground ml-1'>
+              用户名
+            </label>
+            <div className='relative group'>
+              <User className='absolute left-4 top-1/2 -translate-y-1/2 text-muted h-4 w-4 group-focus-within:text-primary transition-colors' />
               <Input
                 type='text'
-                placeholder='用户名'
+                placeholder='您的用户名'
                 {...form.register('username')}
-                className='h-12 pl-12 bg-background/50 border-border/50 text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:ring-primary/20 backdrop-blur-sm'
+                className='h-11 pl-12 bg-background border-none focus:ring-1 focus:ring-primary/50 rounded-sm text-sm text-foreground placeholder:text-muted transition-all'
               />
             </div>
+            {form.formState.errors.username && (
+              <p className='text-destructive text-xs pl-1'>
+                {form.formState.errors.username.message}
+              </p>
+            )}
           </div>
-          {form.formState.errors.username && (
-            <p className='text-destructive text-xs pl-1'>
-              {form.formState.errors.username.message}
-            </p>
-          )}
-        </div>
 
-        {/* Email Field */}
-        <div className='space-y-2'>
-          <div className='relative group'>
-            <div className='absolute inset-0 bg-linear-to-br from-purple-500/20 to-cyan-500/20 rounded-xl blur-sm opacity-0 group-focus-within:opacity-100 transition-opacity' />
-            <div className='relative flex items-center'>
-              <Mail className='absolute left-4 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors' />
+          {/* Email */}
+          <div className='space-y-2'>
+            <label className='block text-[10px] uppercase tracking-widest text-muted-foreground ml-1'>
+              邮箱
+            </label>
+            <div className='relative group'>
+              <Mail className='absolute left-4 top-1/2 -translate-y-1/2 text-muted h-4 w-4 group-focus-within:text-primary transition-colors' />
               <Input
                 type='email'
-                placeholder='邮箱地址'
+                placeholder='example@domain.com'
                 {...form.register('email')}
-                className='h-12 pl-12 bg-background/50 border-border/50 text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:ring-primary/20 backdrop-blur-sm'
+                className='h-11 pl-12 bg-background border-none focus:ring-1 focus:ring-primary/50 rounded-sm text-sm text-foreground placeholder:text-muted transition-all'
               />
             </div>
+            {form.formState.errors.email && (
+              <p className='text-destructive text-xs pl-1'>{form.formState.errors.email.message}</p>
+            )}
           </div>
-          {form.formState.errors.email && (
-            <p className='text-destructive text-xs pl-1'>{form.formState.errors.email.message}</p>
-          )}
         </div>
 
-        {/* Password Field */}
-        <div className='space-y-2'>
-          <div className='relative group'>
-            <div className='absolute inset-0 bg-linear-to-br from-purple-500/20 to-cyan-500/20 rounded-xl blur-sm opacity-0 group-focus-within:opacity-100 transition-opacity' />
-            <div className='relative flex items-center'>
-              <Lock className='absolute left-4 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors' />
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+          {/* Password */}
+          <div className='space-y-2'>
+            <label className='block text-[10px] uppercase tracking-widest text-muted-foreground ml-1'>
+              密码
+            </label>
+            <div className='relative group'>
+              <Lock className='absolute left-4 top-1/2 -translate-y-1/2 text-muted h-4 w-4 group-focus-within:text-primary transition-colors' />
               <Input
                 type={showPassword ? 'text' : 'password'}
-                placeholder='密码'
+                placeholder='••••••••'
                 {...form.register('password')}
-                className='h-12 pl-12 pr-12 bg-background/50 border-border/50 text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:ring-primary/20 backdrop-blur-sm'
+                className='h-11 pl-12 pr-12 bg-background border-none focus:ring-1 focus:ring-primary/50 rounded-sm text-sm text-foreground placeholder:text-muted transition-all'
               />
               <button
                 type='button'
                 onClick={() => setShowPassword(!showPassword)}
-                className='absolute right-4 text-muted-foreground hover:text-foreground transition-colors'
+                className='absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors'
               >
-                {showPassword ? <EyeOff className='w-5 h-5' /> : <Eye className='w-5 h-5' />}
+                {showPassword ? <EyeOff className='h-4 w-4' /> : <Eye className='h-4 w-4' />}
               </button>
             </div>
+            {form.formState.errors.password && (
+              <p className='text-destructive text-xs pl-1'>
+                {form.formState.errors.password.message}
+              </p>
+            )}
           </div>
-          {form.formState.errors.password && (
-            <p className='text-destructive text-xs pl-1'>
-              {form.formState.errors.password.message}
-            </p>
-          )}
-        </div>
 
-        {/* Confirm Password Field */}
-        <div className='space-y-2'>
-          <div className='relative group'>
-            <div className='absolute inset-0 bg-linear-to-br from-purple-500/20 to-cyan-500/20 rounded-xl blur-sm opacity-0 group-focus-within:opacity-100 transition-opacity' />
-            <div className='relative flex items-center'>
-              <Lock className='absolute left-4 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors' />
+          {/* Confirm Password */}
+          <div className='space-y-2'>
+            <label className='block text-[10px] uppercase tracking-widest text-muted-foreground ml-1'>
+              确认密码
+            </label>
+            <div className='relative group'>
+              <Shield className='absolute left-4 top-1/2 -translate-y-1/2 text-muted h-4 w-4 group-focus-within:text-primary transition-colors' />
               <Input
                 type={showConfirmPassword ? 'text' : 'password'}
-                placeholder='确认密码'
+                placeholder='••••••••'
                 {...form.register('confirmPassword')}
-                className='h-12 pl-12 pr-12 bg-background/50 border-border/50 text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:ring-primary/20 backdrop-blur-sm'
+                className='h-11 pl-12 pr-12 bg-background border-none focus:ring-1 focus:ring-primary/50 rounded-sm text-sm text-foreground placeholder:text-muted transition-all'
               />
               <button
                 type='button'
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className='absolute right-4 text-muted-foreground hover:text-foreground transition-colors'
+                className='absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors'
               >
-                {showConfirmPassword ? <EyeOff className='w-5 h-5' /> : <Eye className='w-5 h-5' />}
+                {showConfirmPassword ? <EyeOff className='h-4 w-4' /> : <Eye className='h-4 w-4' />}
               </button>
             </div>
+            {form.formState.errors.confirmPassword && (
+              <p className='text-destructive text-xs pl-1'>
+                {form.formState.errors.confirmPassword.message}
+              </p>
+            )}
           </div>
-          {form.formState.errors.confirmPassword && (
-            <p className='text-destructive text-xs pl-1'>
-              {form.formState.errors.confirmPassword.message}
-            </p>
-          )}
         </div>
 
-        {/* Submit Button */}
+        {/* Terms */}
+        <div className='flex items-start gap-3 py-2'>
+          <div className='flex items-center h-5'>
+            <input
+              id='terms'
+              type='checkbox'
+              className='w-4 h-4 rounded-sm border-none bg-card text-primary focus:ring-primary focus:ring-offset-background'
+            />
+          </div>
+          <label
+            htmlFor='terms'
+            className='text-xs text-muted-foreground leading-tight cursor-pointer'
+          >
+            我同意{' '}
+            <a href='/terms' className='text-primary hover:underline transition-all'>
+              服务条款
+            </a>{' '}
+            和{' '}
+            <a href='/privacy' className='text-primary hover:underline transition-all'>
+              隐私政策
+            </a>
+          </label>
+        </div>
+
+        {/* Submit */}
         <Button
           type='submit'
           disabled={isLoading}
-          className='w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-medium rounded-xl shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all duration-300 disabled:opacity-50'
+          className='w-full h-12 bg-primary text-primary-foreground font-bold rounded-xl active:scale-95 transition-all duration-200 shadow-glow-primary hover:shadow-glow-primary-md tracking-tight disabled:opacity-50'
         >
           {isLoading ? (
             <>
-              <Loader2 className='w-5 h-5 mr-2 animate-spin' />
+              <Loader2 className='w-4 h-4 mr-2 animate-spin' />
               注册中...
             </>
           ) : (
-            <>
-              <Sparkles className='w-5 h-5 mr-2' />
-              注册
-            </>
+            '注册'
           )}
         </Button>
 
         {/* Login Link */}
-        <div className='text-center pt-4'>
-          <span className='text-muted-foreground text-sm'>已有账号？</span>
-          <button
-            type='button'
-            onClick={backToLogin}
-            className='ml-2 text-primary hover:text-primary/90 text-sm font-medium transition-colors'
-          >
-            返回登录
-          </button>
+        <div className='text-center'>
+          <p className='text-xs text-muted-foreground'>
+            已有账号？
+            <button
+              type='button'
+              onClick={backToLogin}
+              className='text-primary font-medium hover:text-primary/80 transition-colors ml-1 cursor-pointer'
+            >
+              返回登录
+            </button>
+          </p>
         </div>
       </form>
 
-      {/* Back button */}
-      <button
-        type='button'
-        onClick={backToLogin}
-        className='absolute top-6 left-6 flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors'
-      >
-        <ArrowLeft className='w-5 h-5' />
-        <span className='text-sm'>返回</span>
-      </button>
-
-      {/* Decorative elements */}
-      <div className='absolute -top-20 -left-20 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl pointer-events-none' />
-      <div className='absolute -bottom-20 -right-20 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none' />
-    </div>
+      {/* System Status Decoration */}
+      <div className='absolute bottom-4 right-8 opacity-20 pointer-events-none'>
+        <span className='text-[8px] tracking-[0.2em] text-foreground uppercase'>
+          {'System Status: Ready // AIGC_AUTH_v2.0'}
+        </span>
+      </div>
+    </>
   )
 }

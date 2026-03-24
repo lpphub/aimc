@@ -1,4 +1,4 @@
 export * from './api'
-export { MaterialLibrary } from './components/material/MaterialLibrary'
+export { MaterialPage } from './components'
 export * from './hooks'
 export * from './types'

@@ -44,19 +44,6 @@ export function useRegister() {
   })
 }
 
-// 登出 hook
-export function useLogout() {
-  const { logout } = useAuth()
-  const queryClient = useQueryClient()
-  return useMutation({
-    mutationFn: () => authApi.logout(),
-    onSuccess: () => {
-      logout()
-      queryClient.clear()
-    },
-  })
-}
-
 // 获取当前用户 hook
 export function useUser() {
   const isAuthenticated = useAuthStore(s => s.isAuthenticated)
@@ -65,4 +52,15 @@ export function useUser() {
     queryFn: () => authApi.me(),
     enabled: isAuthenticated,
   })
+}
+
+// 登出 hook
+export function useLogout() {
+  const { logout } = useAuth()
+  const queryClient = useQueryClient()
+
+  return () => {
+    logout()
+    queryClient.clear()
+  }
 }

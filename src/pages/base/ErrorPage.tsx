@@ -20,7 +20,7 @@ interface ErrorPageProps {
 
 function ErrorPage({ code, title, description, icon, action, secondaryAction }: ErrorPageProps) {
   return (
-    <div className='min-h-screen flex items-center justify-center bg-[#0a0a0a] p-4'>
+    <div className='min-h-screen flex items-center justify-center bg-surface p-4'>
       {/* Animated background */}
       <div className='absolute inset-0 overflow-hidden pointer-events-none'>
         <div className='absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl animate-pulse' />

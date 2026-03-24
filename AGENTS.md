@@ -1,172 +1,118 @@
-# CLAUDE.md (AI-STRICT MODE, STYLING INCLUDED)
+# CLAUDE.md — AI HARD MODE (FSD)
 
-## 0. Mission
+## Core Rules
 
-AI MUST generate code according to these rules:
+- Follow Feature-Sliced Design (FSD)
+- Layers: `app` → `pages` → `features` → `shared`
+- Components = UI only (no business logic / API)
+- Data flow: Component → Hook → API
+- Use TanStack Query for all server data
+- No server data in Zustand
+- No upward or cross-layer violations
+- Full TypeScript strict (no `any`)
 
-- All code MUST follow feature-based architecture.
-- Components MUST NOT contain business logic or API calls.
-- API data MUST go through Hooks.
-- Feature modules MUST be isolated.
-- Server data MUST NOT be stored in Zustand.
-- Query keys MUST be centralized per feature.
-- Styling changes MUST follow Tailwind CSS + CVA + semantic color rules.
+## Commands
 
----
+- `pnpm build` - Build project (runs tsc + vite build)
+- `pnpm dev` - Start dev server (Vite)
+- `pnpm preview` - Preview production build
+- `pnpm lint` - Lint with Biome
+- `pnpm lint:fix` - Fix linting issues
+- `pnpm format` - Format code with Biome
 
-## 1. Naming Conventions (MUST)
+## Structure
 
-### 1.1 Components
-- PascalCase
-- Example: `UserProfile.tsx`, `VideoCard.tsx`
+src/
+- app/        # app init, providers, router
+- pages/      # route-level composition only
+- features/   # business features (isolated)
+- shared/     # reusable logic (ui, lib, hooks, config)
+- lib/        # global clients (api, env, utils)
 
-### 1.2 Utility Functions
-- camelCase
-- Example: `formatDate`, `calculateTotal`
+### Feature
 
-### 1.3 Constants
-- UPPER_SNAKE_CASE
-- Example: `MAX_RETRY_COUNT`, `API_TIMEOUT`
-
-### 1.4 Directories / Folders
-- kebab-case
-- Example: `user-profile/`, `video-list/`
-
-### 1.5 API Types
-- Request payloads → XxxReq
-- Response data → XxxResp
-- Example:
-```ts
-export interface ListVideosReq { page: number; pageSize: number }
-export interface VideoItem { id: string; title: string; coverUrl: string }
-export interface ListVideosResp { list: VideoItem[]; total: number }
-export interface CreateVideoReq { title: string; coverUrl: string }
-export interface CreateVideoResp { id: string }
-```
-
-### 1.6 Query Keys
-- Must be stored in a single object per feature
-- All keys should be `const` and descriptive
-- Example:
-```ts
-export const videoKeys = {
-  all: ['video'] as const,
-  list: () => [...videoKeys.all, 'list'] as const,
-  detail: (id: string) => [...videoKeys.all, 'detail', id] as const,
-}
-```
-
-### 1.7 Stores (Zustand)
-- Store names MUST match purpose
-- Example: `useAuthStore`, `useThemeStore`, `useLocaleStore`
-- MUST NOT store server data
-
----
-
-## 2. Feature Architecture (MUST)
-
-```
 src/features/<feature>/
-├── api.ts                 # API endpoints
-├── types.ts               # API types
-├── hooks/                 # Query Hooks
-│   └── index.ts
-├── components/            # Feature components
-└── index.ts               # Public exports
-```
+- api.ts
+- types.ts
+- hooks/
+- components/
+- model/ (optional)
+- index.ts
 
-Rules:
 
-- Components MUST NOT call API directly.
-- API functions MUST be typed with XxxReq / XxxResp.
-- Hooks MUST use TanStack Query.
-- Components MUST use hooks for data.
-- Features MUST NOT import from other features (only `shared/` allowed).
+## Layer Rules
 
----
+- `app` → can import all
+- `pages` → can import `features`, `shared`
+- `features` → can import `shared` only
+- `shared` → cannot import from other layers
+- `lib` → global, no feature dependency
 
-## 3. API Rules (MUST)
 
-- Must return typed responses.
-- Must not use `any`.
-- Must use ky client.
-- Example:
+## Naming
 
-```ts
-import api from '@/lib/api'
-import type { ListVideosReq, ListVideosResp } from './types'
+- Component: PascalCase
+- Function: camelCase
+- Constant: UPPER_SNAKE_CASE
+- Folder: kebab-case
 
-export const videoApi = {
-  list: (params: ListVideosReq) => api.get<ListVideosResp>('videos', { searchParams: params }),
-  create: (data: CreateVideoReq) => api.post<CreateVideoResp>('videos', data),
-}
-```
+Types:
+- Request → XxxReq
+- Response → XxxResp
 
----
-
-## 4. Hook Rules (MUST)
-
-- Must use `useQuery` / `useMutation` from TanStack Query.
-- Query keys MUST follow QueryKeys object.
-- Example:
-
-```ts
-export function useVideoList(params: ListVideosReq) {
-  return useQuery({
-    queryKey: [...videoKeys.list(), params],
-    queryFn: () => videoApi.list(params),
-  })
-}
-```
-
----
-
-## 5. Data Flow (MUST)
+## Data Rules
 
 - Components → Hooks → API → Backend
-- NEVER call API directly in component
-- NEVER store server response in Zustand
+- API via `ky`, fully typed
+- Hooks wrap ALL requests
+- No API calls in components
 
----
+Query Keys (per feature):
 
-## 6. Zustand Usage (MUST)
+export const xxxKeys = {
+  all: ["xxx"] as const,
+}
 
-- Only for `auth`, `theme`, `locale`
-- Store names MUST match purpose
-- NEVER store server data
+## State
 
----
+Zustand ONLY for:
+- auth
+- theme
+- locale
 
-## 7. Styling Rules (MUST)
+NEVER store server data
 
-- Tailwind classes only
-- Use `cn()` for conditional classes
-- Use semantic color classes (`text-muted-foreground`, `bg-primary`, `bg-primary-foreground`)
-- NO inline styles
-- NO hardcoded colors
-- **CVA Variants**
-  - Only allowed for buttons, inputs, and other UI primitives
-  - Must not introduce new colors outside Tailwind preset
-  - Must not override global `:root` variables outside theme store
-- **Theme changes**
-  - Light/dark mode only via `useThemeStore` + `document.documentElement.classList.toggle('dark')`
-  - Global colors (`--primary`, `--foreground`, `--background`) MUST NOT be hardcoded in component CSS
+## Styling
 
----
+- Tailwind only
+- No CSS files / inline styles
+- Use semantic tokens only
+- Use `cn()` for conditions
 
-## 8. Routing Rules (MUST)
+CVA:
+- Only for base UI components
 
-- Pages MUST be lazy-loaded
-- Auth guard MUST be applied via `<AuthGuard requireAuth>`
-- All routes MUST be defined in `app/router/index.tsx`
+Theme:
+- Controlled via `useThemeStore`
+- Toggle `document.documentElement.classList`
 
----
+## Routing
 
-## 9. Prohibitions (MUST)
+- Defined in `app`
+- Pages are composition only
+- Support lazy loading
+- Use `<AuthGuard>`
 
-- NO class components
-- NO var keyword
-- NO direct database calls
-- NO comments in AI-generated code
-- NEVER invent types outside XxxReq / XxxResp
-- NEVER bypass feature isolation
+## Forbidden
+
+- class components
+- var
+- any
+- API calls in components
+- cross-feature imports
+- layer violations
+- custom server state
+
+## Workflow
+
+- typecheck after changes
