@@ -36,7 +36,7 @@ function WorksToolbar({
         <SelectTrigger className='w-40 bg-card border-border/30 text-foreground'>
           <SelectValue placeholder='全部项目' />
         </SelectTrigger>
-        <SelectContent className='bg-popover/95 border-border/30'>
+        <SelectContent className='bg-card/95 border-border/30'>
           <SelectItem value='all'>全部项目</SelectItem>
           {projects.map(p => (
             <SelectItem key={p.id} value={p.id}>
@@ -50,7 +50,7 @@ function WorksToolbar({
         <SelectTrigger className='w-32 bg-card border-border/30 text-foreground'>
           <SelectValue placeholder='全部类型' />
         </SelectTrigger>
-        <SelectContent className='bg-popover/95 border-border/30'>
+        <SelectContent className='bg-card/95 border-border/30'>
           <SelectItem value='all'>全部类型</SelectItem>
           <SelectItem value='text'>文本</SelectItem>
           <SelectItem value='image'>图片</SelectItem>
@@ -65,7 +65,7 @@ function WorksToolbar({
           placeholder='搜索作品...'
           value={search}
           onChange={e => onSearchChange(e.target.value)}
-          className='w-full h-10 pl-10 pr-4 bg-card border border-border/30 rounded-lg text-foreground placeholder:text-muted-foreground/50 focus:border-primary-container/50 focus:outline-none transition-colors'
+          className='w-full h-10 pl-10 pr-4 bg-card border border-border/30 rounded-lg text-foreground placeholder:text-muted-foreground/50 focus:border-primary/50 focus:outline-none transition-colors'
         />
       </div>
     </div>
@@ -78,7 +78,7 @@ function EmptyState() {
       <div className='text-center'>
         <div className='flex justify-center mb-4'>
           <div className='relative'>
-            <div className='absolute inset-0 bg-primary-container/20 rounded-full blur-xl animate-pulse' />
+            <div className='absolute inset-0 bg-primary/20 rounded-full blur-xl animate-pulse' />
             <Sparkles className='relative w-16 h-16 text-muted-foreground' />
           </div>
         </div>
@@ -87,7 +87,7 @@ function EmptyState() {
         <Button
           onClick={() => (window.location.href = '/creations')}
           variant='outline'
-          className='mt-4 bg-primary-container/10 border-primary-container/30 text-primary-container hover:bg-primary-container/20'
+          className='mt-4 bg-primary/10 border-primary/30 text-primary hover:bg-primary/20'
         >
           前往创作中心
         </Button>

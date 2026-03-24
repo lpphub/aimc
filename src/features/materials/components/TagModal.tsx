@@ -64,7 +64,7 @@ function EditDialog({ open, onOpenChange, title, initialValue, onSubmit }: EditD
             value={name}
             onChange={e => setName(e.target.value)}
             placeholder='请输入名称'
-            className='bg-background border-border/20 text-foreground focus:ring-primary-container/50'
+            className='bg-background border-border/20 text-foreground focus:ring-primary/50'
             autoFocus
           />
         </div>
@@ -79,7 +79,7 @@ function EditDialog({ open, onOpenChange, title, initialValue, onSubmit }: EditD
           <Button
             onClick={handleSubmit}
             disabled={!name.trim()}
-            className='bg-primary-container/10 border border-primary-container/40 text-primary-container hover:bg-primary-container/20'
+            className='bg-primary/10 border border-primary/40 text-primary hover:bg-primary/20'
           >
             保存
           </Button>
@@ -120,7 +120,7 @@ function CreateDialog({ open, onOpenChange, title, placeholder, onSubmit }: Crea
             value={name}
             onChange={e => setName(e.target.value)}
             placeholder={placeholder}
-            className='bg-background border-border/20 text-foreground focus:ring-primary-container/50'
+            className='bg-background border-border/20 text-foreground focus:ring-primary/50'
             autoFocus
           />
         </div>
@@ -135,7 +135,7 @@ function CreateDialog({ open, onOpenChange, title, placeholder, onSubmit }: Crea
           <Button
             onClick={handleSubmit}
             disabled={!name.trim()}
-            className='bg-primary-container/10 border border-primary-container/40 text-primary-container hover:bg-primary-container/20'
+            className='bg-primary/10 border border-primary/40 text-primary hover:bg-primary/20'
           >
             创建
           </Button>
@@ -330,12 +330,12 @@ export function TagModal({
           <div className='flex-1 flex flex-col bg-surface/30 backdrop-blur-sm overflow-hidden'>
             <div className='p-6 pb-4 border-b border-border/10'>
               <div className='relative group pr-10'>
-                <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary-container transition-colors' />
+                <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors' />
                 <Input
                   value={searchKeyword}
                   onChange={e => setSearchKeyword(e.target.value)}
                   placeholder='搜索标签...'
-                  className='h-10 pl-10 pr-4 bg-card border border-border/20 focus:ring-1 focus:ring-primary-container/50 focus:border-primary-container/50 text-foreground placeholder:text-muted-foreground/50'
+                  className='h-10 pl-10 pr-4 bg-card border border-border/20 focus:ring-1 focus:ring-primary/50 focus:border-primary/50 text-foreground placeholder:text-muted-foreground/50'
                 />
               </div>
             </div>
@@ -358,7 +358,7 @@ export function TagModal({
                 {selectedTags.map(tag => (
                   <div
                     key={tag.id}
-                    className='flex items-center gap-1.5 bg-primary-container/20 text-primary-container px-3 py-1 rounded-full text-xs font-medium border border-primary-container/20'
+                    className='flex items-center gap-1.5 bg-primary/20 text-primary px-3 py-1 rounded-full text-xs font-medium border border-primary/20'
                   >
                     {tag.name}
                     <button
@@ -385,7 +385,7 @@ export function TagModal({
                 <button
                   type='button'
                   onClick={() => onConfirm(localSelectedTagIds)}
-                  className='bg-primary-container text-on-primary font-bold px-8 py-2.5 rounded-xl hover:shadow-[0_0_20px_rgba(0,242,255,0.4)] transition-all active:scale-95 text-sm uppercase tracking-wider'
+                  className='bg-primary text-primary-foreground font-bold px-8 py-2.5 rounded-xl hover:shadow-[0_0_20px_rgba(0,242,255,0.4)] transition-all active:scale-95 text-sm uppercase tracking-wider'
                 >
                   确认选择
                 </button>

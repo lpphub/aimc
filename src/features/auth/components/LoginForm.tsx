@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Eye, EyeOff, Loader2, Lock, Mail, Rocket, Sparkles } from 'lucide-react'
+import { Eye, EyeOff, Loader2, Lock, LogIn, Mail, MessageCircle } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -47,66 +47,62 @@ export function LoginForm() {
   const isLoading = loginMutation.isPending
 
   return (
-    <div className='w-full max-w-md mx-auto'>
+    <>
       {/* Header */}
-      <div className='text-center mb-8'>
-        <div className='relative inline-flex items-center justify-center w-20 h-20 mb-6'>
-          {/* Glow effect */}
-          <div className='absolute inset-0 bg-linear-to-br from-cyan-500/30 to-teal-500/30 rounded-2xl blur-xl animate-pulse' />
-          {/* Icon container */}
-          <div className='relative flex items-center justify-center w-20 h-20 rounded-2xl bg-linear-to-br from-cyan-500/20 to-teal-500/20 border border-cyan-500/30 backdrop-blur-sm'>
-            <Rocket className='w-10 h-10 text-cyan-400' />
-          </div>
-        </div>
-        <h1 className='text-3xl font-bold text-white mb-2'>
-          <span className='bg-linear-to-br from-cyan-400 to-teal-400 bg-clip-text text-transparent'>
-            智绘工坊
-          </span>
-        </h1>
-        <p className='text-gray-500 text-sm'>开启你的 AI 创作之旅</p>
+      <div className='mb-10 text-center'>
+        <h1 className='text-4xl font-bold tracking-tight text-foreground mb-3'>欢迎回来</h1>
+        <p className='text-muted-foreground text-sm tracking-wide'>登录以继续您的创作之旅</p>
       </div>
 
       {/* Form */}
-      <form onSubmit={form.handleSubmit(handleFinish)} className='space-y-5'>
-        {/* Email Field */}
-        <div className='space-y-2'>
-          <div className='relative group'>
-            <div className='absolute inset-0 bg-linear-to-br from-cyan-500/20 to-teal-500/20 rounded-xl blur-sm opacity-0 group-focus-within:opacity-100 transition-opacity' />
-            <div className='relative flex items-center'>
-              <Mail className='absolute left-4 w-5 h-5 text-gray-500 group-focus-within:text-cyan-400 transition-colors' />
-              <Input
-                type='email'
-                placeholder='邮箱地址'
-                {...form.register('email')}
-                className='h-12 pl-12 bg-background/50 border-border/50 text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:ring-primary/20 backdrop-blur-sm'
-              />
-            </div>
+      <form onSubmit={form.handleSubmit(handleFinish)} className='space-y-6'>
+        {/* Email */}
+        <div className='space-y-1.5'>
+          <label className='block text-[10px] uppercase tracking-[0.15em] text-muted-foreground ml-1'>
+            邮箱或用户名
+          </label>
+          <div className='relative'>
+            <Mail className='absolute left-4 top-1/2 -translate-y-1/2 text-muted h-4 w-4' />
+            <Input
+              type='email'
+              placeholder='name@domain.com'
+              {...form.register('email')}
+              className='h-12 pl-12 bg-background/80 border-none rounded-lg text-sm text-foreground placeholder:text-muted focus:ring-1 focus:ring-primary/50'
+            />
           </div>
           {form.formState.errors.email && (
             <p className='text-destructive text-xs pl-1'>{form.formState.errors.email.message}</p>
           )}
         </div>
 
-        {/* Password Field */}
-        <div className='space-y-2'>
-          <div className='relative group'>
-            <div className='absolute inset-0 bg-linear-to-br from-cyan-500/20 to-teal-500/20 rounded-xl blur-sm opacity-0 group-focus-within:opacity-100 transition-opacity' />
-            <div className='relative flex items-center'>
-              <Lock className='absolute left-4 w-5 h-5 text-gray-500 group-focus-within:text-cyan-400 transition-colors' />
-              <Input
-                type={showPassword ? 'text' : 'password'}
-                placeholder='密码'
-                {...form.register('password')}
-                className='h-12 pl-12 pr-12 bg-background/50 border-border/50 text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:ring-primary/20 backdrop-blur-sm'
-              />
-              <button
-                type='button'
-                onClick={() => setShowPassword(!showPassword)}
-                className='absolute right-4 text-muted-foreground hover:text-foreground transition-colors'
-              >
-                {showPassword ? <EyeOff className='w-5 h-5' /> : <Eye className='w-5 h-5' />}
-              </button>
-            </div>
+        {/* Password */}
+        <div className='space-y-1.5'>
+          <div className='flex justify-between items-center ml-1'>
+            <label className='block text-[10px] uppercase tracking-[0.15em] text-muted-foreground'>
+              密码
+            </label>
+            <a
+              href='/forgot-password'
+              className='text-[10px] uppercase tracking-widest text-primary hover:text-primary/80 transition-colors'
+            >
+              忘记密码？
+            </a>
+          </div>
+          <div className='relative'>
+            <Lock className='absolute left-4 top-1/2 -translate-y-1/2 text-muted h-4 w-4' />
+            <Input
+              type={showPassword ? 'text' : 'password'}
+              placeholder='••••••••'
+              {...form.register('password')}
+              className='h-12 pl-12 pr-12 bg-background/80 border-none rounded-lg text-sm text-foreground placeholder:text-muted focus:ring-1 focus:ring-primary/50'
+            />
+            <button
+              type='button'
+              onClick={() => setShowPassword(!showPassword)}
+              className='absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors'
+            >
+              {showPassword ? <EyeOff className='h-4 w-4' /> : <Eye className='h-4 w-4' />}
+            </button>
           </div>
           {form.formState.errors.password && (
             <p className='text-destructive text-xs pl-1'>
@@ -115,41 +111,75 @@ export function LoginForm() {
           )}
         </div>
 
-        {/* Submit Button */}
+        {/* Submit */}
         <Button
           type='submit'
           disabled={isLoading}
-          className='w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-medium rounded-xl shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all duration-300 disabled:opacity-50'
+          className='w-full h-12 bg-primary hover:bg-primary/80 text-primary-foreground font-bold tracking-widest text-sm transition-all duration-300 shadow-glow-primary hover:shadow-glow-primary-md active:scale-[0.98] uppercase rounded-xl disabled:opacity-50'
         >
           {isLoading ? (
             <>
-              <Loader2 className='w-5 h-5 mr-2 animate-spin' />
+              <Loader2 className='w-4 h-4 mr-2 animate-spin' />
               登录中...
             </>
           ) : (
             <>
-              <Sparkles className='w-5 h-5 mr-2' />
-              登录
+              <LogIn className='w-4 h-4 mr-2' />
+              登录系统
             </>
           )}
         </Button>
+      </form>
 
-        {/* Register Link */}
-        <div className='text-center pt-4'>
-          <span className='text-muted-foreground text-sm'>还没有账号？</span>
+      {/* Divider */}
+      <div className='relative my-8 flex items-center'>
+        <div className='grow border-t border-border/10' />
+        <span className='mx-4 text-[10px] tracking-widest text-muted-foreground uppercase'>
+          或者使用
+        </span>
+        <div className='grow border-t border-border/10' />
+      </div>
+
+      {/* Social Login */}
+      <div className='grid grid-cols-2 gap-4'>
+        <button
+          type='button'
+          className='flex items-center justify-center gap-3 bg-background/50 hover:bg-card border border-border/5 py-3 rounded-lg transition-all duration-200'
+        >
+          <MessageCircle className='w-5 h-5 text-green-500' />
+          <span className='text-[12px] font-medium tracking-wide'>微信</span>
+        </button>
+        <button
+          type='button'
+          className='flex items-center justify-center gap-3 bg-background/50 hover:bg-card border border-border/5 py-3 rounded-lg transition-all duration-200'
+        >
+          <svg
+            className='w-5 h-5'
+            viewBox='0 0 24 24'
+            fill='currentColor'
+            role='img'
+            aria-label='GitHub'
+          >
+            <title>GitHub</title>
+            <path d='M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z' />
+          </svg>
+          <span className='text-[12px] font-medium tracking-wide'>GitHub</span>
+        </button>
+      </div>
+
+      {/* Footer */}
+      <div className='mt-10 text-center'>
+        <p className='text-[12px] text-muted-foreground tracking-wide'>
+          还没有账号？
           <button
             type='button'
             onClick={() => setLoginState(LoginStateEnum.REGISTER)}
-            className='ml-2 text-primary hover:text-primary/90 text-sm font-medium transition-colors'
+            className='text-primary font-semibold hover:underline decoration-primary/30 underline-offset-4 ml-1 cursor-pointer'
           >
             立即注册
           </button>
-        </div>
-      </form>
-
-      {/* Decorative elements */}
-      <div className='absolute -top-20 -right-20 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none' />
-      <div className='absolute -bottom-20 -left-20 w-40 h-40 bg-teal-500/10 rounded-full blur-3xl pointer-events-none' />
-    </div>
+        </p>
+      </div>
+    </>
   )
 }

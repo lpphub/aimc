@@ -42,7 +42,7 @@ export function MaterialToolbar({ selectedIds, onClear, onDelete }: MaterialTool
             size='sm'
             variant='outline'
             onClick={() => setShowTagModal(true)}
-            className='border-border/30 text-muted-foreground hover:text-primary hover:border-primary-container/50'
+            className='border-border/30 text-muted-foreground hover:text-primary hover:border-primary/50'
           >
             <Tag className='w-4 h-4 mr-2' />
             标签
@@ -57,7 +57,7 @@ export function MaterialToolbar({ selectedIds, onClear, onDelete }: MaterialTool
           <button
             type='button'
             onClick={onClear}
-            className='p-1 hover:bg-primary-container/10 rounded transition-colors'
+            className='p-1 hover:bg-primary/10 rounded transition-colors'
             aria-label='清除选择'
           >
             <X className='w-5 h-5 text-muted-foreground' />

@@ -42,32 +42,26 @@ const tools: ToolCardDef[] = [
   },
 ]
 
-const accentStyles = {
+const accentColors = {
   primary: {
-    cardBg: 'bg-surface-container-high/60',
-    iconBg: 'bg-primary-container/20 group-hover:bg-primary-container',
-    iconText: 'text-primary-container group-hover:text-on-primary',
-    labelText: 'text-primary',
-    arrowText: 'text-primary',
-    borderT: 'border-primary-container/20',
-    hoverShadow: 'hover:shadow-glow-primary-sm',
-    decorText: 'text-primary-container',
+    iconBg: 'bg-primary/20 group-hover:bg-primary',
+    iconText: 'text-primary group-hover:text-primary-foreground',
+    accent: 'text-primary',
+    border: 'border-primary/20',
+    decor: 'text-primary',
   },
   secondary: {
-    cardBg: 'bg-surface-container-high/60',
     iconBg: 'bg-secondary-container/20 group-hover:bg-secondary-container',
     iconText: 'text-secondary group-hover:text-secondary-foreground',
-    labelText: 'text-secondary',
-    arrowText: 'text-secondary',
-    borderT: 'border-secondary-container/20',
-    hoverShadow: 'hover:shadow-glow-secondary',
-    decorText: 'text-secondary-container',
+    accent: 'text-secondary',
+    border: 'border-secondary-container/20',
+    decor: 'text-secondary-container',
   },
-}
+} as const
 
 function ToolCardItem({ tool, onSelect }: { tool: ToolCardDef; onSelect: (t: ToolType) => void }) {
   const Icon = tool.icon
-  const s = accentStyles[tool.accent]
+  const c = accentColors[tool.accent]
 
   return (
     <button
@@ -78,9 +72,8 @@ function ToolCardItem({ tool, onSelect }: { tool: ToolCardDef; onSelect: (t: Too
         'flex flex-col justify-between text-left',
         'backdrop-blur-xl border-t border-transparent',
         'transition-all duration-500',
-        s.cardBg,
-        s.borderT,
-        s.hoverShadow
+        'bg-surface-container-high/60 hover:shadow-glow-primary-sm',
+        c.border
       )}
     >
       <div className='relative z-10'>
@@ -88,32 +81,28 @@ function ToolCardItem({ tool, onSelect }: { tool: ToolCardDef; onSelect: (t: Too
           className={cn(
             'w-12 h-12 rounded-lg flex items-center justify-center mb-6',
             'transition-colors duration-500',
-            s.iconBg
+            c.iconBg
           )}
         >
-          <Icon className={cn('transition-colors duration-500', s.iconText)} />
+          <Icon className={cn('transition-colors duration-500', c.iconText)} />
         </div>
 
-        <h3 className='text-2xl font-headline font-semibold text-foreground mb-3 tracking-tight'>
+        <h3 className='text-2xl font-sans font-semibold text-foreground mb-3 tracking-tight'>
           {tool.title}
         </h3>
         <p className='text-muted-foreground text-sm leading-relaxed'>{tool.description}</p>
       </div>
 
       <div className='flex items-center justify-between mt-auto relative z-10'>
-        <span className={cn('text-[10px] uppercase tracking-widest', s.labelText)}>
-          {tool.label}
-        </span>
-        <ArrowRight
-          className={cn('w-5 h-5 transition-all group-hover:translate-x-2', s.arrowText)}
-        />
+        <span className={cn('text-[10px] uppercase tracking-widest', c.accent)}>{tool.label}</span>
+        <ArrowRight className={cn('w-5 h-5 transition-all group-hover:translate-x-2', c.accent)} />
       </div>
 
       <div
         className={cn(
           'absolute -bottom-10 -right-10 opacity-5 group-hover:opacity-10',
           'transition-opacity pointer-events-none',
-          s.decorText
+          c.decor
         )}
       >
         <Icon className='w-40 h-40' />
@@ -148,14 +137,14 @@ export function ToolHeader({
       <button
         type='button'
         onClick={onBack}
-        className='w-10 h-10 rounded-xl flex items-center justify-center border border-border/40 bg-background/50 backdrop-blur hover:bg-accent transition-colors'
+        className='w-10 h-10 rounded-xl flex items-center justify-center border border-border/40 bg-background/50 backdrop-blur hover:bg-muted transition-colors'
       >
         <ArrowLeft className='w-5 h-5' />
       </button>
 
       <div className='flex items-center gap-3'>
-        <div className='w-10 h-10 rounded-xl flex items-center justify-center bg-primary-container/20'>
-          <Icon className='w-5 h-5 text-primary-container' />
+        <div className='w-10 h-10 rounded-xl flex items-center justify-center bg-primary/20'>
+          <Icon className='w-5 h-5 text-primary' />
         </div>
         <h1 className='text-2xl font-semibold tracking-tight'>{title}</h1>
       </div>

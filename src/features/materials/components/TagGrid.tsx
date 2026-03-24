@@ -55,13 +55,13 @@ export function TagGrid({
               className={cn(
                 'group flex flex-col items-start p-3 rounded-xl relative overflow-hidden transition-all w-full',
                 isSelected
-                  ? 'bg-primary-container/10 border border-primary-container/40 ring-1 ring-primary-container/20'
+                  ? 'bg-primary/10 border border-primary/40 ring-1 ring-primary/20'
                   : 'bg-surface-container-high/40 border border-border/10 hover:bg-surface-container-high/80 hover:border-border/30'
               )}
             >
               <div className='flex justify-between w-full mb-2'>
                 {isSelected ? (
-                  <Check className='w-4 h-4 text-primary-container' />
+                  <Check className='w-4 h-4 text-primary' />
                 ) : (
                   <Circle className='w-4 h-4 text-muted-foreground/40 group-hover:text-muted-foreground transition-colors' />
                 )}
@@ -69,9 +69,7 @@ export function TagGrid({
               <span
                 className={cn(
                   'text-sm font-medium transition-colors',
-                  isSelected
-                    ? 'text-primary-container'
-                    : 'text-muted-foreground group-hover:text-foreground'
+                  isSelected ? 'text-primary' : 'text-muted-foreground group-hover:text-foreground'
                 )}
               >
                 {tag.name}
@@ -124,12 +122,10 @@ export function TagGrid({
       <button
         type='button'
         onClick={onNewTagClick}
-        className='group flex flex-col items-center justify-center p-3 border border-dashed border-primary-container/30 bg-primary-container/5 rounded-xl transition-all hover:bg-primary-container/10 hover:border-primary-container/60'
+        className='group flex flex-col items-center justify-center p-3 border border-dashed border-primary/30 bg-primary/5 rounded-xl transition-all hover:bg-primary/10 hover:border-primary/60'
       >
-        <Plus className='w-5 h-5 text-primary-container mb-2 group-hover:scale-110 transition-transform' />
-        <span className='text-xs font-bold text-primary-container uppercase tracking-widest'>
-          创建新标签
-        </span>
+        <Plus className='w-5 h-5 text-primary mb-2 group-hover:scale-110 transition-transform' />
+        <span className='text-xs font-bold text-primary uppercase tracking-widest'>创建新标签</span>
       </button>
     </div>
   )

@@ -89,7 +89,7 @@ export function OcrTool({ onBack }: OcrToolProps) {
               'border border-dashed border-border/30',
               'bg-background',
               'flex flex-col items-center justify-center',
-              'transition-all hover:border-primary-container/30',
+              'transition-all hover:border-primary/30',
               'h-240'
             )}
           >
@@ -106,7 +106,7 @@ export function OcrTool({ onBack }: OcrToolProps) {
             {/* 扫描线动画 */}
             {isProcessing && (
               <div className='absolute inset-0 overflow-hidden pointer-events-none'>
-                <div className='absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent shadow-glow-primary-sm animate-scan' />
+                <div className='absolute left-0 right-0 h-0.5 bg-linear-to-r from-transparent via-primary to-transparent shadow-glow-primary-sm animate-scan' />
               </div>
             )}
 
@@ -126,17 +126,15 @@ export function OcrTool({ onBack }: OcrToolProps) {
               <div
                 className={cn(
                   'w-20 h-20 rounded-full flex items-center justify-center',
-                  'bg-surface-container-high border border-primary-container/20',
+                  'bg-surface-container-high border border-primary/20',
                   'group-hover:scale-110 transition-transform duration-500',
                   'shadow-glow-primary'
                 )}
               >
-                <FileUp className='w-10 h-10 text-primary-container' />
+                <FileUp className='w-10 h-10 text-primary' />
               </div>
               <div>
-                <h3 className='text-xl font-headline font-bold text-foreground mb-2'>
-                  拖拽或点击上传
-                </h3>
+                <h3 className='text-xl font-sans font-bold text-foreground mb-2'>拖拽或点击上传</h3>
                 <p className='text-muted-foreground text-xs tracking-widest uppercase'>
                   支持 JPG, PNG, PDF (最大 20MB)
                 </p>
@@ -154,7 +152,7 @@ export function OcrTool({ onBack }: OcrToolProps) {
               <Button
                 onClick={() => fileInputRef.current?.click()}
                 variant='outline'
-                className='bg-surface-container-high border-primary-container/20 text-primary hover:bg-muted'
+                className='bg-surface-container-high border-primary/20 text-primary hover:bg-muted'
               >
                 选择文件
               </Button>
@@ -167,8 +165,8 @@ export function OcrTool({ onBack }: OcrToolProps) {
           {/* 头部 */}
           <div className='p-5 border-b border-border/10 flex items-center justify-between bg-background/50'>
             <div className='flex items-center gap-2'>
-              <ScanText className='w-4 h-4 text-primary-container' />
-              <h2 className='font-headline text-lg font-bold text-foreground'>提取结果</h2>
+              <ScanText className='w-4 h-4 text-primary' />
+              <h2 className='font-sans text-lg font-bold text-foreground'>提取结果</h2>
             </div>
             <div className='flex gap-2'>
               <button
@@ -198,7 +196,7 @@ export function OcrTool({ onBack }: OcrToolProps) {
                 {result.split('\n').map((line, i) => (
                   <div
                     key={line || `empty-${i}`}
-                    className='group cursor-text p-2 hover:bg-surface-container-high/40 rounded transition-colors border-l border-transparent hover:border-primary-container/30'
+                    className='group cursor-text p-2 hover:bg-surface-container-high/40 rounded transition-colors border-l border-transparent hover:border-primary/30'
                   >
                     <span className='text-secondary font-bold mr-2 text-xs opacity-50 select-none'>
                       #{String(i + 1).padStart(2, '0')}
@@ -207,8 +205,8 @@ export function OcrTool({ onBack }: OcrToolProps) {
                   </div>
                 ))}
                 <div className='flex items-center gap-2 mt-4 pt-3 border-t border-border/10'>
-                  <span className='w-2 h-2 rounded-full bg-primary-container animate-pulse' />
-                  <span className='text-[10px] uppercase tracking-[0.2em] font-bold text-primary-container/60'>
+                  <span className='w-2 h-2 rounded-full bg-primary animate-pulse' />
+                  <span className='text-[10px] uppercase tracking-[0.2em] font-bold text-primary/60'>
                     解析完成 - 无错误检测
                   </span>
                 </div>

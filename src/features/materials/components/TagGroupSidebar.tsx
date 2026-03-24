@@ -16,7 +16,7 @@ interface TagGroupSidebarProps {
 
 export function TagGroupSidebar({
   groups,
-  allTagsCount,
+  allTagsCount: _allTagsCount,
   activeGroupId,
   onGroupSelect,
   onNewGroupClick,
@@ -29,8 +29,8 @@ export function TagGroupSidebar({
     cn(
       'flex items-center gap-3 px-4 py-3 transition-all text-sm w-full',
       activeGroupId === groupId
-        ? 'bg-surface-container-high text-primary-container border-r-2 border-primary-container'
-        : 'text-muted-foreground hover:bg-surface-container-high/50 hover:text-primary-container'
+        ? 'bg-surface-container-high text-primary border-r-2 border-primary'
+        : 'text-muted-foreground hover:bg-surface-container-high/50 hover:text-primary'
     )
 
   const handleDeleteGroup = (groupId: number) => {
@@ -52,7 +52,7 @@ export function TagGroupSidebar({
         <button
           type='button'
           onClick={onNewGroupClick}
-          className='text-primary-container hover:text-foreground transition-colors'
+          className='text-primary hover:text-foreground transition-colors'
         >
           <Plus className='w-4 h-4' />
         </button>

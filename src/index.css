@@ -14,7 +14,6 @@
   --background: hsl(210 11% 5%);
   --foreground: hsl(210 11% 90%);
   --card: hsl(210 11% 11%);
-  --popover: hsl(210 11% 11%);
   --primary: hsl(180 100% 50%);
   --primary-foreground: hsl(180 100% 11%);
   --secondary: hsl(270 100% 87%);
@@ -26,16 +25,11 @@
   --ring: hsl(180 100% 50%);
   --radius: 0.5rem;
 
-  --font-headline: 'Inter', system-ui, sans-serif;
-  --font-label: 'Inter', system-ui, sans-serif;
-  --font-body: 'Inter', system-ui, sans-serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
 
   --surface: hsl(210 11% 7%);
   --surface-container-high: hsl(210 11% 17%);
 
-  --on-primary: hsl(180 100% 11%);
-
-  --primary-container: hsl(180 100% 50%);
   --secondary-container: hsl(270 100% 38%);
 
   --inverse-on-surface: hsl(210 11% 19%);
@@ -45,34 +39,21 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
-  --color-card-foreground: var(--foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--muted);
-  --color-accent-foreground: var(--foreground);
   --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--foreground);
   --color-border: var(--border);
-  --color-input: var(--border);
   --color-ring: var(--ring);
 
   --color-surface: var(--surface);
   --color-surface-container-high: var(--surface-container-high);
-
-  --color-on-primary: var(--on-primary);
-
-  --color-primary-container: var(--primary-container);
   --color-secondary-container: var(--secondary-container);
 
-  --font-headline: var(--font-headline);
-  --font-label: var(--font-label);
-  --font-body: var(--font-body);
+  --font-sans: var(--font-sans);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -81,9 +62,9 @@
 
   --animate-scan: scan 3s linear infinite;
 
-  --shadow-glow-primary: 0 0 30px color-mix(in srgb, var(--primary-container) 10%, transparent);
+  --shadow-glow-primary: 0 0 30px color-mix(in srgb, var(--primary) 10%, transparent);
   --shadow-glow-primary-sm: 0 0 20px color-mix(in srgb, var(--primary) 15%, transparent);
-  --shadow-glow-primary-md: 0 0 20px color-mix(in srgb, var(--primary-container) 20%, transparent);
+  --shadow-glow-primary-md: 0 0 20px color-mix(in srgb, var(--primary) 20%, transparent);
   --shadow-glow-primary-lg: 0 8px 30px color-mix(in srgb, var(--secondary-container) 30%, transparent);
   --shadow-glow-primary-lg-hover: 0 12px 40px color-mix(in srgb, var(--secondary-container) 50%, transparent);
   --shadow-glow-secondary: 0 0 20px color-mix(in srgb, var(--secondary-container) 15%, transparent);

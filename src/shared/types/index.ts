@@ -1,10 +1,1 @@
-export type {
-  CreateProjectReq,
-  CreateWorkReq,
-  CreationRecord,
-  Project,
-  Template,
-  Work,
-  WorksFilter,
-  WorkType,
-} from './work'
+export type { WorkType } from './work'

@@ -18,8 +18,8 @@ export function MaterialCard({ material, isSelected, onSelect }: MaterialCardPro
         'relative overflow-hidden rounded-md bg-card border transition-all duration-300 group',
         'aspect-4/5',
         isSelected
-          ? 'border-primary-container shadow-[0_0_15px_rgba(0,242,255,0.12)]'
-          : 'border-border/50 hover:border-primary-container hover:shadow-[0_0_15px_rgba(0,242,255,0.12)]'
+          ? 'border-primary shadow-[0_0_15px_rgba(0,242,255,0.12)]'
+          : 'border-border/50 hover:border-primary hover:shadow-[0_0_15px_rgba(0,242,255,0.12)]'
       )}
     >
       <div className='absolute inset-0'>
@@ -43,7 +43,7 @@ export function MaterialCard({ material, isSelected, onSelect }: MaterialCardPro
         className={cn(
           'absolute top-1.5 left-1.5 w-3.5 h-3.5 rounded-sm border flex items-center justify-center transition-all',
           isSelected
-            ? 'bg-primary-container border-primary-container'
+            ? 'bg-primary border-primary'
             : 'border-foreground/30 bg-surface/20 opacity-0 group-hover:opacity-100'
         )}
         onClick={e => {
@@ -51,7 +51,7 @@ export function MaterialCard({ material, isSelected, onSelect }: MaterialCardPro
           onSelect(material.id)
         }}
       >
-        {isSelected && <Check className='w-2 h-2 text-on-primary' />}
+        {isSelected && <Check className='w-2 h-2 text-primary-foreground' />}
       </button>
 
       <div className='absolute bottom-0 p-1.5 w-full'>
@@ -60,7 +60,7 @@ export function MaterialCard({ material, isSelected, onSelect }: MaterialCardPro
           {displayTags.map(tag => (
             <span
               key={tag}
-              className='text-[8px] font-bold px-1 py-px rounded-sm uppercase bg-primary-container/20 backdrop-blur-md text-primary-container border border-primary-container/30'
+              className='text-[8px] font-bold px-1 py-px rounded-sm uppercase bg-primary/20 backdrop-blur-md text-primary border border-primary/30'
             >
               {tag}
             </span>
