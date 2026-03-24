@@ -53,7 +53,7 @@ export function PosterTool({ onBack }: PosterToolProps) {
     <div className='flex-1 flex flex-col px-8'>
       <ToolHeader title='海报创作' icon={Image} onBack={onBack} />
 
-      <p className='text-on-surface-variant text-sm leading-relaxed -mt-4 mb-8'>
+      <p className='text-muted-foreground text-sm leading-relaxed -mt-4 mb-8'>
         利用AI算力构建极简主义视觉。上传资产，配置参数，即刻获取高清专业级电商海报。
       </p>
 
@@ -62,19 +62,19 @@ export function PosterTool({ onBack }: PosterToolProps) {
         {/* Left Control Panel */}
         <div className='col-span-12 lg:col-span-4 space-y-6'>
           {/* Asset Upload */}
-          <div className='bg-surface-container-low rounded-xl p-8 border-t border-primary-container/20'>
+          <div className='bg-card rounded-xl p-8 border-t border-primary-container/20'>
             <div className='flex items-center justify-between mb-6'>
-              <h2 className='font-headline text-lg font-bold text-tertiary'>1. 资产上传</h2>
+              <h2 className='font-headline text-lg font-bold text-foreground'>1. 资产上传</h2>
               <Upload className='w-5 h-5 text-primary-container' />
             </div>
             <input ref={fileInputRef} type='file' accept='image/*' className='hidden' />
             <button
               type='button'
               onClick={() => fileInputRef.current?.click()}
-              className='w-full border-2 border-dashed border-outline-variant/30 rounded-lg p-10 flex flex-col items-center justify-center hover:border-primary-container/50 transition-colors cursor-pointer bg-surface-container-lowest'
+              className='w-full border-2 border-dashed border-border/30 rounded-lg p-10 flex flex-col items-center justify-center hover:border-primary-container/50 transition-colors cursor-pointer bg-background'
             >
-              <Plus className='w-10 h-10 text-on-surface-variant group-hover:text-primary-container mb-4' />
-              <p className='text-sm text-on-surface-variant font-medium'>点击或拖拽上传主图资产</p>
+              <Plus className='w-10 h-10 text-muted-foreground group-hover:text-primary-container mb-4' />
+              <p className='text-sm text-muted-foreground font-medium'>点击或拖拽上传主图资产</p>
               <p className='text-[0.625rem] text-outline mt-2 uppercase tracking-widest'>
                 PNG, JPG, WebP (Max 10MB)
               </p>
@@ -82,16 +82,16 @@ export function PosterTool({ onBack }: PosterToolProps) {
           </div>
 
           {/* Parameter Config */}
-          <div className='bg-surface-container-low rounded-xl p-8 border-t border-primary-container/20'>
+          <div className='bg-card rounded-xl p-8 border-t border-primary-container/20'>
             <div className='flex items-center justify-between mb-6'>
-              <h2 className='font-headline text-lg font-bold text-tertiary'>2. 参数配置</h2>
+              <h2 className='font-headline text-lg font-bold text-foreground'>2. 参数配置</h2>
               <Palette className='w-5 h-5 text-primary-container' />
             </div>
 
             <div className='space-y-8'>
               {/* Aspect Ratio */}
               <div>
-                <label className='font-label text-[0.6875rem] text-on-surface-variant tracking-widest uppercase mb-3 block'>
+                <label className='font-label text-[0.6875rem] text-muted-foreground tracking-widest uppercase mb-3 block'>
                   宽高比例
                 </label>
                 <div className='grid grid-cols-3 gap-2'>
@@ -104,7 +104,7 @@ export function PosterTool({ onBack }: PosterToolProps) {
                         'py-2 rounded-sm text-xs font-bold transition-all',
                         aspectRatio === ratio
                           ? 'bg-surface-container-high border border-primary-container/50 text-primary-container'
-                          : 'bg-surface-container-lowest border border-outline-variant/20 text-on-surface-variant hover:border-primary-container/30'
+                          : 'bg-background border border-border/20 text-muted-foreground hover:border-primary-container/30'
                       )}
                     >
                       {ratio}
@@ -115,7 +115,7 @@ export function PosterTool({ onBack }: PosterToolProps) {
 
               {/* Color Tone */}
               <div>
-                <label className='font-label text-[0.6875rem] text-on-surface-variant tracking-widest uppercase mb-3 block'>
+                <label className='font-label text-[0.6875rem] text-muted-foreground tracking-widest uppercase mb-3 block'>
                   色调倾向
                 </label>
                 <div className='flex gap-3'>
@@ -129,14 +129,14 @@ export function PosterTool({ onBack }: PosterToolProps) {
                       className={cn(
                         'w-8 h-8 rounded-full cursor-pointer transition-all',
                         selectedColor === tone.color
-                          ? 'ring-2 ring-primary-container ring-offset-2 ring-offset-surface-container-low'
+                          ? 'ring-2 ring-primary-container ring-offset-2 ring-offset-card'
                           : 'hover:scale-110'
                       )}
                     />
                   ))}
                   <button
                     type='button'
-                    className='w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center cursor-pointer hover:scale-110 transition-transform'
+                    className='w-8 h-8 rounded-full border border-border flex items-center justify-center cursor-pointer hover:scale-110 transition-transform'
                   >
                     <Palette className='w-3 h-3' />
                   </button>
@@ -145,7 +145,7 @@ export function PosterTool({ onBack }: PosterToolProps) {
 
               {/* Style Presets */}
               <div>
-                <label className='font-label text-[0.6875rem] text-on-surface-variant tracking-widest uppercase mb-3 block'>
+                <label className='font-label text-[0.6875rem] text-muted-foreground tracking-widest uppercase mb-3 block'>
                   风格预设
                 </label>
                 <div className='space-y-2'>
@@ -157,14 +157,14 @@ export function PosterTool({ onBack }: PosterToolProps) {
                       className={cn(
                         'w-full flex items-center justify-between p-3 rounded border cursor-pointer transition-all text-left',
                         selectedStyle === preset.id
-                          ? 'bg-surface-container-highest/40 border-primary-container/20'
-                          : 'bg-surface-container-lowest border-transparent hover:border-outline-variant/30'
+                          ? 'bg-muted/40 border-primary-container/20'
+                          : 'bg-background border-transparent hover:border-border/30'
                       )}
                     >
                       <span
                         className={cn(
                           'text-sm font-medium',
-                          selectedStyle === preset.id ? 'text-tertiary' : 'text-on-surface-variant'
+                          selectedStyle === preset.id ? 'text-foreground' : 'text-muted-foreground'
                         )}
                       >
                         {preset.name}
@@ -180,22 +180,22 @@ export function PosterTool({ onBack }: PosterToolProps) {
         {/* Right Preview & Actions */}
         <div className='col-span-12 lg:col-span-8 space-y-6'>
           {/* Preview Area */}
-          <div className='relative bg-surface-container-low rounded-xl overflow-hidden min-h-150 flex items-center justify-center border border-outline-variant/10'>
+          <div className='relative bg-card rounded-xl overflow-hidden min-h-150 flex items-center justify-center border border-border/10'>
             {/* Background Grid */}
             <div
               className='absolute inset-0 pointer-events-none opacity-5'
               style={{
                 backgroundImage:
-                  'linear-gradient(#849495 1px, transparent 1px), linear-gradient(90deg, #849495 1px, transparent 1px)',
+                  'linear-gradient(var(--outline-variant) 1px, transparent 1px), linear-gradient(90deg, var(--outline-variant) 1px, transparent 1px)',
                 backgroundSize: '24px 24px',
               }}
             />
 
             {/* Main Preview */}
-            <div className='relative z-10 w-100 h-150 bg-surface-container-lowest shadow-2xl overflow-hidden flex items-center justify-center'>
+            <div className='relative z-10 w-100 h-150 bg-background shadow-2xl overflow-hidden flex items-center justify-center'>
               {isGenerating ? (
                 <>
-                  <div className='absolute inset-0 bg-linear-to-br from-surface-container/80 to-surface-container-lowest' />
+                  <div className='absolute inset-0 bg-linear-to-br from-card/80 to-background' />
                   <div className='relative z-10 flex flex-col items-center'>
                     {/* Progress Ring */}
                     <div className='relative w-24 h-24 mb-6'>
@@ -208,7 +208,7 @@ export function PosterTool({ onBack }: PosterToolProps) {
                           fill='transparent'
                           stroke='currentColor'
                           strokeWidth='4'
-                          className='text-surface-container-highest'
+                          className='text-muted'
                         />
                         <circle
                           cx='48'
@@ -224,30 +224,30 @@ export function PosterTool({ onBack }: PosterToolProps) {
                       </svg>
                       <div className='absolute inset-0 bg-secondary-container/20 rounded-full animate-pulse blur-xl' />
                     </div>
-                    <span className='font-headline text-tertiary font-bold tracking-widest text-lg'>
+                    <span className='font-headline text-foreground font-bold tracking-widest text-lg'>
                       PROCESSING...
                     </span>
-                    <span className='font-label text-[0.6875rem] text-on-surface-variant mt-2 uppercase'>
+                    <span className='font-label text-[0.6875rem] text-muted-foreground mt-2 uppercase'>
                       算力加载中 {progress}%
                     </span>
                   </div>
                 </>
               ) : progress >= 100 ? (
-                <div className='w-full h-full bg-linear-to-br from-[#0a1628] via-[#1a0a2e] to-[#0a1628] flex items-center justify-center'>
+                <div className='w-full h-full bg-linear-to-br from-background via-surface to-background flex items-center justify-center'>
                   <div className='text-center'>
                     <div className='w-48 h-48 mx-auto mb-6 rounded-lg bg-linear-to-br from-primary-container/20 to-secondary-container/20 border border-primary-container/30 flex items-center justify-center'>
                       <Image className='w-16 h-16 text-primary-container' />
                     </div>
-                    <p className='text-tertiary font-headline font-bold text-lg'>海报已生成</p>
-                    <p className='text-on-surface-variant text-xs mt-1 uppercase tracking-widest'>
+                    <p className='text-foreground font-headline font-bold text-lg'>海报已生成</p>
+                    <p className='text-muted-foreground text-xs mt-1 uppercase tracking-widest'>
                       Model: Kinetic-V24 • Seed: 8829103
                     </p>
                   </div>
                 </div>
               ) : (
                 <div className='text-center'>
-                  <Image className='w-16 h-16 text-surface-container-highest mx-auto mb-4' />
-                  <p className='text-on-surface-variant text-sm'>配置参数后点击生成</p>
+                  <Image className='w-16 h-16 text-muted mx-auto mb-4' />
+                  <p className='text-muted-foreground text-sm'>配置参数后点击生成</p>
                 </div>
               )}
 
@@ -260,12 +260,12 @@ export function PosterTool({ onBack }: PosterToolProps) {
 
             {/* Info Overlay */}
             {progress >= 100 && (
-              <div className='absolute bottom-8 left-8 right-8 flex justify-between items-end p-6 rounded-lg bg-[rgba(53,52,54,0.6)] backdrop-blur-[20px] border border-primary-container/10'>
+              <div className='absolute bottom-8 left-8 right-8 flex justify-between items-end p-6 rounded-lg bg-surface-container-high/60 backdrop-blur-[20px] border border-primary-container/10'>
                 <div>
-                  <p className='font-headline text-xl text-tertiary font-bold mb-1'>
+                  <p className='font-headline text-xl text-foreground font-bold mb-1'>
                     Cyber-Nexus 01
                   </p>
-                  <p className='text-xs text-on-surface-variant uppercase tracking-widest'>
+                  <p className='text-xs text-muted-foreground uppercase tracking-widest'>
                     Model: Kinetic-V24 &bull; Seed: 8829103
                   </p>
                 </div>
@@ -282,7 +282,7 @@ export function PosterTool({ onBack }: PosterToolProps) {
             <Button
               onClick={handleGenerate}
               disabled={isGenerating}
-              className='flex-1 bg-primary-container text-on-primary py-4 rounded-xl font-headline font-bold text-lg flex items-center justify-center gap-3 hover:brightness-110 transition-all'
+              className='flex-1 bg-primary-container text-on-primary py-4 rounded-xl font-headline font-bold text-lg flex items-center justify-center gap-3 hover:opacity-90 transition-all'
             >
               <Bolt className='w-5 h-5' />
               开始生成
@@ -291,7 +291,7 @@ export function PosterTool({ onBack }: PosterToolProps) {
               <Button
                 variant='outline'
                 disabled={progress < 100}
-                className='flex-1 sm:flex-none px-8 py-4 bg-surface-container-high border-outline-variant/20 text-tertiary rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-surface-container-highest'
+                className='flex-1 sm:flex-none px-8 py-4 bg-surface-container-high border-border/20 text-foreground rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-muted'
               >
                 <Download className='w-5 h-5' />
                 下载 4K
@@ -299,7 +299,7 @@ export function PosterTool({ onBack }: PosterToolProps) {
               <Button
                 variant='outline'
                 disabled={progress < 100}
-                className='flex-1 sm:flex-none px-8 py-4 bg-surface-container-high border-outline-variant/20 text-tertiary rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-surface-container-highest'
+                className='flex-1 sm:flex-none px-8 py-4 bg-surface-container-high border-border/20 text-foreground rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-muted'
               >
                 <Share className='w-5 h-5' />
                 分享

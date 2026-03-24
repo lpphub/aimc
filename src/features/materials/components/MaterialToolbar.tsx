@@ -30,9 +30,9 @@ export function MaterialToolbar({ selectedIds, onClear, onDelete }: MaterialTool
 
   return (
     <>
-      <div className='fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-surface-container-high/95 backdrop-blur border border-outline-variant/30 rounded-2xl px-6 py-4 shadow-2xl'>
+      <div className='fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-surface-container-high/95 backdrop-blur border border-border/30 rounded-2xl px-6 py-4 shadow-2xl'>
         <div className='flex items-center gap-4'>
-          <span className='text-on-surface'>
+          <span className='text-foreground'>
             已选择 <span className='text-primary font-semibold'>{selectedIds.length}</span> 项
           </span>
 
@@ -42,7 +42,7 @@ export function MaterialToolbar({ selectedIds, onClear, onDelete }: MaterialTool
             size='sm'
             variant='outline'
             onClick={() => setShowTagModal(true)}
-            className='border-outline-variant/30 text-on-surface-variant hover:text-primary hover:border-primary-container/50'
+            className='border-border/30 text-muted-foreground hover:text-primary hover:border-primary-container/50'
           >
             <Tag className='w-4 h-4 mr-2' />
             标签
@@ -60,7 +60,7 @@ export function MaterialToolbar({ selectedIds, onClear, onDelete }: MaterialTool
             className='p-1 hover:bg-primary-container/10 rounded transition-colors'
             aria-label='清除选择'
           >
-            <X className='w-5 h-5 text-on-surface-variant' />
+            <X className='w-5 h-5 text-muted-foreground' />
           </button>
         </div>
       </div>

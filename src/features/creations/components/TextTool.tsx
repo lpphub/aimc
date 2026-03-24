@@ -41,31 +41,31 @@ export function TextTool({ onBack }: TextToolProps) {
     <div className='flex-1 flex flex-col px-8'>
       <ToolHeader title='营销文案' icon={Type} onBack={onBack} />
 
-      <p className='text-on-surface-variant text-sm leading-relaxed -mt-4 mb-8 max-w-2xl'>
+      <p className='text-muted-foreground text-sm leading-relaxed -mt-4 mb-8 max-w-2xl'>
         输入您的产品愿景，让合成架构为您完成剩下的工作。
       </p>
 
       <div className='grid grid-cols-12 gap-8 items-stretch'>
         {/* Left Panel: Input */}
         <section className='col-span-12 lg:col-span-5 flex flex-col space-y-6 min-h-185'>
-          <div className='bg-surface-container-low p-8 rounded-xl border-t border-primary-container/20 shadow-[0_0_40px_rgba(0,0,0,0.3)] flex-1'>
+          <div className='bg-card p-8 rounded-xl border-t border-primary-container/20 shadow-elevation flex-1'>
             <div className='space-y-6'>
               {/* 产品描述 */}
               <div>
-                <label className='block text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant mb-3'>
+                <label className='block text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-3'>
                   产品描述
                 </label>
                 <Textarea
                   value={productDesc}
                   onChange={e => setProductDesc(e.target.value)}
                   placeholder='输入您的产品名称和核心卖点...'
-                  className='w-full bg-surface-container-lowest border-none focus:ring-1 focus:ring-primary-container/50 rounded-sm p-4 text-on-surface text-sm min-h-72 resize-none'
+                  className='w-full bg-background border-none focus:ring-1 focus:ring-primary-container/50 rounded-sm p-4 text-foreground text-sm min-h-72 resize-none'
                 />
               </div>
 
               {/* 目标受众 */}
               <div>
-                <label className='block text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant mb-3'>
+                <label className='block text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-3'>
                   目标受众
                 </label>
                 <input
@@ -73,13 +73,13 @@ export function TextTool({ onBack }: TextToolProps) {
                   value={targetAudience}
                   onChange={e => setTargetAudience(e.target.value)}
                   placeholder='例如：25-35岁的科技爱好者'
-                  className='w-full bg-surface-container-lowest border-none focus:ring-1 focus:ring-primary-container/50 rounded-sm p-4 text-on-surface text-sm'
+                  className='w-full bg-background border-none focus:ring-1 focus:ring-primary-container/50 rounded-sm p-4 text-foreground text-sm'
                 />
               </div>
 
               {/* 品牌语调 */}
               <div>
-                <label className='block text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant mb-3'>
+                <label className='block text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-3'>
                   品牌语调
                 </label>
                 <div className='grid grid-cols-2 gap-2'>
@@ -92,7 +92,7 @@ export function TextTool({ onBack }: TextToolProps) {
                         'py-2 px-3 text-xs rounded transition-all',
                         selectedTone === tone
                           ? 'bg-surface-container-high border border-primary-container/30 text-primary-container'
-                          : 'bg-surface-container-high border border-outline-variant/30 text-on-surface-variant hover:border-primary-container/30'
+                          : 'bg-surface-container-high border border-border/30 text-muted-foreground hover:border-primary-container/30'
                       )}
                     >
                       {tone}
@@ -111,13 +111,13 @@ export function TextTool({ onBack }: TextToolProps) {
                   <Bolt className='w-5 h-5' />
                   开始生成
                 </span>
-                <div className='absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300' />
+                <div className='absolute inset-0 bg-foreground/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300' />
               </Button>
             </div>
           </div>
 
           {/* 提示 */}
-          <div className='flex items-center gap-3 px-2 text-on-surface-variant'>
+          <div className='flex items-center gap-3 px-2 text-muted-foreground'>
             <Info className='w-4 h-4 text-primary-container/60' />
             <p className='text-[10px] uppercase tracking-wider'>
               提示：提供具体的使用场景将显著提升生成质量。
@@ -127,9 +127,9 @@ export function TextTool({ onBack }: TextToolProps) {
 
         {/* Right Panel: Result & Loading */}
         <section className='col-span-12 lg:col-span-7 flex flex-col relative'>
-          <div className='h-full bg-surface-container-low rounded-xl border-t border-secondary-container/20 shadow-[0_0_40px_rgba(0,0,0,0.3)] flex flex-col overflow-hidden'>
+          <div className='h-full bg-card rounded-xl border-t border-secondary-container/20 shadow-elevation flex flex-col overflow-hidden'>
             {/* Header Actions */}
-            <div className='flex justify-between items-center px-8 py-4 border-b border-outline-variant/10'>
+            <div className='flex justify-between items-center px-8 py-4 border-b border-border/10'>
               <h2 className='font-headline text-lg font-bold tracking-tight text-primary-container'>
                 输出预览
               </h2>
@@ -138,7 +138,7 @@ export function TextTool({ onBack }: TextToolProps) {
                   type='button'
                   onClick={handleCopy}
                   disabled={!generatedContent}
-                  className='p-2 text-on-surface-variant hover:text-primary-container hover:bg-surface-container-high rounded transition-all disabled:opacity-30'
+                  className='p-2 text-muted-foreground hover:text-primary-container hover:bg-surface-container-high rounded transition-all disabled:opacity-30'
                   title='复制'
                 >
                   <Copy className='w-5 h-5' />
@@ -147,15 +147,15 @@ export function TextTool({ onBack }: TextToolProps) {
             </div>
 
             {/* Content Area */}
-            <div className='flex-1 p-8 font-body leading-relaxed text-on-surface-variant overflow-y-auto relative'>
+            <div className='flex-1 p-8 font-body leading-relaxed text-muted-foreground overflow-y-auto relative'>
               {/* 骨架屏 / 占位 */}
               {!generatedContent && !isGenerating && (
                 <div className='space-y-4 opacity-40 select-none'>
-                  <div className='h-4 bg-surface-container-highest rounded w-3/4' />
-                  <div className='h-4 bg-surface-container-highest rounded w-full' />
-                  <div className='h-4 bg-surface-container-highest rounded w-5/6' />
-                  <div className='h-20 bg-surface-container-highest rounded w-full' />
-                  <div className='h-4 bg-surface-container-highest rounded w-2/3' />
+                  <div className='h-4 bg-muted rounded w-3/4' />
+                  <div className='h-4 bg-muted rounded w-full' />
+                  <div className='h-4 bg-muted rounded w-5/6' />
+                  <div className='h-20 bg-muted rounded w-full' />
+                  <div className='h-4 bg-muted rounded w-2/3' />
                 </div>
               )}
 
@@ -168,15 +168,15 @@ export function TextTool({ onBack }: TextToolProps) {
 
               {/* Loading Overlay */}
               {isGenerating && (
-                <div className='absolute inset-0 z-10 flex items-center justify-center bg-surface-container-low/40 backdrop-blur-[2px]'>
+                <div className='absolute inset-0 z-10 flex items-center justify-center bg-card/40 backdrop-blur-[2px]'>
                   <div className='relative flex flex-col items-center'>
                     <div className='absolute inset-0 bg-secondary-container rounded-full blur-[60px] opacity-20 animate-pulse scale-150' />
                     <div className='relative z-20 flex flex-col items-center'>
-                      <div className='w-16 h-16 border-2 border-primary-container border-t-transparent rounded-full animate-spin mb-4 shadow-[0_0_20px_rgba(0,242,255,0.2)]' />
+                      <div className='w-16 h-16 border-2 border-primary-container border-t-transparent rounded-full animate-spin mb-4 shadow-glow-primary-md' />
                       <p className='font-headline text-sm font-bold tracking-[0.3em] text-primary-container uppercase animate-pulse'>
                         Generating...
                       </p>
-                      <p className='text-[10px] text-on-surface-variant mt-2 uppercase tracking-widest'>
+                      <p className='text-[10px] text-muted-foreground mt-2 uppercase tracking-widest'>
                         正在构建多维营销视角
                       </p>
                     </div>
@@ -191,7 +191,7 @@ export function TextTool({ onBack }: TextToolProps) {
             <div
               className='w-full h-full'
               style={{
-                backgroundImage: 'radial-gradient(#00F2FF 1px, transparent 1px)',
+                backgroundImage: 'radial-gradient(var(--primary) 1px, transparent 1px)',
                 backgroundSize: '12px 12px',
               }}
             />

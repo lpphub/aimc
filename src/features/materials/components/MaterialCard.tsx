@@ -15,11 +15,11 @@ export function MaterialCard({ material, isSelected, onSelect }: MaterialCardPro
   return (
     <div
       className={cn(
-        'relative overflow-hidden rounded-md bg-surface-container-low border transition-all duration-300 group',
+        'relative overflow-hidden rounded-md bg-card border transition-all duration-300 group',
         'aspect-4/5',
         isSelected
           ? 'border-primary-container shadow-[0_0_15px_rgba(0,242,255,0.12)]'
-          : 'border-outline-variant/50 hover:border-primary-container hover:shadow-[0_0_15px_rgba(0,242,255,0.12)]'
+          : 'border-border/50 hover:border-primary-container hover:shadow-[0_0_15px_rgba(0,242,255,0.12)]'
       )}
     >
       <div className='absolute inset-0'>
@@ -44,7 +44,7 @@ export function MaterialCard({ material, isSelected, onSelect }: MaterialCardPro
           'absolute top-1.5 left-1.5 w-3.5 h-3.5 rounded-sm border flex items-center justify-center transition-all',
           isSelected
             ? 'bg-primary-container border-primary-container'
-            : 'border-on-surface/30 bg-surface/20 opacity-0 group-hover:opacity-100'
+            : 'border-foreground/30 bg-surface/20 opacity-0 group-hover:opacity-100'
         )}
         onClick={e => {
           e.stopPropagation()
@@ -55,7 +55,7 @@ export function MaterialCard({ material, isSelected, onSelect }: MaterialCardPro
       </button>
 
       <div className='absolute bottom-0 p-1.5 w-full'>
-        <h3 className='font-medium text-[11px] text-on-surface truncate'>{material.filename}</h3>
+        <h3 className='font-medium text-[11px] text-foreground truncate'>{material.filename}</h3>
         <div className='flex flex-wrap gap-0.5 mt-0.5'>
           {displayTags.map(tag => (
             <span

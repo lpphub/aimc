@@ -44,23 +44,23 @@ const tools: ToolCardDef[] = [
 
 const accentStyles = {
   primary: {
-    cardBg: 'bg-[rgba(53,52,54,0.6)]',
+    cardBg: 'bg-surface-container-high/60',
     iconBg: 'bg-primary-container/20 group-hover:bg-primary-container',
     iconText: 'text-primary-container group-hover:text-on-primary',
-    labelText: 'text-primary-fixed-dim',
+    labelText: 'text-primary',
     arrowText: 'text-primary',
     borderT: 'border-primary-container/20',
-    hoverShadow: 'hover:shadow-[0_0_20px_rgba(0,242,255,0.15)]',
+    hoverShadow: 'hover:shadow-glow-primary-sm',
     decorText: 'text-primary-container',
   },
   secondary: {
-    cardBg: 'bg-[rgba(53,52,54,0.6)]',
+    cardBg: 'bg-surface-container-high/60',
     iconBg: 'bg-secondary-container/20 group-hover:bg-secondary-container',
-    iconText: 'text-secondary group-hover:text-white',
+    iconText: 'text-secondary group-hover:text-secondary-foreground',
     labelText: 'text-secondary',
     arrowText: 'text-secondary',
     borderT: 'border-secondary-container/20',
-    hoverShadow: 'hover:shadow-[0_0_20px_rgba(208,188,255,0.15)]',
+    hoverShadow: 'hover:shadow-glow-secondary',
     decorText: 'text-secondary-container',
   },
 }
@@ -94,10 +94,10 @@ function ToolCardItem({ tool, onSelect }: { tool: ToolCardDef; onSelect: (t: Too
           <Icon className={cn('transition-colors duration-500', s.iconText)} />
         </div>
 
-        <h3 className='text-2xl font-headline font-semibold text-white mb-3 tracking-tight'>
+        <h3 className='text-2xl font-headline font-semibold text-foreground mb-3 tracking-tight'>
           {tool.title}
         </h3>
-        <p className='text-on-surface-variant text-sm leading-relaxed'>{tool.description}</p>
+        <p className='text-muted-foreground text-sm leading-relaxed'>{tool.description}</p>
       </div>
 
       <div className='flex items-center justify-between mt-auto relative z-10'>

@@ -33,10 +33,10 @@ function WorksToolbar({
   return (
     <div className='flex items-center gap-3 mb-6'>
       <Select value={projectFilter} onValueChange={onProjectChange}>
-        <SelectTrigger className='w-40 bg-surface-container-low border-outline-variant/30 text-on-surface'>
+        <SelectTrigger className='w-40 bg-card border-border/30 text-foreground'>
           <SelectValue placeholder='全部项目' />
         </SelectTrigger>
-        <SelectContent className='bg-popover/95 border-outline-variant/30'>
+        <SelectContent className='bg-popover/95 border-border/30'>
           <SelectItem value='all'>全部项目</SelectItem>
           {projects.map(p => (
             <SelectItem key={p.id} value={p.id}>
@@ -47,10 +47,10 @@ function WorksToolbar({
       </Select>
 
       <Select value={typeFilter} onValueChange={onTypeChange}>
-        <SelectTrigger className='w-32 bg-surface-container-low border-outline-variant/30 text-on-surface'>
+        <SelectTrigger className='w-32 bg-card border-border/30 text-foreground'>
           <SelectValue placeholder='全部类型' />
         </SelectTrigger>
-        <SelectContent className='bg-popover/95 border-outline-variant/30'>
+        <SelectContent className='bg-popover/95 border-border/30'>
           <SelectItem value='all'>全部类型</SelectItem>
           <SelectItem value='text'>文本</SelectItem>
           <SelectItem value='image'>图片</SelectItem>
@@ -65,7 +65,7 @@ function WorksToolbar({
           placeholder='搜索作品...'
           value={search}
           onChange={e => onSearchChange(e.target.value)}
-          className='w-full h-10 pl-10 pr-4 bg-surface-container-low border border-outline-variant/30 rounded-lg text-on-surface placeholder:text-on-surface-variant/50 focus:border-primary-container/50 focus:outline-none transition-colors'
+          className='w-full h-10 pl-10 pr-4 bg-card border border-border/30 rounded-lg text-foreground placeholder:text-muted-foreground/50 focus:border-primary-container/50 focus:outline-none transition-colors'
         />
       </div>
     </div>
@@ -79,11 +79,11 @@ function EmptyState() {
         <div className='flex justify-center mb-4'>
           <div className='relative'>
             <div className='absolute inset-0 bg-primary-container/20 rounded-full blur-xl animate-pulse' />
-            <Sparkles className='relative w-16 h-16 text-on-surface-variant' />
+            <Sparkles className='relative w-16 h-16 text-muted-foreground' />
           </div>
         </div>
-        <p className='text-on-surface text-lg'>暂无作品</p>
-        <p className='text-on-surface-variant text-sm mt-2'>使用 AI 工具创作并收藏你的第一个作品</p>
+        <p className='text-foreground text-lg'>暂无作品</p>
+        <p className='text-muted-foreground text-sm mt-2'>使用 AI 工具创作并收藏你的第一个作品</p>
         <Button
           onClick={() => (window.location.href = '/creations')}
           variant='outline'
@@ -129,7 +129,7 @@ export function Projects() {
 
       {isLoading ? (
         <div className='flex h-[calc(100vh-400px)] items-center justify-center'>
-          <div className='text-on-surface-variant'>加载中...</div>
+          <div className='text-muted-foreground'>加载中...</div>
         </div>
       ) : works.length > 0 ? (
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6'>

@@ -52,9 +52,9 @@ function EditDialog({ open, onOpenChange, title, initialValue, onSubmit }: EditD
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='max-w-sm bg-surface-container-low/90 backdrop-blur-xl border-outline-variant/20'>
+      <DialogContent className='max-w-sm bg-card/90 backdrop-blur-xl border-border/20'>
         <DialogHeader>
-          <DialogTitle className='text-on-surface flex items-center gap-2'>
+          <DialogTitle className='text-foreground flex items-center gap-2'>
             <Pencil className='w-5 h-5' />
             {title}
           </DialogTitle>
@@ -64,7 +64,7 @@ function EditDialog({ open, onOpenChange, title, initialValue, onSubmit }: EditD
             value={name}
             onChange={e => setName(e.target.value)}
             placeholder='请输入名称'
-            className='bg-surface-container-lowest border-outline-variant/20 text-on-surface focus:ring-primary-container/50'
+            className='bg-background border-border/20 text-foreground focus:ring-primary-container/50'
             autoFocus
           />
         </div>
@@ -72,7 +72,7 @@ function EditDialog({ open, onOpenChange, title, initialValue, onSubmit }: EditD
           <Button
             variant='outline'
             onClick={() => onOpenChange(false)}
-            className='bg-transparent border-outline-variant/20 text-on-surface-variant hover:text-on-surface'
+            className='bg-transparent border-border/20 text-muted-foreground hover:text-foreground'
           >
             取消
           </Button>
@@ -111,16 +111,16 @@ function CreateDialog({ open, onOpenChange, title, placeholder, onSubmit }: Crea
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='max-w-sm bg-surface-container-low/90 backdrop-blur-xl border-outline-variant/20'>
+      <DialogContent className='max-w-sm bg-card/90 backdrop-blur-xl border-border/20'>
         <DialogHeader>
-          <DialogTitle className='text-on-surface'>{title}</DialogTitle>
+          <DialogTitle className='text-foreground'>{title}</DialogTitle>
         </DialogHeader>
         <div className='py-4'>
           <Input
             value={name}
             onChange={e => setName(e.target.value)}
             placeholder={placeholder}
-            className='bg-surface-container-lowest border-outline-variant/20 text-on-surface focus:ring-primary-container/50'
+            className='bg-background border-border/20 text-foreground focus:ring-primary-container/50'
             autoFocus
           />
         </div>
@@ -128,7 +128,7 @@ function CreateDialog({ open, onOpenChange, title, placeholder, onSubmit }: Crea
           <Button
             variant='outline'
             onClick={() => onOpenChange(false)}
-            className='bg-transparent border-outline-variant/20 text-on-surface-variant hover:text-on-surface'
+            className='bg-transparent border-border/20 text-muted-foreground hover:text-foreground'
           >
             取消
           </Button>
@@ -162,19 +162,19 @@ function DeleteConfirmDialog({
 }: DeleteConfirmDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='max-w-sm bg-surface-container-low/90 backdrop-blur-xl border-outline-variant/20'>
+      <DialogContent className='max-w-sm bg-card/90 backdrop-blur-xl border-border/20'>
         <DialogHeader>
-          <DialogTitle className='text-on-surface flex items-center gap-2'>
-            <AlertTriangle className='w-5 h-5 text-error' />
+          <DialogTitle className='text-foreground flex items-center gap-2'>
+            <AlertTriangle className='w-5 h-5 text-destructive' />
             {title}
           </DialogTitle>
-          <DialogDescription className='text-on-surface-variant'>{description}</DialogDescription>
+          <DialogDescription className='text-muted-foreground'>{description}</DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <Button
             variant='outline'
             onClick={() => onOpenChange(false)}
-            className='bg-transparent border-outline-variant/20 text-on-surface-variant hover:text-on-surface'
+            className='bg-transparent border-border/20 text-muted-foreground hover:text-foreground'
           >
             取消
           </Button>
@@ -183,7 +183,7 @@ function DeleteConfirmDialog({
               onConfirm()
               onOpenChange(false)
             }}
-            className='bg-error-container/20 border border-error/30 text-error hover:bg-error-container/30'
+            className='bg-destructive-container/20 border border-destructive/30 text-destructive hover:bg-destructive-container/30'
           >
             删除
           </Button>
@@ -315,7 +315,7 @@ export function TagModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='max-w-5xl h-205 p-0 flex flex-col bg-surface-container-low/60 backdrop-blur-xl border-outline-variant/15 shadow-[0_0_40px_rgba(0,242,255,0.06)]'>
+      <DialogContent className='max-w-5xl h-205 p-0 flex flex-col bg-card/60 backdrop-blur-xl border-border/15 shadow-[0_0_40px_rgba(0,242,255,0.06)]'>
         <div className='flex flex-1 overflow-hidden'>
           <TagGroupSidebar
             groups={groups}
@@ -328,14 +328,14 @@ export function TagModal({
           />
 
           <div className='flex-1 flex flex-col bg-surface/30 backdrop-blur-sm overflow-hidden'>
-            <div className='p-6 pb-4 border-b border-outline-variant/10'>
+            <div className='p-6 pb-4 border-b border-border/10'>
               <div className='relative group pr-10'>
-                <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant group-focus-within:text-primary-container transition-colors' />
+                <Search className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary-container transition-colors' />
                 <Input
                   value={searchKeyword}
                   onChange={e => setSearchKeyword(e.target.value)}
                   placeholder='搜索标签...'
-                  className='h-10 pl-10 pr-4 bg-surface-container-low border border-outline-variant/20 focus:ring-1 focus:ring-primary-container/50 focus:border-primary-container/50 text-on-surface placeholder:text-on-surface-variant/50'
+                  className='h-10 pl-10 pr-4 bg-card border border-border/20 focus:ring-1 focus:ring-primary-container/50 focus:border-primary-container/50 text-foreground placeholder:text-muted-foreground/50'
                 />
               </div>
             </div>
@@ -352,9 +352,9 @@ export function TagModal({
               />
             </div>
 
-            <div className='p-6 bg-surface-container-low/80 border-t border-outline-variant/10 flex flex-col sm:flex-row gap-4 items-center justify-between'>
+            <div className='p-6 bg-card/80 border-t border-border/10 flex flex-col sm:flex-row gap-4 items-center justify-between'>
               <div className='flex flex-wrap items-center gap-2'>
-                <span className='text-xs text-on-surface-variant mr-2'>已选择:</span>
+                <span className='text-xs text-muted-foreground mr-2'>已选择:</span>
                 {selectedTags.map(tag => (
                   <div
                     key={tag.id}
@@ -366,7 +366,7 @@ export function TagModal({
                       onClick={() =>
                         setLocalSelectedTagIds(prev => prev.filter(id => id !== tag.id))
                       }
-                      className='hover:text-on-surface transition-colors'
+                      className='hover:text-foreground transition-colors'
                     >
                       <X className='w-3 h-3' />
                     </button>
@@ -378,7 +378,7 @@ export function TagModal({
                   type='button'
                   onClick={() => setLocalSelectedTagIds([])}
                   disabled={localSelectedTagIds.length === 0}
-                  className='text-sm text-on-surface-variant hover:text-error transition-colors px-4 py-2 font-medium disabled:opacity-50'
+                  className='text-sm text-muted-foreground hover:text-destructive transition-colors px-4 py-2 font-medium disabled:opacity-50'
                 >
                   清空
                 </button>

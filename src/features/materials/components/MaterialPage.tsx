@@ -27,7 +27,7 @@ function MaterialSearchToolbar({
           placeholder='搜索素材...'
           value={search}
           onChange={e => onSearchChange(e.target.value)}
-          className='w-full h-10 pl-10 pr-4 bg-surface-container-low border border-outline-variant/30 rounded-lg text-on-surface placeholder:text-on-surface-variant/50 focus:border-primary-container/50 focus:outline-none transition-colors'
+          className='w-full h-10 pl-10 pr-4 bg-card border border-border/30 rounded-lg text-foreground placeholder:text-muted-foreground/50 focus:border-primary-container/50 focus:outline-none transition-colors'
         />
       </div>
 
@@ -38,7 +38,7 @@ function MaterialSearchToolbar({
           'px-6 py-2.5 rounded-lg transition-colors flex items-center gap-2 border',
           filterTagCount > 0
             ? 'bg-primary-container/10 border-primary-container/40 text-primary-container'
-            : 'bg-surface-container-high border-outline-variant/30 text-on-surface-variant hover:text-primary-container hover:border-primary-container/30'
+            : 'bg-surface-container-high border-border/30 text-muted-foreground hover:text-primary-container hover:border-primary-container/30'
         )}
       >
         <Filter className='w-4 h-4' />
@@ -56,16 +56,16 @@ function EmptyState({ onUploadClick }: { onUploadClick: () => void }) {
       <button
         type='button'
         onClick={onUploadClick}
-        className='flex flex-col items-center justify-center gap-4 p-12 bg-surface-container-low/30 border-dashed border-2 border-outline-variant/30 hover:border-primary-container/50 hover:bg-primary-container/5 transition-all rounded-2xl group'
+        className='flex flex-col items-center justify-center gap-4 p-12 bg-card/30 border-dashed border-2 border-border/30 hover:border-primary-container/50 hover:bg-primary-container/5 transition-all rounded-2xl group'
       >
         <div className='w-16 h-16 rounded-full bg-primary-container/10 flex items-center justify-center text-primary-container group-hover:scale-110 transition-transform duration-500'>
           <span className='text-4xl'>+</span>
         </div>
         <div className='text-center'>
-          <span className='block text-sm font-bold uppercase tracking-widest text-on-surface'>
+          <span className='block text-sm font-bold uppercase tracking-widest text-foreground'>
             上传素材
           </span>
-          <span className='block text-[10px] text-on-surface-variant mt-1 uppercase'>
+          <span className='block text-[10px] text-muted-foreground mt-1 uppercase'>
             支持 JPG, PNG, MP4, OBJ
           </span>
         </div>
@@ -142,7 +142,7 @@ export function MaterialPage() {
 
       {isLoading ? (
         <div className='flex h-[calc(100vh-400px)] items-center justify-center'>
-          <div className='text-on-surface-variant'>加载中...</div>
+          <div className='text-muted-foreground'>加载中...</div>
         </div>
       ) : materials.length > 0 ? (
         <div className='grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2'>
@@ -157,16 +157,16 @@ export function MaterialPage() {
           <button
             type='button'
             onClick={() => fileInputRef.current?.click()}
-            className='aspect-4/5 flex flex-col items-center justify-center gap-2 bg-surface-container-low/30 border-dashed border border-outline-variant/30 hover:border-primary-container/50 hover:bg-primary-container/5 transition-all rounded-md group'
+            className='aspect-4/5 flex flex-col items-center justify-center gap-2 bg-card/30 border-dashed border border-border/30 hover:border-primary-container/50 hover:bg-primary-container/5 transition-all rounded-md group'
           >
             <div className='w-10 h-10 rounded-full bg-primary-container/10 flex items-center justify-center text-primary-container group-hover:scale-110 transition-transform duration-500'>
               <span className='text-xl'>+</span>
             </div>
             <div className='text-center'>
-              <span className='block text-sm font-bold uppercase tracking-widest text-on-surface'>
+              <span className='block text-sm font-bold uppercase tracking-widest text-foreground'>
                 上传素材
               </span>
-              <span className='block text-xs text-on-surface-variant mt-0.5 uppercase'>
+              <span className='block text-xs text-muted-foreground mt-0.5 uppercase'>
                 JPG, PNG, MP4
               </span>
             </div>

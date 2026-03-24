@@ -86,8 +86,8 @@ export function OcrTool({ onBack }: OcrToolProps) {
             onDrop={handleDrop}
             className={cn(
               'relative group rounded-xl overflow-hidden',
-              'border border-dashed border-outline-variant/30',
-              'bg-surface-container-lowest',
+              'border border-dashed border-border/30',
+              'bg-background',
               'flex flex-col items-center justify-center',
               'transition-all hover:border-primary-container/30',
               'h-240'
@@ -97,7 +97,8 @@ export function OcrTool({ onBack }: OcrToolProps) {
             <div
               className='absolute inset-0 opacity-[0.03] pointer-events-none'
               style={{
-                backgroundImage: 'radial-gradient(circle at 2px 2px, #00f2ff 1px, transparent 0)',
+                backgroundImage:
+                  'radial-gradient(circle at 2px 2px, var(--primary) 1px, transparent 0)',
                 backgroundSize: '24px 24px',
               }}
             />
@@ -105,13 +106,7 @@ export function OcrTool({ onBack }: OcrToolProps) {
             {/* 扫描线动画 */}
             {isProcessing && (
               <div className='absolute inset-0 overflow-hidden pointer-events-none'>
-                <div
-                  className='absolute left-0 right-0 h-0.5 animate-[scan_3s_linear_infinite]'
-                  style={{
-                    background: 'linear-gradient(90deg, transparent, #00f2ff, transparent)',
-                    boxShadow: '0 0 15px #00f2ff',
-                  }}
-                />
+                <div className='absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent shadow-glow-primary-sm animate-scan' />
               </div>
             )}
 
@@ -133,16 +128,16 @@ export function OcrTool({ onBack }: OcrToolProps) {
                   'w-20 h-20 rounded-full flex items-center justify-center',
                   'bg-surface-container-high border border-primary-container/20',
                   'group-hover:scale-110 transition-transform duration-500',
-                  'shadow-[0_0_30px_rgba(0,242,255,0.1)]'
+                  'shadow-glow-primary'
                 )}
               >
                 <FileUp className='w-10 h-10 text-primary-container' />
               </div>
               <div>
-                <h3 className='text-xl font-headline font-bold text-tertiary mb-2'>
+                <h3 className='text-xl font-headline font-bold text-foreground mb-2'>
                   拖拽或点击上传
                 </h3>
-                <p className='text-on-surface-variant text-xs tracking-widest uppercase'>
+                <p className='text-muted-foreground text-xs tracking-widest uppercase'>
                   支持 JPG, PNG, PDF (最大 20MB)
                 </p>
               </div>
@@ -159,7 +154,7 @@ export function OcrTool({ onBack }: OcrToolProps) {
               <Button
                 onClick={() => fileInputRef.current?.click()}
                 variant='outline'
-                className='bg-surface-container-high border-primary-container/20 text-primary hover:bg-surface-container-highest'
+                className='bg-surface-container-high border-primary-container/20 text-primary hover:bg-muted'
               >
                 选择文件
               </Button>
@@ -168,19 +163,19 @@ export function OcrTool({ onBack }: OcrToolProps) {
         </div>
 
         {/* 右栏：结果面板 */}
-        <div className='lg:col-span-6 flex flex-col bg-surface-container-low rounded-xl border border-outline-variant/10 overflow-hidden h-200'>
+        <div className='lg:col-span-6 flex flex-col bg-card rounded-xl border border-border/10 overflow-hidden h-200'>
           {/* 头部 */}
-          <div className='p-5 border-b border-outline-variant/10 flex items-center justify-between bg-surface-container-lowest/50'>
+          <div className='p-5 border-b border-border/10 flex items-center justify-between bg-background/50'>
             <div className='flex items-center gap-2'>
               <ScanText className='w-4 h-4 text-primary-container' />
-              <h2 className='font-headline text-lg font-bold text-tertiary'>提取结果</h2>
+              <h2 className='font-headline text-lg font-bold text-foreground'>提取结果</h2>
             </div>
             <div className='flex gap-2'>
               <button
                 type='button'
                 onClick={handleCopy}
                 disabled={!result}
-                className='p-2 rounded-lg bg-surface-container-high text-on-surface-variant hover:text-primary transition-all active:scale-90 disabled:opacity-30'
+                className='p-2 rounded-lg bg-surface-container-high text-muted-foreground hover:text-primary transition-all active:scale-90 disabled:opacity-30'
                 title='复制'
               >
                 <Copy className='w-4 h-4' />
@@ -188,7 +183,7 @@ export function OcrTool({ onBack }: OcrToolProps) {
               <button
                 type='button'
                 disabled={!result}
-                className='p-2 rounded-lg bg-surface-container-high text-on-surface-variant hover:text-primary transition-all active:scale-90 disabled:opacity-30'
+                className='p-2 rounded-lg bg-surface-container-high text-muted-foreground hover:text-primary transition-all active:scale-90 disabled:opacity-30'
                 title='下载'
               >
                 <Download className='w-4 h-4' />
@@ -199,19 +194,19 @@ export function OcrTool({ onBack }: OcrToolProps) {
           {/* 文本内容区 */}
           <div className='flex-1 p-5 overflow-y-auto'>
             {result ? (
-              <div className='space-y-1 text-on-surface-variant text-sm leading-relaxed'>
+              <div className='space-y-1 text-muted-foreground text-sm leading-relaxed'>
                 {result.split('\n').map((line, i) => (
                   <div
                     key={line || `empty-${i}`}
                     className='group cursor-text p-2 hover:bg-surface-container-high/40 rounded transition-colors border-l border-transparent hover:border-primary-container/30'
                   >
-                    <span className='text-secondary-fixed-dim font-bold mr-2 text-xs opacity-50 select-none'>
+                    <span className='text-secondary font-bold mr-2 text-xs opacity-50 select-none'>
                       #{String(i + 1).padStart(2, '0')}
                     </span>
                     {line || '\u00A0'}
                   </div>
                 ))}
-                <div className='flex items-center gap-2 mt-4 pt-3 border-t border-outline-variant/10'>
+                <div className='flex items-center gap-2 mt-4 pt-3 border-t border-border/10'>
                   <span className='w-2 h-2 rounded-full bg-primary-container animate-pulse' />
                   <span className='text-[10px] uppercase tracking-[0.2em] font-bold text-primary-container/60'>
                     解析完成 - 无错误检测
@@ -231,14 +226,14 @@ export function OcrTool({ onBack }: OcrToolProps) {
           </div>
 
           {/* 底部导出 */}
-          <div className='p-5 bg-surface-container-highest/20 border-t border-outline-variant/10'>
+          <div className='p-5 bg-muted/20 border-t border-border/10'>
             <Button
               disabled={!result}
               className={cn(
                 'w-full py-5 font-bold tracking-widest uppercase text-sm',
-                'bg-linear-to-r from-secondary-container to-[#6b2fd0]',
-                'text-tertiary shadow-[0_8px_30px_rgba(87,27,193,0.3)]',
-                'hover:shadow-[0_12px_40px_rgba(87,27,193,0.5)]',
+                'bg-linear-to-r from-secondary-container to-secondary',
+                'text-foreground shadow-glow-primary-lg',
+                'hover:shadow-glow-primary-lg-hover',
                 'transition-all active:scale-[0.98]',
                 'disabled:opacity-30 disabled:shadow-none'
               )}
@@ -248,18 +243,6 @@ export function OcrTool({ onBack }: OcrToolProps) {
           </div>
         </div>
       </div>
-
-      {/* 扫描线动画 keyframes */}
-      <style>
-        {`
-          @keyframes scan {
-            0% { top: 0%; opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { top: 100%; opacity: 0; }
-          }
-        `}
-      </style>
     </div>
   )
 }

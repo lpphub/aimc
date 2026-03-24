@@ -32,10 +32,10 @@ export function Sidebar() {
   }
 
   return (
-    <aside className='fixed left-0 top-0 h-screen w-64 bg-surface-container-lowest border-r border-primary-container/10 flex flex-col py-6 z-50 shadow-[0_0_40px_rgba(0,242,255,0.06)]'>
+    <aside className='fixed left-0 top-0 h-screen w-64 bg-background border-r border-primary-container/10 flex flex-col py-6 z-50 shadow-[0_0_40px_rgba(0,242,255,0.06)]'>
       <div className='px-6 mb-10'>
         <div className='text-xl font-bold tracking-tighter text-primary mb-1'>AIGC Toolset</div>
-        <div className='text-[0.6875rem] font-bold tracking-widest uppercase text-on-surface-variant'>
+        <div className='text-[0.6875rem] font-bold tracking-widest uppercase text-muted-foreground'>
           The Synthetic Architect
         </div>
       </div>
@@ -53,7 +53,7 @@ export function Sidebar() {
                 'flex items-center gap-4 px-4 py-3 transition-all rounded-xl group',
                 isActive
                   ? 'bg-surface-container-high text-primary border-r-4 border-primary shadow-[0px_0px_15px_rgba(0,242,255,0.2)]'
-                  : 'text-on-surface-variant hover:bg-surface-container-high/50 hover:text-primary'
+                  : 'text-muted-foreground hover:bg-surface-container-high/50 hover:text-primary'
               )}
             >
               <Icon
@@ -66,14 +66,14 @@ export function Sidebar() {
       </nav>
 
       <div className='px-6 mt-auto space-y-4'>
-        <div className='pt-6 border-t border-outline-variant/10 flex items-center'>
+        <div className='pt-6 border-t border-border/10 flex items-center'>
           <div className='overflow-hidden flex-1'>
-            <div className='text-xs text-on-surface truncate'>管理员</div>
+            <div className='text-xs text-foreground truncate'>管理员</div>
           </div>
           <button
             type='button'
             onClick={handleLogout}
-            className='text-on-surface-variant hover:text-primary cursor-pointer transition-colors'
+            className='text-muted-foreground hover:text-primary cursor-pointer transition-colors'
             title='退出登录'
           >
             <LogOut className='w-4 h-4' />

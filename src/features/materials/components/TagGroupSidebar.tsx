@@ -30,7 +30,7 @@ export function TagGroupSidebar({
       'flex items-center gap-3 px-4 py-3 transition-all text-sm w-full',
       activeGroupId === groupId
         ? 'bg-surface-container-high text-primary-container border-r-2 border-primary-container'
-        : 'text-on-surface-variant hover:bg-surface-container-high/50 hover:text-primary-container'
+        : 'text-muted-foreground hover:bg-surface-container-high/50 hover:text-primary-container'
     )
 
   const handleDeleteGroup = (groupId: number) => {
@@ -44,15 +44,15 @@ export function TagGroupSidebar({
   }
 
   return (
-    <aside className='w-64 bg-surface-container-lowest/40 flex flex-col border-r border-outline-variant/10'>
-      <div className='px-6 py-4 flex items-center justify-between border-b border-outline-variant/10'>
-        <span className='text-sm font-bold text-on-surface-variant uppercase tracking-wider'>
+    <aside className='w-64 bg-background/40 flex flex-col border-r border-border/10'>
+      <div className='px-6 py-4 flex items-center justify-between border-b border-border/10'>
+        <span className='text-sm font-bold text-muted-foreground uppercase tracking-wider'>
           标签组
         </span>
         <button
           type='button'
           onClick={onNewGroupClick}
-          className='text-primary-container hover:text-on-surface transition-colors'
+          className='text-primary-container hover:text-foreground transition-colors'
         >
           <Plus className='w-4 h-4' />
         </button>
@@ -93,7 +93,7 @@ export function TagGroupSidebar({
                       e.stopPropagation()
                       setMenuOpenGroupId(menuOpenGroupId === group.id ? null : group.id)
                     }}
-                    className='p-1 hover:bg-surface-container-highest rounded transition-colors opacity-0 group-hover/item:opacity-100'
+                    className='p-1 hover:bg-muted rounded transition-colors opacity-0 group-hover/item:opacity-100'
                     aria-label='更多操作'
                   >
                     <MoreHorizontal className='w-4 h-4' />
@@ -108,11 +108,11 @@ export function TagGroupSidebar({
                       onClick={() => setMenuOpenGroupId(null)}
                       aria-label='关闭菜单'
                     />
-                    <div className='absolute right-4 top-full mt-1 z-20 bg-surface-container-low border border-outline-variant/20 rounded-lg shadow-lg py-1 min-w-32'>
+                    <div className='absolute right-4 top-full mt-1 z-20 bg-card border border-border/20 rounded-lg shadow-lg py-1 min-w-32'>
                       <button
                         type='button'
                         onClick={() => handleEditGroup(group.id, group.name)}
-                        className='w-full px-3 py-2 text-sm text-left text-on-surface hover:bg-surface-container-high flex items-center gap-2'
+                        className='w-full px-3 py-2 text-sm text-left text-foreground hover:bg-surface-container-high flex items-center gap-2'
                       >
                         <Pencil className='w-4 h-4' />
                         编辑
@@ -120,7 +120,7 @@ export function TagGroupSidebar({
                       <button
                         type='button'
                         onClick={() => handleDeleteGroup(group.id)}
-                        className='w-full px-3 py-2 text-sm text-left text-error hover:bg-error-container/10 flex items-center gap-2'
+                        className='w-full px-3 py-2 text-sm text-left text-destructive hover:bg-destructive-container/10 flex items-center gap-2'
                       >
                         <Trash2 className='w-4 h-4' />
                         删除

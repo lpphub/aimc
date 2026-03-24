@@ -66,8 +66,8 @@ export function WorkCard({ work, onDelete }: WorkCardProps) {
         {work.projectName && (
           <p className='text-xs text-muted-foreground mb-1'>来自: {work.projectName}</p>
         )}
-        <p className='text-sm text-on-surface-variant line-clamp-2'>{work.prompt}</p>
-        <p className='text-xs text-on-surface-variant/60 mt-2'>
+        <p className='text-sm text-muted-foreground line-clamp-2'>{work.prompt}</p>
+        <p className='text-xs text-muted-foreground/60 mt-2'>
           {new Date(work.createdAt).toLocaleDateString()}
         </p>
       </div>
