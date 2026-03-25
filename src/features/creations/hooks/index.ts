@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import { creationsApi } from '../api'
-import type { GenerateImageReq, GenerateTextReq, OcrReq } from '../types'
+import type { GenerateImageReq, GeneratePosterReq, GenerateTextReq, OcrReq } from '../types'
 
 export const creationsKeys = {
   all: ['creations'] as const,
@@ -21,5 +22,15 @@ export function useGenerateImage() {
 export function useOcr() {
   return useMutation({
     mutationFn: (data: OcrReq) => creationsApi.ocr(data),
+  })
+}
+
+export function useGeneratePoster() {
+  return useMutation({
+    mutationFn: ({ data, file }: { data: GeneratePosterReq; file?: File }) =>
+      creationsApi.generatePoster(data, file),
+    onError: (error: Error) => {
+      toast.error(error.message || '海报生成失败')
+    },
   })
 }
