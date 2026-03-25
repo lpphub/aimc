@@ -1,4 +1,4 @@
-import api, { apiClient } from '@/lib/api'
+import api, { apiClient, unwrap } from '@/lib/api'
 import type {
   GenerateImageReq,
   GenerateImageResp,
@@ -27,8 +27,6 @@ export const creationsApi = {
       formData.append('file', file)
     }
     const res = await apiClient.post('creations/poster', { body: formData })
-    const json = await res.json<{ code: number; message: string; data: GeneratePosterResp }>()
-    if (json.code !== 0) throw new Error(json.message)
-    return json.data
+    return unwrap<GeneratePosterResp>(res)
   },
 }
