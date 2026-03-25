@@ -30,6 +30,15 @@ const [resultUrl, setResultUrl] = useState<string | null>(null)
 
 移除 `progress` 状态。
 
+## 布局说明
+
+组件分为左右两个面板：
+
+| 面板 | 位置 | 内容 |
+|------|------|------|
+| 左侧面板 | `lg:col-span-4` | 资产上传区域 → 预览图 + 删除按钮 |
+| 右侧面板 | `lg:col-span-8` | 生成中加载动画 → 结果图片 |
+
 ## 上传交互
 
 **选择前：**
@@ -40,20 +49,79 @@ const [resultUrl, setResultUrl] = useState<string | null>(null)
 - 显示图片预览（居中、限制最大尺寸）
 - 右上角显示删除按钮（点击清除选择）
 
-**交互逻辑：**
-1. 点击上传区域 → 触发文件选择
-2. 选择文件后 → 生成预览 URL（`URL.createObjectURL`），存储文件
-3. 点击删除按钮 → 清除文件和预览
+**文件选择处理：**
+
+```typescript
+const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0]
+  if (!file) return
+  if (!validateFile(file)) return
+
+  // 清除之前的预览 URL
+  if (previewUrl) URL.revokeObjectURL(previewUrl)
+
+  // 设置新状态
+  setUploadedFile(file)
+  setPreviewUrl(URL.createObjectURL(file))
+  setResultUrl(null)
+}
+
+const handleDelete = () => {
+  if (previewUrl) URL.revokeObjectURL(previewUrl)
+  setPreviewUrl(null)
+  setUploadedFile(null)
+  setResultUrl(null)
+  // 重置文件输入，允许重新选择相同文件
+  if (fileInputRef.current) {
+    fileInputRef.current.value = ''
+  }
+}
+```
 
 ## 生成结果展示
 
 **生成中：**
-- 显示加载动画（Spinner 或脉冲效果）
+- 使用简单的脉冲动画效果（pulse animation）
+- 替换现有的进度环 + 百分比
+- 保持 "PROCESSING..." 文字提示
+
+```typescript
+// 加载状态 UI
+<div className="flex flex-col items-center gap-4">
+  <div className="w-16 h-16 rounded-full bg-primary/20 animate-pulse" />
+  <span className="font-sans text-foreground font-bold tracking-widest">
+    PROCESSING...
+  </span>
+</div>
+```
 
 **生成完成后：**
 - 预览区显示返回的图片（使用 `resultUrl`）
 - 图片自适应容器，保持比例
 - 保留四角装饰线
+
+**生成按钮状态：**
+- 无上传文件时：禁用生成按钮
+- 有文件时：启用生成按钮
+
+**生成流程（mock）：**
+
+```typescript
+const handleGenerate = async () => {
+  if (!uploadedFile) return
+
+  setIsGenerating(true)
+  setResultUrl(null)
+
+  // Mock: 模拟生成延迟
+  await new Promise(resolve => setTimeout(resolve, 2000))
+
+  // Mock: 设置模拟结果 URL
+  setResultUrl('https://picsum.photos/400/600')
+  setIsGenerating(false)
+  toast.success('海报生成完成')
+}
+```
 
 **操作按钮：**
 - 下载按钮：点击触发下载 `resultUrl`
