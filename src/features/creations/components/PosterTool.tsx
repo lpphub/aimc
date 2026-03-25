@@ -345,12 +345,20 @@ export function PosterTool({ onBack }: PosterToolProps) {
     }
   }
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     if (!resultUrl) return
-    const a = document.createElement('a')
-    a.href = resultUrl
-    a.download = 'poster.png'
-    a.click()
+    try {
+      const response = await fetch(resultUrl)
+      const blob = await response.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = 'poster.png'
+      a.click()
+      URL.revokeObjectURL(url)
+    } catch {
+      toast.error('下载失败')
+    }
   }
 
   const handleShare = () => {
