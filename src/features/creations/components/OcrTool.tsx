@@ -1,22 +1,11 @@
 import { Copy, Download, FileUp, ScanText } from 'lucide-react'
 import { useCallback, useRef, useState } from 'react'
 import { toast } from 'sonner'
+import { apiClient, unwrap } from '@/lib/api'
 import { cn } from '@/lib/utils'
 import { Button } from '@/shared/components/ui/button'
+import type { OcrResp } from '../types'
 import { ToolHeader } from './ToolGrid'
-
-const MOCK_RESULT = `项目名称：极光边缘计算节点架构设计 (Project Aurora-Edge)
-
-核心目标：构建可大规模部署的合成智能网络，实现低延迟数据提取与自动标注。
-
-硬件需求：
-  - Lumina NPU 系列核心处理器 x4
-  - 高带宽内存存储系统 (64GB HBM3)
-  - 超导液冷散热阵列
-
-合规性：符合 ISO/IEC 42001 人工智能管理体系标准。
-
-此文档包含机密数据，仅供内部架构委员会审阅。未经授权禁止分发或进行逆向工程分析。`
 
 interface OcrToolProps {
   onBack: () => void
@@ -29,7 +18,7 @@ export function OcrTool({ onBack }: OcrToolProps) {
   const [isProcessing, setIsProcessing] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const handleFile = useCallback((f: File) => {
+  const handleFile = useCallback(async (f: File) => {
     if (!f.type.startsWith('image/') && f.type !== 'application/pdf') {
       toast.error('仅支持 JPG、PNG、PDF 格式')
       return
@@ -41,19 +30,26 @@ export function OcrTool({ onBack }: OcrToolProps) {
     setFile(f)
     setResult(null)
 
+    const objectUrl = URL.createObjectURL(f)
     if (f.type.startsWith('image/')) {
-      const url = URL.createObjectURL(f)
-      setPreviewUrl(url)
+      setPreviewUrl(objectUrl)
     } else {
       setPreviewUrl(null)
     }
 
     setIsProcessing(true)
-    setTimeout(() => {
-      setResult(MOCK_RESULT)
-      setIsProcessing(false)
+    try {
+      const res = await apiClient.post('creations/ocr', {
+        json: { imageUrl: objectUrl },
+      })
+      const data = await unwrap<OcrResp>(res)
+      setResult(data.text)
       toast.success('文字提取完成')
-    }, 2000)
+    } catch {
+      toast.error('文字提取失败')
+    } finally {
+      setIsProcessing(false)
+    }
   }, [])
 
   const handleDrop = useCallback(

@@ -4,6 +4,7 @@ import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 import { Button } from '@/shared/components/ui/button'
 import { Textarea } from '@/shared/components/ui/textarea'
+import { useGenerateText } from '../hooks'
 import { ToolHeader } from './ToolGrid'
 
 const brandTones = ['专业严谨', '风趣幽默', '极简主义', '煽动性强']
@@ -16,18 +17,26 @@ export function TextTool({ onBack }: TextToolProps) {
   const [productDesc, setProductDesc] = useState('')
   const [targetAudience, setTargetAudience] = useState('')
   const [selectedTone, setSelectedTone] = useState('专业严谨')
-  const [isGenerating, setIsGenerating] = useState(false)
   const [generatedContent, setGeneratedContent] = useState<string | null>(null)
 
-  const handleGenerate = () => {
-    setIsGenerating(true)
-    setTimeout(() => {
-      setGeneratedContent(
-        '【产品核心文案】\n\n在瞬息万变的数字时代，我们重新定义了智能交互的边界。这不仅仅是一款产品，更是一次对未来生活方式的大胆预演。\n\n【核心卖点】\n• 零延迟响应，毫秒级处理能力\n• 跨平台无缝同步，随时随地保持连接\n• AI 驱动的个性化推荐引擎\n\n【行动号召】\n立即体验未来科技，开启您的智能生活新篇章。限量首发，尊享早鸟优惠。'
-      )
-      setIsGenerating(false)
+  const generateText = useGenerateText()
+  const isGenerating = generateText.isPending
+
+  const handleGenerate = async () => {
+    const prompt = [productDesc, targetAudience, selectedTone].filter(Boolean).join('\n')
+    if (!prompt.trim()) {
+      toast.error('请输入产品描述')
+      return
+    }
+
+    setGeneratedContent(null)
+    try {
+      const result = await generateText.mutateAsync({ prompt })
+      setGeneratedContent(result.content)
       toast.success('文案生成成功')
-    }, 3000)
+    } catch {
+      // Error handled by potential hook onError
+    }
   }
 
   const handleCopy = () => {
