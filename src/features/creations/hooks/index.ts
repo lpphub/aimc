@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { creationsApi } from '../api'
 import type { GenerateImageReq, GeneratePosterReq, GenerateTextReq, OcrReq } from '../types'
@@ -26,11 +26,16 @@ export function useOcr() {
 }
 
 export function useGeneratePoster() {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: ({ data, file }: { data: GeneratePosterReq; file?: File }) =>
       creationsApi.generatePoster(data, file),
-    onError: (error: Error) => {
-      toast.error(error.message || '海报生成失败')
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: creationsKeys.all })
+    },
+    onError: (error: unknown) => {
+      const message = error instanceof Error ? error.message : '海报生成失败'
+      toast.error(message)
     },
   })
 }
