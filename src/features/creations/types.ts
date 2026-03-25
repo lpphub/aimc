@@ -26,3 +26,14 @@ export interface OcrResp {
   text: string
   confidence: number
 }
+
+export interface GeneratePosterReq {
+  prompt: string
+  aspectRatio: string
+  colorTone: string
+  style: string
+}
+
+export interface GeneratePosterResp {
+  imageUrl: string
+}
