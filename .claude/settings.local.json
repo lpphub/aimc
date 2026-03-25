@@ -10,9 +10,8 @@
 			"Bash(git push:*)",
 			"Bash(pnpm tsc:*)",
 			"Bash(pnpm lint:*)",
-			"Bash(pnpm biome:*)",
-			"Bash(sed -i \"s|from ''../types''|from ''../../types''|g\" /home/lsk/projects/aimc/src/features/materials/components/tag/*.tsx)",
-			"Bash(sed -i \"s|from ''../hooks''|from ''../../hooks''|g\" /home/lsk/projects/aimc/src/features/materials/components/tag/*.tsx)"
+			"Bash(pnpm format:*)",
+			"Bash(pnpm build:*)"
 		]
 	}
 }

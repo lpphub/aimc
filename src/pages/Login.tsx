@@ -5,9 +5,7 @@ export default function LoginPage() {
     <div className='relative min-h-screen flex flex-col bg-background font-sans selection:bg-primary/20 selection:text-primary'>
       {/* Top Navigation */}
       <nav className='fixed top-0 w-full z-50 flex justify-between items-center px-8 py-4 bg-transparent backdrop-blur-xl border-b border-white/5 shadow-glow-primary-sm'>
-        <div className='text-2xl font-bold tracking-tighter text-primary uppercase'>
-          AIGC PLATFORM
-        </div>
+        <div className='text-2xl font-bold tracking-tighter text-primary uppercase'>AIMC</div>
         <div />
       </nav>
 
@@ -49,9 +47,7 @@ export default function LoginPage() {
       {/* Footer */}
       <footer className='w-full py-12 border-t border-white/5 bg-background'>
         <div className='flex flex-col md:flex-row justify-between items-center px-12 w-full gap-8'>
-          <div className='text-primary font-bold tracking-widest text-sm uppercase'>
-            AIGC PLATFORM
-          </div>
+          <div className='text-primary font-bold tracking-widest text-sm uppercase'>AIMC</div>
           <div className='flex gap-8'>
             <a
               className='text-muted-foreground hover:text-primary transition-colors text-[10px] tracking-widest uppercase'
@@ -73,7 +69,7 @@ export default function LoginPage() {
             </a>
           </div>
           <div className='text-[10px] tracking-widest uppercase text-muted-foreground'>
-            © 2026 AIGC PLATFORM. ALL RIGHTS RESERVED.
+            © 2026 AIMC. ALL RIGHTS RESERVED.
           </div>
         </div>
       </footer>

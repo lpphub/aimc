@@ -2,7 +2,14 @@
 	"$schema": "https://biomejs.dev/schemas/2.4.6/schema.json",
 	"overrides": [
 		{
-			"includes": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx","!!**/{dist,node_modules,public,docs,.claude}"],
+			"includes": [
+				"**/*.{js,jsx,ts,tsx}",
+				"!dist",
+				"!node_modules",
+				"!public",
+				"!docs",
+				"!.claude"
+			],
 			"linter": {
 				"enabled": true,
 				"rules": {

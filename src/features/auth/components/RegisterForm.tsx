@@ -5,11 +5,11 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { z } from 'zod'
+import type { ApiError } from '@/lib/api'
 import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { useRegister } from '../hooks'
 import { LoginStateEnum, useLoginStateContext } from './LoginProvider'
-import type { ApiError } from '@/lib/api'
 
 const registerSchema = z
   .object({
@@ -47,7 +47,7 @@ export function RegisterForm() {
   const handleFinish = async (values: RegisterFormValues) => {
     try {
       await registerMutation.mutateAsync(values)
-      navigate('/', { replace: true })
+      navigate('/creations', { replace: true })
     } catch (error) {
       const { message } = error as ApiError
       toast.error('注册失败', { description: message })
@@ -71,9 +71,7 @@ export function RegisterForm() {
       {/* Header */}
       <div className='mb-10 text-center'>
         <h1 className='text-4xl font-bold tracking-tight text-foreground mb-3'>开启创作之旅</h1>
-        <p className='text-muted-foreground text-sm tracking-wide'>
-          加入 AIGC PLATFORM，释放您的 AI 创造力
-        </p>
+        <p className='text-muted-foreground text-sm tracking-wide'>加入 AIMC，释放您的 AI 创造力</p>
       </div>
 
       {/* Form */}

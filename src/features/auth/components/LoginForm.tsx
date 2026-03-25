@@ -36,7 +36,7 @@ export function LoginForm() {
   const handleFinish = async (values: LoginFormValues) => {
     try {
       await loginMutation.mutateAsync(values)
-      navigate('/', { replace: true })
+      navigate('/creations', { replace: true })
     } catch {
       toast.error('登录失败', {
         description: '请检查邮箱和密码是否正确',

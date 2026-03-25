@@ -9,7 +9,7 @@ export default function Creations() {
           <Sparkles className='w-6 h-6 text-secondary-container' />
         </div>
         <div>
-          <h1 className='text-3xl font-bold text-foreground tracking-tight'>AI创作中心</h1>
+          <h1 className='text-3xl font-bold text-foreground tracking-tight'>创作中心</h1>
           <p className='text-sm text-muted-foreground mt-1'>AI智绘，激发无限创意</p>
         </div>
       </div>
