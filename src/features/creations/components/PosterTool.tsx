@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 import { Button } from '@/shared/components/ui/button'
 import { Dialog, DialogContent } from '@/shared/components/ui/dialog'
 import { Textarea } from '@/shared/components/ui/textarea'
+import { useGeneratePoster } from '../hooks'
 import { ToolHeader } from './ToolGrid'
 
 interface PosterToolProps {
@@ -269,18 +270,22 @@ export function PosterTool({ onBack }: PosterToolProps) {
     style: 'cyberpunk',
   })
   const [prompt, setPrompt] = useState('')
-  const [isGenerating, setIsGenerating] = useState(false)
+  const [file, setFile] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [resultUrl, setResultUrl] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const validateFile = (file: File): boolean => {
+  const generatePoster = useGeneratePoster()
+
+  const isGenerating = generatePoster.isPending
+
+  const validateFile = (f: File): boolean => {
     const validTypes = ['image/png', 'image/jpeg', 'image/webp']
-    if (!validTypes.includes(file.type)) {
+    if (!validTypes.includes(f.type)) {
       toast.error('仅支持 PNG, JPG, WebP 格式')
       return false
     }
-    if (file.size > 10 * 1024 * 1024) {
+    if (f.size > 10 * 1024 * 1024) {
       toast.error('文件大小不能超过 10MB')
       return false
     }
@@ -294,18 +299,20 @@ export function PosterTool({ onBack }: PosterToolProps) {
   }, [previewUrl])
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    if (!validateFile(file)) return
+    const f = e.target.files?.[0]
+    if (!f) return
+    if (!validateFile(f)) return
 
     if (previewUrl) URL.revokeObjectURL(previewUrl)
 
-    setPreviewUrl(URL.createObjectURL(file))
+    setFile(f)
+    setPreviewUrl(URL.createObjectURL(f))
     setResultUrl(null)
   }
 
   const handleDelete = () => {
     if (previewUrl) URL.revokeObjectURL(previewUrl)
+    setFile(null)
     setPreviewUrl(null)
     setResultUrl(null)
     if (fileInputRef.current) {
@@ -319,14 +326,23 @@ export function PosterTool({ onBack }: PosterToolProps) {
       return
     }
 
-    setIsGenerating(true)
     setResultUrl(null)
 
-    await new Promise(resolve => setTimeout(resolve, 2000))
-
-    setResultUrl('https://picsum.photos/400/600')
-    setIsGenerating(false)
-    toast.success('海报生成完成')
+    try {
+      const result = await generatePoster.mutateAsync({
+        data: {
+          prompt: prompt.trim(),
+          aspectRatio: config.aspectRatio,
+          colorTone: config.colorTone,
+          style: config.style,
+        },
+        file: file ?? undefined,
+      })
+      setResultUrl(result.imageUrl)
+      toast.success('海报生成完成')
+    } catch {
+      // Error toast handled by hook onError
+    }
   }
 
   const handleDownload = () => {
@@ -338,7 +354,6 @@ export function PosterTool({ onBack }: PosterToolProps) {
   }
 
   const handleShare = () => {
-    // Placeholder for share functionality
     toast.info('分享功能开发中')
   }
 
@@ -378,7 +393,7 @@ export function PosterTool({ onBack }: PosterToolProps) {
               className='flex-1 bg-primary text-primary-foreground py-4 rounded-xl font-sans font-bold text-lg flex items-center justify-center gap-3 hover:opacity-90 transition-all'
             >
               <Bolt className='w-5 h-5' />
-              开始生成
+              {isGenerating ? '生成中...' : '开始生成'}
             </Button>
             <div className='flex gap-4 w-full sm:w-auto'>
               <Button
