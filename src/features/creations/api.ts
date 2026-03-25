@@ -1,7 +1,9 @@
-import api from '@/lib/api'
+import api, { apiClient } from '@/lib/api'
 import type {
   GenerateImageReq,
   GenerateImageResp,
+  GeneratePosterReq,
+  GeneratePosterResp,
   GenerateTextReq,
   GenerateTextResp,
   OcrReq,
@@ -14,4 +16,19 @@ export const creationsApi = {
   generateImage: (data: GenerateImageReq) => api.post<GenerateImageResp>('creations/image', data),
 
   ocr: (data: OcrReq) => api.post<OcrResp>('creations/ocr', data),
+
+  generatePoster: async (data: GeneratePosterReq, file?: File): Promise<GeneratePosterResp> => {
+    const formData = new FormData()
+    formData.append('prompt', data.prompt)
+    formData.append('aspectRatio', data.aspectRatio)
+    formData.append('colorTone', data.colorTone)
+    formData.append('style', data.style)
+    if (file) {
+      formData.append('file', file)
+    }
+    const res = await apiClient.post('creations/poster', { body: formData })
+    const json = await res.json<{ code: number; message: string; data: GeneratePosterResp }>()
+    if (json.code !== 0) throw new Error(json.message)
+    return json.data
+  },
 }
