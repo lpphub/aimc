@@ -21,7 +21,7 @@ All three tools follow the same pattern:
 
 **Key Changes:**
 - `TextTool`: Hook gets `onError` toast (no component change needed)
-- `PosterTool`: Component fixes download using `fetch` + `blob` for cross-origin images
+- `PosterTool`: Already complete ✓ (download uses `fetch` + `blob`)
 - `OcrTool`: Component uses `useOcr` hook; API supports FormData upload
 
 ## Hook Layer Changes
@@ -59,8 +59,7 @@ export function useGenerateImage() {
 
 export function useOcr() {
   return useMutation({
-    mutationFn: ({ imageUrl, file }: { imageUrl?: string; file?: File }) =>
-      creationsApi.ocr(imageUrl, file),
+    mutationFn: (data: OcrReq) => creationsApi.ocr(data),
     onError: (error: unknown) => {
       const message = error instanceof Error ? error.message : '文字提取失败'
       toast.error(message)
@@ -77,29 +76,39 @@ export function useOcr() {
 
 ```ts
 export interface OcrReq {
-  imageUrl?: string  // Optional: remote URL (for backward compat)
+  imageUrl?: string  // Optional: remote URL
+  file?: File        // Optional: local file upload
 }
 ```
 
 **Changes to `api.ts`:**
 
 ```ts
-ocr: async (imageUrl?: string, file?: File): Promise<OcrResp> => {
-  if (file) {
+ocr: async (data: OcrReq): Promise<OcrResp> => {
+  if (data.file) {
     // FormData upload for local files
     const formData = new FormData()
-    formData.append('file', file)
+    formData.append('file', data.file)
+    if (data.imageUrl) formData.append('imageUrl', data.imageUrl)
     const res = await apiClient.post('creations/ocr', { body: formData })
     return unwrap<OcrResp>(res)
   }
   // JSON body for URL-based OCR
-  return api.post<OcrResp>('creations/ocr', { imageUrl })
+  return api.post<OcrResp>('creations/ocr', { imageUrl: data.imageUrl })
 }
 ```
 
-**Hook signature change:**
+**Hook signature (consistent with other hooks):**
 ```ts
-useOcr() // mutationFn accepts { imageUrl?, file? }
+export function useOcr() {
+  return useMutation({
+    mutationFn: (data: OcrReq) => creationsApi.ocr(data),
+    onError: (error: unknown) => {
+      const message = error instanceof Error ? error.message : '文字提取失败'
+      toast.error(message)
+    },
+  })
+}
 ```
 
 ## Component Layer Changes
@@ -110,25 +119,7 @@ useOcr() // mutationFn accepts { imageUrl?, file? }
 
 ### PosterTool
 
-**Change:** Fix cross-origin download using `fetch` + `blob`.
-
-```ts
-const handleDownload = async () => {
-  if (!resultUrl) return
-  try {
-    const response = await fetch(resultUrl)
-    const blob = await response.blob()
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = 'poster.png'
-    a.click()
-    URL.revokeObjectURL(url)
-  } catch {
-    toast.error('下载失败')
-  }
-}
-```
+**Change:** None - already complete. Download uses `fetch` + `blob` for cross-origin images.
 
 ### OcrTool
 
@@ -247,9 +238,9 @@ After implementation, verify with agent-browser:
 
 | File | Change |
 |------|--------|
-| `src/features/creations/hooks/index.ts` | Add `onError` to `useGenerateText`, `useGenerateImage`, `useOcr`; update `useOcr` signature |
+| `src/features/creations/types.ts` | Add `file?: File` to `OcrReq` |
+| `src/features/creations/hooks/index.ts` | Add `onError` to `useGenerateText`, `useGenerateImage`, `useOcr` |
 | `src/features/creations/api.ts` | Update `ocr` to support FormData upload |
-| `src/features/creations/components/PosterTool.tsx` | Fix download with `fetch` + `blob` |
 | `src/features/creations/components/OcrTool.tsx` | Refactor to use `useOcr` hook |
 | `src/mocks/handlers/creations.ts` | Add error scenarios, update OCR for FormData |
 
