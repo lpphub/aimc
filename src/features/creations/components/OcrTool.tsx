@@ -1,4 +1,4 @@
-import { Copy, Download, FileUp, ScanText } from 'lucide-react'
+import { Copy, Download, FileUp, ScanText, Sparkles } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
@@ -14,6 +14,7 @@ export function OcrTool({ onBack }: OcrToolProps) {
   const [file, setFile] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [result, setResult] = useState<string | null>(null)
+  const [isUploading, setIsUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Cleanup blob URL on unmount or when previewUrl changes
@@ -26,7 +27,8 @@ export function OcrTool({ onBack }: OcrToolProps) {
   const ocr = useOcr()
   const isProcessing = ocr.isPending
 
-  const handleFile = useCallback(
+  // Step 1: Upload file and show preview
+  const handleFileSelect = useCallback(
     async (f: File) => {
       if (!f.type.startsWith('image/') && f.type !== 'application/pdf') {
         toast.error('仅支持 JPG、PNG、PDF 格式')
@@ -37,38 +39,49 @@ export function OcrTool({ onBack }: OcrToolProps) {
         return
       }
 
-      setFile(f)
-      setResult(null)
-
       // Revoke old URL before creating new one
       if (previewUrl) URL.revokeObjectURL(previewUrl)
+
+      setFile(f)
+      setResult(null)
+      setIsUploading(true)
+
+      // Simulate upload delay for UX feedback
+      await new Promise(resolve => setTimeout(resolve, 800))
 
       const objectUrl = URL.createObjectURL(f)
       if (f.type.startsWith('image/')) {
         setPreviewUrl(objectUrl)
       } else {
         setPreviewUrl(null)
-        URL.revokeObjectURL(objectUrl) // Clean up if not used
+        URL.revokeObjectURL(objectUrl)
       }
 
-      try {
-        const data = await ocr.mutateAsync({ file: f })
-        setResult(data.text)
-        toast.success('文字提取完成')
-      } catch {
-        // Error handled by hook onError
-      }
+      setIsUploading(false)
     },
-    [ocr, previewUrl]
+    [previewUrl]
   )
+
+  // Step 2: Extract text from uploaded file
+  const handleExtract = useCallback(async () => {
+    if (!file) return
+
+    try {
+      const data = await ocr.mutateAsync({ file })
+      setResult(data.text)
+      toast.success('文字提取完成')
+    } catch {
+      // Error handled by hook onError
+    }
+  }, [file, ocr])
 
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
       e.preventDefault()
       const f = e.dataTransfer.files[0]
-      if (f) handleFile(f)
+      if (f) handleFileSelect(f)
     },
-    [handleFile]
+    [handleFileSelect]
   )
 
   const handleCopy = useCallback(() => {
@@ -83,9 +96,8 @@ export function OcrTool({ onBack }: OcrToolProps) {
       <ToolHeader title='图片文字提取' icon={ScanText} onBack={onBack} />
 
       <div className='grid grid-cols-1 lg:grid-cols-12 gap-6 items-start'>
-        {/* 左栏：上传区 */}
+        {/* 左栏：上传/预览区 */}
         <div className='lg:col-span-6 flex flex-col gap-4'>
-          {/* 上传区域 */}
           <section
             aria-label='文件上传区域'
             onDragOver={e => e.preventDefault()}
@@ -95,8 +107,10 @@ export function OcrTool({ onBack }: OcrToolProps) {
               'border border-dashed border-border/30',
               'bg-background',
               'flex flex-col items-center justify-center',
-              'transition-all hover:border-primary/30',
-              'h-240'
+              'transition-all',
+              'h-240',
+              // When preview is shown, change border style
+              previewUrl && !isUploading && 'border-solid border-border/20'
             )}
           >
             {/* 点状背景 */}
@@ -109,60 +123,133 @@ export function OcrTool({ onBack }: OcrToolProps) {
               }}
             />
 
-            {/* 扫描线动画 */}
-            {isProcessing && (
-              <div className='absolute inset-0 overflow-hidden pointer-events-none'>
-                <div className='absolute left-0 right-0 h-0.5 bg-linear-to-r from-transparent via-primary to-transparent shadow-glow-primary-sm animate-scan' />
+            {/* 上传中 Loading 状态 */}
+            {isUploading && (
+              <div className='absolute inset-0 z-20 flex flex-col items-center justify-center bg-background/80 backdrop-blur-sm'>
+                <div className='w-16 h-16 border-2 border-primary border-t-transparent rounded-full animate-spin mb-4 shadow-glow-primary-md' />
+                <p className='font-sans text-sm font-bold tracking-widest text-primary uppercase'>
+                  上传中...
+                </p>
               </div>
             )}
 
-            {/* 预览图 */}
-            {previewUrl && !isProcessing && result ? (
-              <div className='absolute inset-0 p-6 flex items-center justify-center'>
+            {/* 预览图 + Hover 提取按钮 */}
+            {previewUrl && !isUploading && (
+              <>
+                {/* 预览图片 */}
                 <img
                   src={previewUrl}
                   alt={file?.name ?? 'preview'}
-                  className='max-w-full max-h-full rounded-lg object-contain opacity-60'
+                  className='absolute inset-0 w-full h-full object-contain p-4'
                 />
-              </div>
-            ) : null}
 
-            {/* 上传交互 */}
-            <div className='relative z-10 flex flex-col items-center gap-6 p-12 text-center'>
-              <div
-                className={cn(
-                  'w-20 h-20 rounded-full flex items-center justify-center',
-                  'bg-surface-container-high border border-primary/20',
-                  'group-hover:scale-110 transition-transform duration-500',
-                  'shadow-glow-primary'
+                {/* 扫描线动画 */}
+                {isProcessing && (
+                  <div className='absolute inset-0 overflow-hidden pointer-events-none z-10'>
+                    <div className='absolute left-0 right-0 h-1 bg-linear-to-r from-transparent via-primary to-transparent shadow-glow-primary-md animate-scan' />
+                    {/* 扫描区域高亮 */}
+                    <div className='absolute inset-0 bg-primary/5 animate-pulse' />
+                  </div>
                 )}
-              >
-                <FileUp className='w-10 h-10 text-primary' />
+
+                {/* 提取中状态 */}
+                {isProcessing && (
+                  <div className='absolute inset-0 z-20 flex flex-col items-center justify-center bg-background/40 backdrop-blur-sm'>
+                    <div className='w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center mb-4 animate-pulse'>
+                      <ScanText className='w-10 h-10 text-primary' />
+                    </div>
+                    <p className='font-sans text-sm font-bold tracking-widest text-primary uppercase animate-pulse'>
+                      SCANNING...
+                    </p>
+                    <p className='text-xs text-muted-foreground mt-2'>正在识别文字内容</p>
+                  </div>
+                )}
+
+                {/* Hover 显示提取按钮 (仅未处理时显示) */}
+                {!isProcessing && !result && (
+                  <div className='absolute inset-0 z-10 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300'>
+                    <button
+                      type='button'
+                      onClick={handleExtract}
+                      className='flex flex-col items-center gap-3 px-8 py-6 rounded-2xl bg-primary text-primary-foreground shadow-glow-primary-lg hover:scale-105 transition-transform'
+                    >
+                      <Sparkles className='w-8 h-8' />
+                      <span className='font-sans font-bold tracking-widest uppercase'>提取文字</span>
+                    </button>
+                  </div>
+                )}
+
+                {/* 已完成标记 */}
+                {result && !isProcessing && (
+                  <div className='absolute top-4 right-4 z-10 px-3 py-1.5 rounded-full bg-primary/20 text-primary text-xs font-bold flex items-center gap-1.5'>
+                    <ScanText className='w-3.5 h-3.5' />
+                    提取完成
+                  </div>
+                )}
+              </>
+            )}
+
+            {/* 上传交互区域 (无预览时显示) */}
+            {!previewUrl && !isUploading && (
+              <div className='relative z-10 flex flex-col items-center gap-6 p-12 text-center'>
+                <div
+                  className={cn(
+                    'w-20 h-20 rounded-full flex items-center justify-center',
+                    'bg-surface-container-high border border-primary/20',
+                    'group-hover:scale-110 transition-transform duration-500',
+                    'shadow-glow-primary'
+                  )}
+                >
+                  <FileUp className='w-10 h-10 text-primary' />
+                </div>
+                <div>
+                  <h3 className='text-xl font-sans font-bold text-foreground mb-2'>拖拽或点击上传</h3>
+                  <p className='text-muted-foreground text-xs tracking-widest uppercase'>
+                    支持 JPG, PNG, PDF (最大 20MB)
+                  </p>
+                </div>
+                <input
+                  ref={fileInputRef}
+                  type='file'
+                  accept='image/*,application/pdf'
+                  className='hidden'
+                  onChange={e => {
+                    const f = e.target.files?.[0]
+                    if (f) handleFileSelect(f)
+                  }}
+                />
+                <Button
+                  onClick={() => fileInputRef.current?.click()}
+                  variant='outline'
+                  className='bg-surface-container-high border-primary/20 text-primary hover:bg-muted'
+                >
+                  选择文件
+                </Button>
               </div>
-              <div>
-                <h3 className='text-xl font-sans font-bold text-foreground mb-2'>拖拽或点击上传</h3>
-                <p className='text-muted-foreground text-xs tracking-widest uppercase'>
-                  支持 JPG, PNG, PDF (最大 20MB)
-                </p>
+            )}
+
+            {/* 重新上传按钮 (有预览时显示) */}
+            {previewUrl && !isUploading && !isProcessing && (
+              <div className='absolute bottom-4 left-4 z-10'>
+                <input
+                  ref={fileInputRef}
+                  type='file'
+                  accept='image/*,application/pdf'
+                  className='hidden'
+                  onChange={e => {
+                    const f = e.target.files?.[0]
+                    if (f) handleFileSelect(f)
+                  }}
+                />
+                <button
+                  type='button'
+                  onClick={() => fileInputRef.current?.click()}
+                  className='px-4 py-2 rounded-lg bg-background/80 backdrop-blur-sm text-muted-foreground hover:text-primary text-sm border border-border/30 hover:border-primary/30 transition-all'
+                >
+                  重新上传
+                </button>
               </div>
-              <input
-                ref={fileInputRef}
-                type='file'
-                accept='image/*,application/pdf'
-                className='hidden'
-                onChange={e => {
-                  const f = e.target.files?.[0]
-                  if (f) handleFile(f)
-                }}
-              />
-              <Button
-                onClick={() => fileInputRef.current?.click()}
-                variant='outline'
-                className='bg-surface-container-high border-primary/20 text-primary hover:bg-muted'
-              >
-                选择文件
-              </Button>
-            </div>
+            )}
           </section>
         </div>
 
