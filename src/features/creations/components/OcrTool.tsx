@@ -1,5 +1,5 @@
 import { Copy, Download, FileUp, ScanText } from 'lucide-react'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 import { Button } from '@/shared/components/ui/button'
@@ -15,6 +15,13 @@ export function OcrTool({ onBack }: OcrToolProps) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [result, setResult] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  // Cleanup blob URL on unmount or when previewUrl changes
+  useEffect(() => {
+    return () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl)
+    }
+  }, [previewUrl])
 
   const ocr = useOcr()
   const isProcessing = ocr.isPending
@@ -33,11 +40,15 @@ export function OcrTool({ onBack }: OcrToolProps) {
       setFile(f)
       setResult(null)
 
+      // Revoke old URL before creating new one
+      if (previewUrl) URL.revokeObjectURL(previewUrl)
+
       const objectUrl = URL.createObjectURL(f)
       if (f.type.startsWith('image/')) {
         setPreviewUrl(objectUrl)
       } else {
         setPreviewUrl(null)
+        URL.revokeObjectURL(objectUrl) // Clean up if not used
       }
 
       try {
@@ -48,7 +59,7 @@ export function OcrTool({ onBack }: OcrToolProps) {
         // Error handled by hook onError
       }
     },
-    [ocr]
+    [ocr, previewUrl]
   )
 
   const handleDrop = useCallback(
