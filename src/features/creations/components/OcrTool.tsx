@@ -136,31 +136,35 @@ export function OcrTool({ onBack }: OcrToolProps) {
             {/* 预览图 + Hover 提取按钮 */}
             {previewUrl && !isUploading && (
               <>
-                {/* 预览图片 */}
-                <img
-                  src={previewUrl}
-                  alt={file?.name ?? 'preview'}
-                  className='absolute inset-0 w-full h-full object-contain p-4'
-                />
+                {/* 图片容器 + 扫描线 */}
+                <div className='absolute inset-4 flex items-center justify-center'>
+                  <div className='relative w-full h-full flex items-center justify-center'>
+                    <img
+                      src={previewUrl}
+                      alt={file?.name ?? 'preview'}
+                      className={cn(
+                        'max-w-full max-h-full object-contain transition-all duration-300',
+                        isProcessing && 'opacity-50 blur-[2px]'
+                      )}
+                    />
+                    {/* 扫描线 - 只在图片区域 */}
+                    {isProcessing && (
+                      <div className='absolute inset-0 overflow-hidden pointer-events-none'>
+                        <div
+                          className='absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent shadow-glow-primary-md'
+                          style={{ animation: 'scanLine 2.5s ease-in-out infinite' }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
 
-                {/* 扫描线动画 + 提取中状态 */}
+                {/* 提取中文案 */}
                 {isProcessing && (
-                  <>
-                    {/* 扫描线 - 使用 top 动画实现容器高度移动 */}
-                    <div className='absolute inset-0 overflow-hidden pointer-events-none z-10'>
-                      <div
-                        className='absolute left-4 right-4 h-0.5 bg-primary shadow-glow-primary-md'
-                        style={{
-                          animation: 'scanLine 2.5s ease-in-out infinite',
-                        }}
-                      />
-                    </div>
-                    {/* 提取中文案 */}
-                    <div className='absolute bottom-6 left-0 right-0 z-20 flex items-center justify-center gap-2'>
-                      <div className='w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin' />
-                      <span className='font-sans text-sm font-bold text-primary'>提取中...</span>
-                    </div>
-                  </>
+                  <div className='absolute bottom-6 left-0 right-0 z-20 flex items-center justify-center gap-2'>
+                    <div className='w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin' />
+                    <span className='font-sans text-sm font-bold text-primary'>提取中...</span>
+                  </div>
                 )}
 
                 {/* Hover 显示提取按钮 (仅未处理时显示) */}
