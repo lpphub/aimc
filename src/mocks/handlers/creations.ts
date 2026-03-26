@@ -13,12 +13,22 @@ function success<T>(data: T): ApiResponse<T> {
   return { code: 0, message: 'success', data }
 }
 
+const shouldFailRandomly = () => Math.random() < 0.1
+
 export const creationsHandlers = [
   http.post<never, { prompt: string }, ApiResponse<GenerateTextResp>>(
     `${API_BASE}/creations/text`,
     async ({ request }) => {
       await delay(1500)
       const { prompt } = await request.json()
+
+      if (!prompt?.trim()) {
+        return HttpResponse.json({ code: 400, message: '请输入提示词' }, { status: 400 })
+      }
+
+      if (shouldFailRandomly()) {
+        return HttpResponse.json({ code: 500, message: '服务暂时不可用，请重试' }, { status: 500 })
+      }
 
       return HttpResponse.json(
         success({
@@ -34,7 +44,17 @@ export const creationsHandlers = [
     ApiResponse<GenerateImageResp>
   >(`${API_BASE}/creations/image`, async ({ request }) => {
     await delay(2000)
-    const { aspectRatio } = await request.json()
+    const body = await request.json()
+
+    if (!body.prompt?.trim()) {
+      return HttpResponse.json({ code: 400, message: '请输入提示词' }, { status: 400 })
+    }
+
+    if (shouldFailRandomly()) {
+      return HttpResponse.json({ code: 500, message: '服务暂时不可用，请重试' }, { status: 500 })
+    }
+
+    const { aspectRatio } = body
     const [w, h] = aspectRatio.split(':').map(Number)
     const width = 400
     const height = Math.round((width * h) / w)
@@ -48,8 +68,31 @@ export const creationsHandlers = [
 
   http.post<never, { imageUrl: string }, ApiResponse<OcrResp>>(
     `${API_BASE}/creations/ocr`,
-    async () => {
+    async ({ request }) => {
       await delay(1500)
+
+      const contentType = request.headers.get('content-type') || ''
+      let hasValidInput = false
+
+      if (contentType.includes('multipart/form-data')) {
+        const formData = await request.formData()
+        const file = formData.get('file') as File | null
+        hasValidInput = !!file && file.size > 0
+      } else {
+        const body = await request.json()
+        hasValidInput = !!body.imageUrl?.trim()
+      }
+
+      if (!hasValidInput) {
+        return HttpResponse.json(
+          { code: 400, message: '请上传图片或提供图片链接' },
+          { status: 400 }
+        )
+      }
+
+      if (shouldFailRandomly()) {
+        return HttpResponse.json({ code: 500, message: '服务暂时不可用，请重试' }, { status: 500 })
+      }
 
       return HttpResponse.json(
         success({
@@ -70,6 +113,14 @@ export const creationsHandlers = [
       const colorTone = formData.get('colorTone') as string
       const style = formData.get('style') as string
       const file = formData.get('file') as File | null
+
+      if (!prompt?.trim()) {
+        return HttpResponse.json({ code: 400, message: '请输入提示词' }, { status: 400 })
+      }
+
+      if (shouldFailRandomly()) {
+        return HttpResponse.json({ code: 500, message: '服务暂时不可用，请重试' }, { status: 500 })
+      }
 
       console.log('[Mock] Poster generation:', {
         prompt,
