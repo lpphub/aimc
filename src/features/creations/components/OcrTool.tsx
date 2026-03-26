@@ -146,9 +146,14 @@ export function OcrTool({ onBack }: OcrToolProps) {
                 {/* 扫描线动画 + 提取中状态 */}
                 {isProcessing && (
                   <>
-                    {/* 扫描线 */}
+                    {/* 扫描线 - 使用 top 动画实现容器高度移动 */}
                     <div className='absolute inset-0 overflow-hidden pointer-events-none z-10'>
-                      <div className='absolute left-4 right-4 top-0 h-0.5 bg-primary shadow-glow-primary-md animate-scan' />
+                      <div
+                        className='absolute left-4 right-4 h-0.5 bg-primary shadow-glow-primary-md'
+                        style={{
+                          animation: 'scanLine 2.5s ease-in-out infinite',
+                        }}
+                      />
                     </div>
                     {/* 提取中文案 */}
                     <div className='absolute bottom-6 left-0 right-0 z-20 flex items-center justify-center gap-2'>

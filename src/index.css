@@ -83,3 +83,17 @@
     opacity: 0;
   }
 }
+
+/* 扫描线 - 使用 top 属性实现容器高度移动 */
+@keyframes scanLine {
+  0% {
+    top: 0%;
+    opacity: 0;
+  }
+  5% { opacity: 1; }
+  95% { opacity: 1; }
+  100% {
+    top: calc(100% - 2px);
+    opacity: 0;
+  }
+}
