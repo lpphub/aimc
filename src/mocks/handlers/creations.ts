@@ -13,6 +13,18 @@ function success<T>(data: T): ApiResponse<T> {
   return { code: 0, message: 'success', data }
 }
 
+function errorResponse<T = null>(code: number, message: string, status: number) {
+  return HttpResponse.json<ApiResponse<T>>({ code, message, data: null as T }, { status })
+}
+
+function badRequest<T = null>(message: string) {
+  return errorResponse<T>(400, message, 400)
+}
+
+function serverError<T = null>(message: string) {
+  return errorResponse<T>(500, message, 500)
+}
+
 const shouldFailRandomly = () => Math.random() < 0.1
 
 export const creationsHandlers = [
@@ -23,11 +35,11 @@ export const creationsHandlers = [
       const { prompt } = await request.json()
 
       if (!prompt?.trim()) {
-        return HttpResponse.json({ code: 400, message: '请输入提示词' }, { status: 400 })
+        return badRequest('请输入提示词')
       }
 
       if (shouldFailRandomly()) {
-        return HttpResponse.json({ code: 500, message: '服务暂时不可用，请重试' }, { status: 500 })
+        return serverError('服务暂时不可用，请重试')
       }
 
       return HttpResponse.json(
@@ -47,11 +59,11 @@ export const creationsHandlers = [
     const body = await request.json()
 
     if (!body.prompt?.trim()) {
-      return HttpResponse.json({ code: 400, message: '请输入提示词' }, { status: 400 })
+      return badRequest('请输入提示词')
     }
 
     if (shouldFailRandomly()) {
-      return HttpResponse.json({ code: 500, message: '服务暂时不可用，请重试' }, { status: 500 })
+      return serverError('服务暂时不可用，请重试')
     }
 
     const { aspectRatio } = body
@@ -84,14 +96,11 @@ export const creationsHandlers = [
       }
 
       if (!hasValidInput) {
-        return HttpResponse.json(
-          { code: 400, message: '请上传图片或提供图片链接' },
-          { status: 400 }
-        )
+        return badRequest('请上传图片或提供图片链接')
       }
 
       if (shouldFailRandomly()) {
-        return HttpResponse.json({ code: 500, message: '服务暂时不可用，请重试' }, { status: 500 })
+        return serverError('服务暂时不可用，请重试')
       }
 
       return HttpResponse.json(
@@ -115,11 +124,11 @@ export const creationsHandlers = [
       const file = formData.get('file') as File | null
 
       if (!prompt?.trim()) {
-        return HttpResponse.json({ code: 400, message: '请输入提示词' }, { status: 400 })
+        return badRequest('请输入提示词')
       }
 
       if (shouldFailRandomly()) {
-        return HttpResponse.json({ code: 500, message: '服务暂时不可用，请重试' }, { status: 500 })
+        return serverError('服务暂时不可用，请重试')
       }
 
       console.log('[Mock] Poster generation:', {
