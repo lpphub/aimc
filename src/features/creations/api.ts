@@ -15,7 +15,22 @@ export const creationsApi = {
 
   generateImage: (data: GenerateImageReq) => api.post<GenerateImageResp>('creations/image', data),
 
-  ocr: (data: OcrReq) => api.post<OcrResp>('creations/ocr', data),
+  ocr: async (data: OcrReq): Promise<OcrResp> => {
+    if (!data.file && !data.imageUrl) {
+      throw new Error('请上传文件或提供图片地址')
+    }
+
+    if (data.file) {
+      const formData = new FormData()
+      formData.append('file', data.file)
+      if (data.imageUrl) formData.append('imageUrl', data.imageUrl)
+      const res = await apiClient.post('creations/ocr', { body: formData })
+      return unwrap<OcrResp>(res)
+    }
+
+    const res = await apiClient.post('creations/ocr', { json: { imageUrl: data.imageUrl } })
+    return unwrap<OcrResp>(res)
+  },
 
   generatePoster: async (data: GeneratePosterReq, file?: File): Promise<GeneratePosterResp> => {
     const formData = new FormData()
