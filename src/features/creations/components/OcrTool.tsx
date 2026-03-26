@@ -143,26 +143,19 @@ export function OcrTool({ onBack }: OcrToolProps) {
                   className='absolute inset-0 w-full h-full object-contain p-4'
                 />
 
-                {/* 扫描线动画 */}
+                {/* 扫描线动画 + 提取中状态 */}
                 {isProcessing && (
-                  <div className='absolute inset-0 overflow-hidden pointer-events-none z-10'>
-                    <div className='absolute left-0 right-0 h-1 bg-linear-to-r from-transparent via-primary to-transparent shadow-glow-primary-md animate-scan' />
-                    {/* 扫描区域高亮 */}
-                    <div className='absolute inset-0 bg-primary/5 animate-pulse' />
-                  </div>
-                )}
-
-                {/* 提取中状态 */}
-                {isProcessing && (
-                  <div className='absolute inset-0 z-20 flex flex-col items-center justify-center bg-background/40 backdrop-blur-sm'>
-                    <div className='w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center mb-4 animate-pulse'>
-                      <ScanText className='w-10 h-10 text-primary' />
+                  <>
+                    {/* 扫描线 */}
+                    <div className='absolute inset-0 overflow-hidden pointer-events-none z-10'>
+                      <div className='absolute left-4 right-4 top-0 h-0.5 bg-primary shadow-glow-primary-md animate-scan' />
                     </div>
-                    <p className='font-sans text-sm font-bold tracking-widest text-primary uppercase animate-pulse'>
-                      SCANNING...
-                    </p>
-                    <p className='text-xs text-muted-foreground mt-2'>正在识别文字内容</p>
-                  </div>
+                    {/* 提取中文案 */}
+                    <div className='absolute bottom-6 left-0 right-0 z-20 flex items-center justify-center gap-2'>
+                      <div className='w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin' />
+                      <span className='font-sans text-sm font-bold text-primary'>提取中...</span>
+                    </div>
+                  </>
                 )}
 
                 {/* Hover 显示提取按钮 (仅未处理时显示) */}
