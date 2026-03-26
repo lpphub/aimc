@@ -12,7 +12,20 @@
       "Bash(pnpm lint:*)",
       "Bash(pnpm format:*)",
       "Bash(pnpm build:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git:*)",
+      "Bash(npx biome:*)",
+      "Bash(pnpm exec:*)",
+      "Bash(pnpm biome:*)",
+      "Bash(grep -n \"from ''@/lib/api''\" src/features/creations/components/OcrTool.tsx)",
+      "Bash(grep -n \"apiClient\\\\|unwrap\" src/features/creations/components/*.tsx)",
+      "Skill(agent-browser)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173/)",
+      "Bash(pkill -f \"vite --host\")",
+      "Bash(pkill -f 'vite --host')",
+      "Bash(agent-browser open:*)",
+      "Bash(agent-browser wait:*)",
+      "Bash(agent-browser snapshot:*)"
     ]
   }
 }

@@ -1,7 +1,5 @@
 import api, { apiClient, unwrap } from '@/lib/api'
 import type {
-  GenerateImageReq,
-  GenerateImageResp,
   GeneratePosterReq,
   GeneratePosterResp,
   GenerateTextReq,
@@ -12,8 +10,6 @@ import type {
 
 export const creationsApi = {
   generateText: (data: GenerateTextReq) => api.post<GenerateTextResp>('creations/text', data),
-
-  generateImage: (data: GenerateImageReq) => api.post<GenerateImageResp>('creations/image', data),
 
   ocr: async (data: OcrReq): Promise<OcrResp> => {
     if (!data.file && !data.imageUrl) {

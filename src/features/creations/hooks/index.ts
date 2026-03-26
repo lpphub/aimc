@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { creationsApi } from '../api'
-import type { GenerateImageReq, GeneratePosterReq, GenerateTextReq, OcrReq } from '../types'
+import type { GeneratePosterReq, GenerateTextReq, OcrReq } from '../types'
 
 export const creationsKeys = {
   all: ['creations'] as const,
@@ -12,16 +12,6 @@ export function useGenerateText() {
     mutationFn: (data: GenerateTextReq) => creationsApi.generateText(data),
     onError: (error: unknown) => {
       const message = error instanceof Error ? error.message : '文案生成失败'
-      toast.error(message)
-    },
-  })
-}
-
-export function useGenerateImage() {
-  return useMutation({
-    mutationFn: (data: GenerateImageReq) => creationsApi.generateImage(data),
-    onError: (error: unknown) => {
-      const message = error instanceof Error ? error.message : '图片生成失败'
       toast.error(message)
     },
   })

@@ -8,16 +8,6 @@ export interface GenerateTextResp {
   content: string
 }
 
-export interface GenerateImageReq {
-  prompt: string
-  aspectRatio: string
-  engine?: string
-}
-
-export interface GenerateImageResp {
-  imageUrl: string
-}
-
 export interface OcrReq {
   imageUrl?: string
   file?: File

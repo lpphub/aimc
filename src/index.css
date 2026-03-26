@@ -60,38 +60,23 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  --animate-scan: scan 3s linear infinite;
-
-  --shadow-glow-primary: 0 0 30px color-mix(in srgb, var(--primary) 10%, transparent);
   --shadow-glow-primary-sm: 0 0 20px color-mix(in srgb, var(--primary) 15%, transparent);
   --shadow-glow-primary-md: 0 0 20px color-mix(in srgb, var(--primary) 20%, transparent);
   --shadow-glow-primary-lg: 0 8px 30px color-mix(in srgb, var(--secondary-container) 30%, transparent);
   --shadow-glow-primary-lg-hover: 0 12px 40px color-mix(in srgb, var(--secondary-container) 50%, transparent);
   --shadow-glow-secondary: 0 0 20px color-mix(in srgb, var(--secondary-container) 15%, transparent);
   --shadow-elevation: 0 0 40px color-mix(in srgb, var(--inverse-on-surface) 30%, transparent);
+
+  --animate-scan: scan 2s ease-in-out infinite alternate;
 }
 
 @keyframes scan {
   0% {
-    transform: translateY(0%);
+    top: 0%;
     opacity: 0;
   }
   10% { opacity: 1; }
   90% { opacity: 1; }
-  100% {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-}
-
-/* 扫描线 - 使用 top 属性实现容器高度移动 */
-@keyframes scanLine {
-  0% {
-    top: 0%;
-    opacity: 0;
-  }
-  5% { opacity: 1; }
-  95% { opacity: 1; }
   100% {
     top: calc(100% - 2px);
     opacity: 0;

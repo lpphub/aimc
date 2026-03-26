@@ -1,6 +1,5 @@
 import { delay, HttpResponse, http } from 'msw'
 import type {
-  GenerateImageResp,
   GeneratePosterResp,
   GenerateTextResp,
   OcrResp,
@@ -31,7 +30,7 @@ export const creationsHandlers = [
   http.post<never, { prompt: string }, ApiResponse<GenerateTextResp>>(
     `${API_BASE}/creations/text`,
     async ({ request }) => {
-      await delay(1500)
+      await delay(3000)
       const { prompt } = await request.json()
 
       if (!prompt?.trim()) {
@@ -50,38 +49,10 @@ export const creationsHandlers = [
     }
   ),
 
-  http.post<
-    never,
-    { prompt: string; aspectRatio: string; engine?: string },
-    ApiResponse<GenerateImageResp>
-  >(`${API_BASE}/creations/image`, async ({ request }) => {
-    await delay(2000)
-    const body = await request.json()
-
-    if (!body.prompt?.trim()) {
-      return badRequest('请输入提示词')
-    }
-
-    if (shouldFailRandomly()) {
-      return serverError('服务暂时不可用，请重试')
-    }
-
-    const { aspectRatio } = body
-    const [w, h] = aspectRatio.split(':').map(Number)
-    const width = 400
-    const height = Math.round((width * h) / w)
-
-    return HttpResponse.json(
-      success({
-        imageUrl: `https://picsum.photos/${width}/${height}?random=${Date.now()}`,
-      })
-    )
-  }),
-
   http.post<never, { imageUrl?: string }, ApiResponse<OcrResp>>(
     `${API_BASE}/creations/ocr`,
     async ({ request }) => {
-      await delay(1500)
+      await delay(5000)
 
       const contentType = request.headers.get('content-type') || ''
       let hasValidInput = false
@@ -115,7 +86,7 @@ export const creationsHandlers = [
   http.post<never, never, ApiResponse<GeneratePosterResp>>(
     `${API_BASE}/creations/poster`,
     async ({ request }) => {
-      await delay(2500)
+      await delay(6000)
       const formData = await request.formData()
       const prompt = formData.get('prompt') as string
       const aspectRatio = formData.get('aspectRatio') as string

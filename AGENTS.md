@@ -17,7 +17,7 @@
 - `pnpm dev` - Start dev server (Vite)
 - `pnpm preview` - Preview production build
 - `pnpm lint` - Lint with Biome
-- `pnpm lint:fix` - Fix linting issues
+- `pnpm lint:fix` - Fix linting issues with Biome
 - `pnpm format` - Format code with Biome
 
 ## Structure
@@ -36,9 +36,7 @@ src/features/<feature>/
 - types.ts
 - hooks/
 - components/
-- model/ (optional)
 - index.ts
-
 
 ## Layer Rules
 
@@ -73,15 +71,6 @@ export const xxxKeys = {
   all: ["xxx"] as const,
 }
 
-## State
-
-Zustand ONLY for:
-- auth
-- theme
-- locale
-
-NEVER store server data
-
 ## Styling
 
 - Tailwind only
@@ -112,7 +101,3 @@ Theme:
 - cross-feature imports
 - layer violations
 - custom server state
-
-## Workflow
-
-- typecheck after changes
