@@ -78,7 +78,7 @@ export const creationsHandlers = [
     )
   }),
 
-  http.post<never, { imageUrl: string }, ApiResponse<OcrResp>>(
+  http.post<never, { imageUrl?: string }, ApiResponse<OcrResp>>(
     `${API_BASE}/creations/ocr`,
     async ({ request }) => {
       await delay(1500)
