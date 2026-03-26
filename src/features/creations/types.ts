@@ -19,7 +19,8 @@ export interface GenerateImageResp {
 }
 
 export interface OcrReq {
-  imageUrl: string
+  imageUrl?: string
+  file?: File
 }
 
 export interface OcrResp {
