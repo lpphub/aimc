@@ -85,6 +85,10 @@ export interface OcrReq {
 
 ```ts
 ocr: async (data: OcrReq): Promise<OcrResp> => {
+  if (!data.file && !data.imageUrl) {
+    throw new Error('请上传文件或提供图片地址')
+  }
+
   if (data.file) {
     // FormData upload for local files
     const formData = new FormData()
@@ -93,8 +97,10 @@ ocr: async (data: OcrReq): Promise<OcrResp> => {
     const res = await apiClient.post('creations/ocr', { body: formData })
     return unwrap<OcrResp>(res)
   }
-  // JSON body for URL-based OCR
-  return api.post<OcrResp>('creations/ocr', { imageUrl: data.imageUrl })
+
+  // JSON body for URL-based OCR (use apiClient for consistency)
+  const res = await apiClient.post('creations/ocr', { json: { imageUrl: data.imageUrl } })
+  return unwrap<OcrResp>(res)
 }
 ```
 
@@ -195,17 +201,29 @@ http.post(`${API_BASE}/creations/text`, async ({ request }) => {
 http.post(`${API_BASE}/creations/ocr`, async ({ request }) => {
   await delay(1500)
 
-  let file: File | null = null
-
   const contentType = request.headers.get('content-type') || ''
+
   if (contentType.includes('multipart/form-data')) {
+    // FormData upload
     const formData = await request.formData()
-    file = formData.get('file') as File | null
+    const file = formData.get('file') as File | null
+
+    if (!file) {
+      return HttpResponse.json(
+        { code: 400, message: '请上传文件', data: null },
+        { status: 400 }
+      )
+    }
+
+    return HttpResponse.json(success({ text: '...', confidence: 0.97 }))
   }
 
-  if (!file) {
+  // JSON body with imageUrl
+  const { imageUrl } = await request.json()
+
+  if (!imageUrl) {
     return HttpResponse.json(
-      { code: 400, message: '请上传文件', data: null },
+      { code: 400, message: '请提供图片地址', data: null },
       { status: 400 }
     )
   }
