@@ -1,10 +1,9 @@
 import { Copy, Download, FileUp, ScanText } from 'lucide-react'
 import { useCallback, useRef, useState } from 'react'
 import { toast } from 'sonner'
-import { apiClient, unwrap } from '@/lib/api'
 import { cn } from '@/lib/utils'
 import { Button } from '@/shared/components/ui/button'
-import type { OcrResp } from '../types'
+import { useOcr } from '../hooks'
 import { ToolHeader } from './ToolGrid'
 
 interface OcrToolProps {
@@ -15,42 +14,42 @@ export function OcrTool({ onBack }: OcrToolProps) {
   const [file, setFile] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [result, setResult] = useState<string | null>(null)
-  const [isProcessing, setIsProcessing] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const handleFile = useCallback(async (f: File) => {
-    if (!f.type.startsWith('image/') && f.type !== 'application/pdf') {
-      toast.error('仅支持 JPG、PNG、PDF 格式')
-      return
-    }
-    if (f.size > 20 * 1024 * 1024) {
-      toast.error('文件大小不能超过 20MB')
-      return
-    }
-    setFile(f)
-    setResult(null)
+  const ocr = useOcr()
+  const isProcessing = ocr.isPending
 
-    const objectUrl = URL.createObjectURL(f)
-    if (f.type.startsWith('image/')) {
-      setPreviewUrl(objectUrl)
-    } else {
-      setPreviewUrl(null)
-    }
+  const handleFile = useCallback(
+    async (f: File) => {
+      if (!f.type.startsWith('image/') && f.type !== 'application/pdf') {
+        toast.error('仅支持 JPG、PNG、PDF 格式')
+        return
+      }
+      if (f.size > 20 * 1024 * 1024) {
+        toast.error('文件大小不能超过 20MB')
+        return
+      }
 
-    setIsProcessing(true)
-    try {
-      const res = await apiClient.post('creations/ocr', {
-        json: { imageUrl: objectUrl },
-      })
-      const data = await unwrap<OcrResp>(res)
-      setResult(data.text)
-      toast.success('文字提取完成')
-    } catch {
-      toast.error('文字提取失败')
-    } finally {
-      setIsProcessing(false)
-    }
-  }, [])
+      setFile(f)
+      setResult(null)
+
+      const objectUrl = URL.createObjectURL(f)
+      if (f.type.startsWith('image/')) {
+        setPreviewUrl(objectUrl)
+      } else {
+        setPreviewUrl(null)
+      }
+
+      try {
+        const data = await ocr.mutateAsync({ file: f })
+        setResult(data.text)
+        toast.success('文字提取完成')
+      } catch {
+        // Error handled by hook onError
+      }
+    },
+    [ocr]
+  )
 
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
