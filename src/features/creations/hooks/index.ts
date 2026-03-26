@@ -10,18 +10,30 @@ export const creationsKeys = {
 export function useGenerateText() {
   return useMutation({
     mutationFn: (data: GenerateTextReq) => creationsApi.generateText(data),
+    onError: (error: unknown) => {
+      const message = error instanceof Error ? error.message : '文案生成失败'
+      toast.error(message)
+    },
   })
 }
 
 export function useGenerateImage() {
   return useMutation({
     mutationFn: (data: GenerateImageReq) => creationsApi.generateImage(data),
+    onError: (error: unknown) => {
+      const message = error instanceof Error ? error.message : '图片生成失败'
+      toast.error(message)
+    },
   })
 }
 
 export function useOcr() {
   return useMutation({
     mutationFn: (data: OcrReq) => creationsApi.ocr(data),
+    onError: (error: unknown) => {
+      const message = error instanceof Error ? error.message : '文字提取失败'
+      toast.error(message)
+    },
   })
 }
 
