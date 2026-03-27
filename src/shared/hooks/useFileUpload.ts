@@ -10,11 +10,18 @@ export interface UseFileUploadOptions {
   uploadDelay?: number
   /** 是否生成预览 URL，默认 true */
   generatePreview?: boolean
+  /** 是否支持多文件，默认 false */
+  multiple?: boolean
   /** 自定义验证错误消息 */
   errorMessage?: {
     type?: string
     size?: string
   }
+}
+
+export interface FileUploadResult {
+  file: File
+  previewUrl: string | null
 }
 
 export interface UseFileUploadReturn {
@@ -34,6 +41,8 @@ export interface UseFileUploadReturn {
   clearFile: () => void
   /** 触发文件选择对话框 */
   openFilePicker: () => void
+  /** 验证单个文件 */
+  validateFile: (file: File) => boolean
 }
 
 const DEFAULT_ACCEPT = ['image/*', 'application/pdf']
@@ -147,5 +156,6 @@ export function useFileUpload(options: UseFileUploadOptions = {}): UseFileUpload
     handleDrop,
     clearFile,
     openFilePicker,
+    validateFile,
   }
 }

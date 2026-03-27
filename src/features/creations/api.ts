@@ -9,7 +9,12 @@ import type {
 } from './types'
 
 export const creationsApi = {
-  generateText: (data: GenerateTextReq) => api.post<GenerateTextResp>('creations/text', data),
+  generateText: (data: GenerateTextReq) => api.post<GenerateTextResp>('creations/text', {
+    prompt: data.prompt,
+    productDesc: data.productDesc,
+    targetAudience: data.targetAudience,
+    tone: data.tone,
+  }),
 
   ocr: async (data: OcrReq): Promise<OcrResp> => {
     if (!data.file && !data.imageUrl) {

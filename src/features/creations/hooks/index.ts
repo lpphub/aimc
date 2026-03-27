@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
+import { createMutationErrorHandler } from '@/shared/utils/query-helpers'
 import { creationsApi } from '../api'
 import type { GeneratePosterReq, GenerateTextReq, OcrReq } from '../types'
 
@@ -10,20 +10,14 @@ export const creationsKeys = {
 export function useGenerateText() {
   return useMutation({
     mutationFn: (data: GenerateTextReq) => creationsApi.generateText(data),
-    onError: (error: unknown) => {
-      const message = error instanceof Error ? error.message : '文案生成失败'
-      toast.error(message)
-    },
+    onError: createMutationErrorHandler('文案生成失败'),
   })
 }
 
 export function useOcr() {
   return useMutation({
     mutationFn: (data: OcrReq) => creationsApi.ocr(data),
-    onError: (error: unknown) => {
-      const message = error instanceof Error ? error.message : '文字提取失败'
-      toast.error(message)
-    },
+    onError: createMutationErrorHandler('文字提取失败'),
   })
 }
 
@@ -35,9 +29,6 @@ export function useGeneratePoster() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: creationsKeys.all })
     },
-    onError: (error: unknown) => {
-      const message = error instanceof Error ? error.message : '海报生成失败'
-      toast.error(message)
-    },
+    onError: createMutationErrorHandler('海报生成失败'),
   })
 }

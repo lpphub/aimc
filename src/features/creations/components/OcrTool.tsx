@@ -1,5 +1,5 @@
 import { Copy, Download, FileUp, ScanText, Sparkles } from 'lucide-react'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 import { Button } from '@/shared/components/ui/button'
@@ -63,6 +63,8 @@ export function OcrTool({ onBack }: OcrToolProps) {
     }
   }, [result])
 
+  const resultLines = useMemo(() => result?.split('\n') ?? [], [result])
+
   return (
     <div className='flex-1 flex flex-col px-8 pb-8'>
       <ToolHeader title='图片文字提取' icon={ScanText} onBack={onBack} />
@@ -116,7 +118,7 @@ export function OcrTool({ onBack }: OcrToolProps) {
               </div>
             )}
 
-            {/* 预览图 + Hover 提取按钮 */}
+            {/* 预览图 */}
             {previewUrl && !isUploading && (
               <>
                 {/* 图片容器 + 扫描线 */}
@@ -139,33 +141,34 @@ export function OcrTool({ onBack }: OcrToolProps) {
                   </div>
                 </div>
 
-                {/* 提取中文案 */}
-                {isProcessing && (
-                  <div className='absolute bottom-6 left-0 right-0 z-20 flex items-center justify-center gap-2'>
-                    <div className='w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin' />
-                    <span className='font-sans text-sm font-bold text-primary'>提取中...</span>
-                  </div>
-                )}
-
-                {/* Hover 显示提取按钮 (仅未处理时显示) */}
-                {!isProcessing && !result && (
-                  <div className='absolute inset-0 z-10 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300'>
-                    <button
-                      type='button'
-                      onClick={handleExtract}
-                      className='flex flex-col items-center gap-3 px-8 py-6 rounded-2xl bg-primary text-primary-foreground shadow-glow-primary-lg hover:scale-105 transition-transform'
-                    >
-                      <Sparkles className='w-8 h-8' />
-                      <span className='font-sans font-bold tracking-widest uppercase'>提取文字</span>
-                    </button>
-                  </div>
-                )}
-
                 {/* 已完成标记 */}
                 {result && !isProcessing && (
-                  <div className='absolute top-4 right-4 z-10 px-3 py-1.5 rounded-full bg-primary/20 text-primary text-xs font-bold flex items-center gap-1.5'>
+                  <div className='absolute top-4 left-1/2 -translate-x-1/2 z-10 px-3 py-1.5 rounded-full bg-primary/20 text-primary text-xs font-bold flex items-center gap-1.5'>
                     <ScanText className='w-3.5 h-3.5' />
                     提取完成
+                  </div>
+                )}
+
+                {/* 底部操作按钮 (有预览时显示) */}
+                {!isProcessing && (
+                  <div className='absolute bottom-4 left-0 right-0 z-10 flex items-center justify-center gap-3'>
+                    <button
+                      type='button'
+                      onClick={openFilePicker}
+                      className='px-4 py-2 rounded-lg bg-background/80 backdrop-blur-sm text-muted-foreground hover:text-primary text-sm border border-border/30 hover:border-primary/30 transition-all'
+                    >
+                      重新上传
+                    </button>
+                    {!result && (
+                      <button
+                        type='button'
+                        onClick={handleExtract}
+                        className='px-5 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-bold flex items-center gap-2 hover:opacity-90 transition-all shadow-glow-primary-sm'
+                      >
+                        <Sparkles className='w-4 h-4' />
+                        提取文字
+                      </button>
+                    )}
                   </div>
                 )}
               </>
@@ -197,19 +200,6 @@ export function OcrTool({ onBack }: OcrToolProps) {
                 >
                   选择文件
                 </Button>
-              </div>
-            )}
-
-            {/* 重新上传按钮 (有预览时显示) */}
-            {previewUrl && !isUploading && !isProcessing && (
-              <div className='absolute bottom-4 left-4 z-10'>
-                <button
-                  type='button'
-                  onClick={openFilePicker}
-                  className='px-4 py-2 rounded-lg bg-background/80 backdrop-blur-sm text-muted-foreground hover:text-primary text-sm border border-border/30 hover:border-primary/30 transition-all'
-                >
-                  重新上传
-                </button>
               </div>
             )}
           </section>
@@ -249,7 +239,7 @@ export function OcrTool({ onBack }: OcrToolProps) {
             <div className='flex-1 p-5 overflow-y-auto'>
               {result ? (
                 <div className='space-y-1 text-muted-foreground text-sm leading-relaxed'>
-                  {result.split('\n').map((line, i) => (
+                  {resultLines.map((line, i) => (
                     <div
                       key={line || `empty-${i}`}
                       className='group cursor-text p-2 hover:bg-surface-container-high/40 rounded transition-colors border-l border-transparent hover:border-primary/30'

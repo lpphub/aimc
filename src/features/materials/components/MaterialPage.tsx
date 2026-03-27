@@ -1,7 +1,7 @@
 import { Filter, Search } from 'lucide-react'
-import { useRef, useState } from 'react'
-import { toast } from 'sonner'
+import { useState } from 'react'
 import { cn } from '@/lib/utils'
+import { useFileUpload } from '@/shared/hooks'
 import { useDeleteMaterial, useMaterials, useTagGroups, useUploadMaterial } from '../hooks'
 import { MaterialCard } from './MaterialCard'
 import { MaterialToolbar } from './MaterialToolbar'
@@ -79,7 +79,6 @@ export function MaterialPage() {
   const [search, setSearch] = useState('')
   const [filterTagIds, setFilterTagIds] = useState<number[]>([])
   const [showFilterModal, setShowFilterModal] = useState(false)
-  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const { data: groups = [] } = useTagGroups()
   const allTags = groups.flatMap(g => g.tags)
@@ -96,6 +95,16 @@ export function MaterialPage() {
   const upload = useUploadMaterial()
   const deleteMaterial = useDeleteMaterial()
 
+  const { fileInputRef, validateFile, openFilePicker } = useFileUpload({
+    accept: ['image/*', 'video/*'],
+    maxSize: 20 * 1024 * 1024,
+    generatePreview: false,
+    errorMessage: {
+      type: '仅支持图片和视频格式',
+      size: '文件大小不能超过 20MB',
+    },
+  })
+
   const handleSelect = (id: string) => {
     setSelectedIds(prev => (prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]))
   }
@@ -105,13 +114,9 @@ export function MaterialPage() {
     if (!files?.length) return
 
     for (const file of Array.from(files)) {
-      const isImage = file.type.startsWith('image/')
-      const isVideo = file.type.startsWith('video/')
-      if (!isImage && !isVideo) {
-        toast.error(`${file.name} 不是支持的格式`)
-        continue
+      if (validateFile(file)) {
+        upload.mutate({ file })
       }
-      upload.mutate({ file })
     }
     e.target.value = ''
   }
@@ -156,7 +161,7 @@ export function MaterialPage() {
           ))}
           <button
             type='button'
-            onClick={() => fileInputRef.current?.click()}
+            onClick={openFilePicker}
             className='aspect-4/5 flex flex-col items-center justify-center gap-2 bg-card/30 border-dashed border border-border/30 hover:border-primary/50 hover:bg-primary/5 transition-all rounded-md group'
           >
             <div className='w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-500'>
@@ -173,7 +178,7 @@ export function MaterialPage() {
           </button>
         </div>
       ) : (
-        <EmptyState onUploadClick={() => fileInputRef.current?.click()} />
+        <EmptyState onUploadClick={openFilePicker} />
       )}
 
       <MaterialToolbar

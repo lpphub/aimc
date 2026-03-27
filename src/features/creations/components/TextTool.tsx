@@ -1,13 +1,14 @@
 import { Bolt, Copy, Info, Type } from 'lucide-react'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 import { Button } from '@/shared/components/ui/button'
 import { Textarea } from '@/shared/components/ui/textarea'
 import { useGenerateText } from '../hooks'
+import type { BrandTone } from '../types'
 import { ToolHeader } from './ToolGrid'
 
-const brandTones = ['专业严谨', '风趣幽默', '极简主义', '煽动性强']
+const brandTones: BrandTone[] = ['专业严谨', '风趣幽默', '极简主义', '煽动性强']
 
 interface TextToolProps {
   onBack: () => void
@@ -16,13 +17,13 @@ interface TextToolProps {
 export function TextTool({ onBack }: TextToolProps) {
   const [productDesc, setProductDesc] = useState('')
   const [targetAudience, setTargetAudience] = useState('')
-  const [selectedTone, setSelectedTone] = useState('专业严谨')
+  const [selectedTone, setSelectedTone] = useState<BrandTone>('专业严谨')
   const [generatedContent, setGeneratedContent] = useState<string | null>(null)
 
   const generateText = useGenerateText()
   const isGenerating = generateText.isPending
 
-  const handleGenerate = async () => {
+  const handleGenerate = useCallback(async () => {
     const prompt = [productDesc, targetAudience, selectedTone].filter(Boolean).join('\n')
     if (!prompt.trim()) {
       toast.error('请输入产品描述')
@@ -31,20 +32,25 @@ export function TextTool({ onBack }: TextToolProps) {
 
     setGeneratedContent(null)
     try {
-      const result = await generateText.mutateAsync({ prompt })
+      const result = await generateText.mutateAsync({
+        prompt,
+        productDesc: productDesc.trim() || undefined,
+        targetAudience: targetAudience.trim() || undefined,
+        tone: selectedTone,
+      })
       setGeneratedContent(result.content)
       toast.success('文案生成成功')
     } catch {
-      // Error handled by potential hook onError
+      // Error handled by hook onError
     }
-  }
+  }, [productDesc, targetAudience, selectedTone, generateText])
 
-  const handleCopy = () => {
+  const handleCopy = useCallback(() => {
     if (generatedContent) {
       navigator.clipboard.writeText(generatedContent)
       toast.success('已复制到剪贴板')
     }
-  }
+  }, [generatedContent])
 
   return (
     <div className='flex-1 flex flex-col px-8'>

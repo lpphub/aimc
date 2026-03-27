@@ -1,10 +1,12 @@
 import { Bolt, Download, Image, Maximize2, Palette, Plus, Share, Upload, X } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 import { Button } from '@/shared/components/ui/button'
 import { Dialog, DialogContent } from '@/shared/components/ui/dialog'
 import { Textarea } from '@/shared/components/ui/textarea'
+import { useFileUpload } from '@/shared/hooks'
+import type { AspectRatio, PosterStyle } from '../types'
 import { useGeneratePoster } from '../hooks'
 import { ToolHeader } from './ToolGrid'
 
@@ -12,7 +14,7 @@ interface PosterToolProps {
   onBack: () => void
 }
 
-const aspectRatios = ['9:16', '3:4', '1:1']
+const aspectRatios: AspectRatio[] = ['9:16', '3:4', '1:1']
 
 const colorTones = [
   { color: '#00F2FF', label: '赛博青' },
@@ -21,16 +23,16 @@ const colorTones = [
   { color: '#FAF6F9', label: '极光白' },
 ]
 
-const stylePresets = [
+const stylePresets: { id: PosterStyle; name: string }[] = [
   { id: 'cyberpunk', name: '赛博' },
   { id: 'minimalist', name: '极简' },
   { id: 'hyperreal', name: '写实' },
 ]
 
 interface PosterConfig {
-  aspectRatio: string
+  aspectRatio: AspectRatio
   colorTone: string
-  style: string
+  style: PosterStyle
 }
 
 interface PosterPreviewProps {
@@ -270,57 +272,35 @@ export function PosterTool({ onBack }: PosterToolProps) {
     style: 'cyberpunk',
   })
   const [prompt, setPrompt] = useState('')
-  const [file, setFile] = useState<File | null>(null)
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [resultUrl, setResultUrl] = useState<string | null>(null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const { file, previewUrl, fileInputRef, selectFile, clearFile } = useFileUpload({
+      accept: ['image/png', 'image/jpeg', 'image/webp'],
+      maxSize: 10 * 1024 * 1024,
+      errorMessage: {
+        type: '仅支持 PNG, JPG, WebP 格式',
+        size: '文件大小不能超过 10MB',
+      },
+    })
 
   const generatePoster = useGeneratePoster()
 
   const isGenerating = generatePoster.isPending
 
-  const validateFile = (f: File): boolean => {
-    const validTypes = ['image/png', 'image/jpeg', 'image/webp']
-    if (!validTypes.includes(f.type)) {
-      toast.error('仅支持 PNG, JPG, WebP 格式')
-      return false
-    }
-    if (f.size > 10 * 1024 * 1024) {
-      toast.error('文件大小不能超过 10MB')
-      return false
-    }
-    return true
-  }
-
-  useEffect(() => {
-    return () => {
-      if (previewUrl) URL.revokeObjectURL(previewUrl)
-    }
-  }, [previewUrl])
-
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0]
-    if (!f) return
-    if (!validateFile(f)) return
-
-    if (previewUrl) URL.revokeObjectURL(previewUrl)
-
-    setFile(f)
-    setPreviewUrl(URL.createObjectURL(f))
-    setResultUrl(null)
-  }
-
-  const handleDelete = () => {
-    if (previewUrl) URL.revokeObjectURL(previewUrl)
-    setFile(null)
-    setPreviewUrl(null)
-    setResultUrl(null)
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ''
+    if (f) {
+      selectFile(f)
+      setResultUrl(null)
     }
-  }
+  }, [selectFile])
 
-  const handleGenerate = async () => {
+  const handleDelete = useCallback(() => {
+    clearFile()
+    setResultUrl(null)
+  }, [clearFile])
+
+  const handleGenerate = useCallback(async () => {
     if (!prompt.trim()) {
       toast.error('请输入提示词')
       return
@@ -343,9 +323,9 @@ export function PosterTool({ onBack }: PosterToolProps) {
     } catch {
       // Error toast handled by hook onError
     }
-  }
+  }, [prompt, config, file, generatePoster])
 
-  const handleDownload = async () => {
+  const handleDownload = useCallback(async () => {
     if (!resultUrl) return
     try {
       const response = await fetch(resultUrl)
@@ -355,15 +335,15 @@ export function PosterTool({ onBack }: PosterToolProps) {
       a.href = url
       a.download = 'poster.png'
       a.click()
-      URL.revokeObjectURL(url)
+      setTimeout(() => URL.revokeObjectURL(url), 100)
     } catch {
       toast.error('下载失败')
     }
-  }
+  }, [resultUrl])
 
-  const handleShare = () => {
+  const handleShare = useCallback(() => {
     toast.info('分享功能开发中')
-  }
+  }, [])
 
   return (
     <div className='flex-1 flex flex-col px-8'>
