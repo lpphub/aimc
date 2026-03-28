@@ -9,7 +9,7 @@ export default function CanvasGenerator() {
           <Image className='w-6 h-6 text-secondary-container' />
         </div>
         <div>
-          <h1 className='text-3xl font-bold text-foreground tracking-tight'>画布生成器</h1>
+          <h1 className='text-3xl font-bold text-foreground tracking-tight'>AI绘图</h1>
           <p className='text-sm text-muted-foreground mt-1'>AI 对话生成商品营销图片</p>
         </div>
       </div>

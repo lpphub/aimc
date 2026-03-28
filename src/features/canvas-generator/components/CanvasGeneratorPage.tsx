@@ -4,7 +4,7 @@ import { FloatingChat } from './FloatingChat'
 
 export function CanvasGeneratorPage() {
   return (
-    <div className='relative h-[calc(100vh-64px)]'>
+    <div className='relative h-[calc(100vh-80px)]'>
       <Canvas />
       <FloatingChat />
       <CanvasToolbar />

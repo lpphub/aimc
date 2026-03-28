@@ -17,7 +17,7 @@ export function Sidebar() {
     {
       path: '/canvas',
       icon: Image,
-      label: '画布生成器',
+      label: 'AI绘图',
     },
     {
       path: '/materials',
