@@ -6,6 +6,7 @@ interface CanvasItemProps {
   isSelected: boolean
   onDrag: (id: string, x: number, y: number) => void
   onSelect: (id: string) => void
+  tool?: 'select' | 'hand'
 }
 
 export const CanvasItem = memo(function CanvasItem({
@@ -13,9 +14,13 @@ export const CanvasItem = memo(function CanvasItem({
   isSelected,
   onDrag,
   onSelect,
+  tool = 'select',
 }: CanvasItemProps) {
   const handleMouseDown = useCallback(
     (e: React.MouseEvent) => {
+      // 只有在选择工具模式下才允许选择和拖拽
+      if (tool !== 'select') return
+
       e.stopPropagation()
       onSelect(item.id)
 
@@ -34,19 +39,19 @@ export const CanvasItem = memo(function CanvasItem({
       document.addEventListener('mousemove', handleMouseMove)
       document.addEventListener('mouseup', handleMouseUp)
     },
-    [item.id, item.x, item.y, onDrag, onSelect]
+    [item.id, item.x, item.y, onDrag, onSelect, tool]
   )
 
   return (
-    <button
-      type='button'
-      className={`absolute cursor-move ${isSelected ? 'ring-2 ring-primary' : ''}`}
+    <div
+      className={`absolute ${tool === 'select' ? 'cursor-move' : 'cursor-grab'} ${isSelected && tool === 'select' ? 'ring-2 ring-primary' : ''}`}
       style={{
         left: item.x,
         top: item.y,
         width: item.width,
         height: item.height,
         transform: `rotate(${item.rotation}deg)`,
+        pointerEvents: tool === 'select' ? 'auto' : 'none',
       }}
       onMouseDown={handleMouseDown}
     >
@@ -56,6 +61,6 @@ export const CanvasItem = memo(function CanvasItem({
         className='w-full h-full object-contain pointer-events-none'
         draggable={false}
       />
-    </button>
+    </div>
   )
 })

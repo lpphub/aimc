@@ -35,7 +35,7 @@ export function FloatingChat() {
     if (isExpanded && messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
     }
-  }, [messages, isExpanded])
+  }, [isExpanded])
 
   // 自动调整 textarea 高度
   const adjustTextareaHeight = () => {
@@ -72,11 +72,11 @@ export function FloatingChat() {
     // 添加到画布
     handleAddImage(randomImage, { x: randomX, y: randomY })
 
+    // 只显示文字回复，不显示图片
     const assistantMessage: Message = {
       id: crypto.randomUUID(),
       role: 'assistant',
-      content: `已为您生成图片："${userMessage.content}"`,
-      imageUrl: randomImage,
+      content: `已为您生成图片："${userMessage.content}"\n\n图片已添加到画布上`,
       timestamp: Date.now(),
     }
 
@@ -92,7 +92,7 @@ export function FloatingChat() {
     const userMessage: Message = {
       id: crypto.randomUUID(),
       role: 'user',
-      content: '',
+      content: '[图片]',
       imageUrl,
       timestamp: Date.now(),
     }
@@ -111,11 +111,11 @@ export function FloatingChat() {
     // 添加到画布
     handleAddImage(randomImage, { x: randomX, y: randomY })
 
+    // 只显示文字回复，不显示图片
     const assistantMessage: Message = {
       id: crypto.randomUUID(),
       role: 'assistant',
-      content: '已根据您上传的图片生成新的创意图片',
-      imageUrl: randomImage,
+      content: '已根据您上传的图片生成新的创意图片\n\n图片已添加到画布上',
       timestamp: Date.now(),
     }
 
@@ -275,7 +275,7 @@ export function FloatingChat() {
               onChange={handleFileSelect}
             />
 
-            {/* 输入框 */}
+            {/* 输入框 - 加大尺寸 */}
             <textarea
               ref={textareaRef}
               value={inputValue}
@@ -285,9 +285,9 @@ export function FloatingChat() {
               }}
               onInput={adjustTextareaHeight}
               placeholder='描述你想要的效果...'
-              className='w-full px-4 py-3 pr-14 text-sm bg-transparent border-0 rounded-2xl focus:outline-none focus:ring-0 placeholder:text-muted-foreground/60 resize-none min-h-[44px] max-h-[120px]'
+              className='w-full px-4 py-4 pr-16 text-base bg-transparent border-0 rounded-2xl focus:outline-none focus:ring-0 placeholder:text-muted-foreground/60 resize-none min-h-[80px] max-h-[200px] leading-relaxed'
               disabled={isLoading}
-              rows={1}
+              rows={3}
               onKeyDown={e => {
                 if (e.key === 'Enter' && !e.shiftKey) {
                   e.preventDefault()
@@ -296,31 +296,31 @@ export function FloatingChat() {
               }}
             />
 
-            {/* 上传按钮 */}
+            {/* 上传按钮 - 调整位置 */}
             <button
               type='button'
               onClick={() => fileInputRef.current?.click()}
               disabled={isLoading}
-              className='absolute left-2 bottom-2 p-2 text-muted-foreground/60 hover:text-primary hover:bg-primary/10 rounded-xl transition-all disabled:opacity-40'
+              className='absolute left-3 bottom-3 p-2.5 text-muted-foreground/60 hover:text-primary hover:bg-primary/10 rounded-xl transition-all disabled:opacity-40'
               title='上传图片'
             >
-              <ImagePlus className='w-4 h-4' />
+              <ImagePlus className='w-5 h-5' />
             </button>
 
-            {/* 发送按钮 */}
+            {/* 发送按钮 - 调整位置 */}
             <button
               type='submit'
               disabled={isLoading || !inputValue.trim()}
-              className='absolute right-2 bottom-2 p-2 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-[0_0_20px_rgba(0,242,255,0.3)] hover:shadow-[0_0_30px_rgba(0,242,255,0.5)]'
+              className='absolute right-3 bottom-3 p-2.5 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-[0_0_20px_rgba(0,242,255,0.3)] hover:shadow-[0_0_30px_rgba(0,242,255,0.5)]'
             >
-              <Send className='w-4 h-4' />
+              <Send className='w-5 h-5' />
             </button>
           </div>
-          <div className='flex items-center justify-between mt-2 px-1'>
-            <span className='text-[10px] text-muted-foreground/40'>
+          <div className='flex items-center justify-between mt-3 px-1'>
+            <span className='text-xs text-muted-foreground/40'>
               按 Enter 发送，Shift + Enter 换行
             </span>
-            <span className='text-[10px] text-muted-foreground/40'>支持 JPG、PNG</span>
+            <span className='text-xs text-muted-foreground/40'>支持 JPG、PNG</span>
           </div>
         </form>
       </div>

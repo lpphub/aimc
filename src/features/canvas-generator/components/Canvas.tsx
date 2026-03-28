@@ -115,6 +115,7 @@ export function Canvas({ tool = 'select' }: CanvasProps) {
             isSelected={selectedId === item.id}
             onDrag={handleDrag}
             onSelect={selectItem}
+            tool={tool}
           />
         ))}
       </div>
