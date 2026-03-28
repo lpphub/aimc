@@ -9,6 +9,7 @@ const Landing = lazy(() => import('@/pages/Landing'))
 const Projects = lazy(() => import('@/pages/Projects'))
 const Materials = lazy(() => import('@/pages/Materials'))
 const Creations = lazy(() => import('@/pages/Creations'))
+const CanvasGenerator = lazy(() => import('@/pages/CanvasGenerator'))
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,7 @@ const router = createBrowserRouter([
       { path: '/creations', element: <Creations /> },
       { path: '/materials', element: <Materials /> },
       { path: '/projects', element: <Projects /> },
+      { path: '/canvas', element: <CanvasGenerator /> },
     ],
   },
   {
