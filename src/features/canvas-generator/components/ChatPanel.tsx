@@ -1,82 +1,43 @@
 import { Copy, ImageIcon, MessageSquare, Send, Upload } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { toast } from 'sonner'
-import { canvasGeneratorApi } from '../api'
 import { useCanvas } from '../hooks/useCanvas'
-import type { ChatMessage } from '../types'
+import { useChat } from '../hooks/useChat'
 
 export function ChatPanel() {
-  const [messages, setMessages] = useState<ChatMessage[]>([])
-  const [input, setInput] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [conversationId, setConversationId] = useState<string>()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const { handleAddImage } = useCanvas()
+  const { messages, isLoading, sendMessage } = useChat(handleAddImage)
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [])
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text)
+  const copyToClipboard = async (text: string) => {
+    await navigator.clipboard.writeText(text)
     toast.success('已复制到剪贴板')
   }
 
-  const sendMessage = async (image?: File) => {
-    if (!input.trim() && !image) return
-
-    const userMessage: ChatMessage = {
-      id: crypto.randomUUID(),
-      role: 'user',
-      content: input,
-      imageUrl: image ? URL.createObjectURL(image) : undefined,
-      timestamp: Date.now(),
-    }
-
-    setMessages(prev => [...prev, userMessage])
-    setInput('')
-    setIsLoading(true)
-
-    try {
-      const response = await canvasGeneratorApi.sendMessage({
-        conversationId,
-        message: input,
-        image,
-      })
-
-      setConversationId(response.conversationId)
-
-      const assistantMessage: ChatMessage = {
-        id: crypto.randomUUID(),
-        role: 'assistant',
-        content: response.message.content,
-        timestamp: Date.now(),
-      }
-
-      setMessages(prev => [...prev, assistantMessage])
-
-      if (response.generatedImage?.imageUrl) {
-        handleAddImage(response.generatedImage.imageUrl, response.generatedImage.suggestedPosition)
-      }
-    } catch (error) {
-      console.error('Failed to send message:', error)
-      toast.error('发送消息失败')
-    } finally {
-      setIsLoading(false)
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    const message = formData.get('message') as string
+    if (message.trim()) {
+      await sendMessage(message)
+      e.currentTarget.reset()
     }
   }
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
-      sendMessage(file)
+      await sendMessage('', file)
     }
   }
 
   const formatTime = (timestamp: number) => {
-    const date = new Date(timestamp)
-    return date.toLocaleString('zh-CN', {
+    return new Date(timestamp).toLocaleString('zh-CN', {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
@@ -173,7 +134,7 @@ export function ChatPanel() {
 
       {/* Input area */}
       <div className='p-4 border-t border-border bg-card'>
-        <div className='flex flex-col gap-2'>
+        <form onSubmit={handleSubmit} className='flex flex-col gap-2'>
           {/* Text input */}
           <div className='flex items-center gap-2'>
             <input
@@ -193,17 +154,14 @@ export function ChatPanel() {
             </button>
             <input
               type='text'
-              value={input}
-              onChange={e => setInput(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage()}
+              name='message'
               placeholder='描述你想要的效果，让 AI 搞定所有设计'
               className='flex-1 px-3 py-2 text-sm bg-muted border-0 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 placeholder:text-muted-foreground'
               disabled={isLoading}
             />
             <button
-              type='button'
-              onClick={() => sendMessage()}
-              disabled={isLoading || !input.trim()}
+              type='submit'
+              disabled={isLoading}
               className='p-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors'
             >
               <Send className='w-4 h-4' />
@@ -212,32 +170,32 @@ export function ChatPanel() {
 
           {/* Quick actions */}
           <div className='flex items-center gap-2 px-1'>
-            <button
-              type='button'
-              className='text-xs text-muted-foreground hover:text-secondary transition-colors'
-              onClick={() => setInput('生成场景图')}
-            >
-              生成场景图
-            </button>
+            <QuickActionButton text='生成场景图' />
             <span className='text-border'>|</span>
-            <button
-              type='button'
-              className='text-xs text-muted-foreground hover:text-secondary transition-colors'
-              onClick={() => setInput('生成卖点图')}
-            >
-              生成卖点图
-            </button>
+            <QuickActionButton text='生成卖点图' />
             <span className='text-border'>|</span>
-            <button
-              type='button'
-              className='text-xs text-muted-foreground hover:text-secondary transition-colors'
-              onClick={() => setInput('生成白底图')}
-            >
-              生成白底图
-            </button>
+            <QuickActionButton text='生成白底图' />
           </div>
-        </div>
+        </form>
       </div>
     </div>
+  )
+}
+
+function QuickActionButton({ text }: { text: string }) {
+  const { sendMessage } = useChat()
+
+  const handleClick = () => {
+    sendMessage(text)
+  }
+
+  return (
+    <button
+      type='button'
+      className='text-xs text-muted-foreground hover:text-secondary transition-colors'
+      onClick={handleClick}
+    >
+      {text}
+    </button>
   )
 }
