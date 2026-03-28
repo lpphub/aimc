@@ -4,7 +4,7 @@ export {
   CanvasGeneratorPage,
   CanvasItem,
   CanvasToolbar,
-  ChatPanel,
+  FloatingChat,
 } from './components'
 export * from './hooks/useCanvas'
 export * from './stores/canvas'
