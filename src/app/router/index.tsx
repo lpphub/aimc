@@ -25,6 +25,14 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: '/canvas',
+    element: (
+      <AuthGuard requireAuth>
+        <CanvasGenerator />
+      </AuthGuard>
+    ),
+  },
+  {
     element: (
       <AuthGuard requireAuth>
         <Layout />
@@ -34,7 +42,6 @@ const router = createBrowserRouter([
       { path: '/creations', element: <Creations /> },
       { path: '/materials', element: <Materials /> },
       { path: '/projects', element: <Projects /> },
-      { path: '/canvas', element: <CanvasGenerator /> },
     ],
   },
   {

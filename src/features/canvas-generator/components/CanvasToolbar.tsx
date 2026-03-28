@@ -7,11 +7,11 @@ export function CanvasToolbar() {
   const [activeTool, setActiveTool] = useState<Tool>('select')
 
   return (
-    <div className='absolute bottom-20 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 px-2 py-1.5 bg-card rounded-lg border border-border shadow-elevation'>
+    <div className='absolute right-4 top-1/2 -translate-y-1/2 z-20 flex flex-col items-center gap-2 p-2 bg-card rounded-xl border border-border shadow-elevation'>
       <button
         type='button'
         onClick={() => setActiveTool('select')}
-        className={`p-2 rounded transition-colors ${
+        className={`p-3 rounded-lg transition-colors ${
           activeTool === 'select'
             ? 'bg-primary/10 text-primary'
             : 'hover:bg-surface-container-high text-foreground'
@@ -21,12 +21,12 @@ export function CanvasToolbar() {
         <MousePointer2 className='w-5 h-5' />
       </button>
 
-      <div className='w-px h-5 bg-border mx-1' />
+      <div className='w-5 h-px bg-border' />
 
       <button
         type='button'
         onClick={() => setActiveTool('hand')}
-        className={`p-2 rounded transition-colors ${
+        className={`p-3 rounded-lg transition-colors ${
           activeTool === 'hand'
             ? 'bg-primary/10 text-primary'
             : 'hover:bg-surface-container-high text-foreground'
