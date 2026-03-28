@@ -1,0 +1,41 @@
+import { useCallback } from 'react'
+import { useCanvas } from '../hooks/useCanvas'
+import { CanvasItem } from './CanvasItem'
+
+export function Canvas() {
+  const { items, selectedId, handleDrag, selectItem } = useCanvas()
+
+  const handleCanvasClick = useCallback(() => {
+    selectItem(null)
+  }, [selectItem])
+
+  return (
+    <section
+      className='relative flex-1 overflow-hidden'
+      style={{
+        backgroundImage: `
+          radial-gradient(circle, #d1d5db 1px, transparent 1px)
+        `,
+        backgroundSize: '20px 20px',
+        backgroundColor: '#f9fafb',
+      }}
+      onClick={handleCanvasClick}
+      onKeyDown={e => {
+        if (e.key === 'Escape') {
+          selectItem(null)
+        }
+      }}
+      aria-label='Canvas area'
+    >
+      {items.map(item => (
+        <CanvasItem
+          key={item.id}
+          item={item}
+          isSelected={selectedId === item.id}
+          onDrag={handleDrag}
+          onSelect={selectItem}
+        />
+      ))}
+    </section>
+  )
+}
