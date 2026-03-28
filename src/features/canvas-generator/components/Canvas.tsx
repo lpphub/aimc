@@ -11,11 +11,9 @@ export function Canvas() {
 
   return (
     <section
-      className='relative flex-1 overflow-hidden bg-background'
+      className='relative w-full h-full overflow-hidden bg-background'
       style={{
-        backgroundImage: `
-          radial-gradient(circle, hsl(180 29% 29% / 0.3) 1px, transparent 1px)
-        `,
+        backgroundImage: `radial-gradient(circle, rgba(100, 116, 139, 0.4) 1px, transparent 1px)`,
         backgroundSize: '20px 20px',
       }}
       onClick={handleCanvasClick}
