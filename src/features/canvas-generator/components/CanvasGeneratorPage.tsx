@@ -1,15 +1,10 @@
 import { Canvas } from './Canvas'
-import { CanvasToolbar } from './CanvasToolbar'
-import { ChatPanel } from './ChatPanel'
 
 export function CanvasGeneratorPage() {
   return (
-    <div className='flex h-[calc(100vh-64px)]'>
-      <ChatPanel />
-      <div className='relative flex-1 flex flex-col'>
-        <Canvas />
-        <CanvasToolbar />
-      </div>
+    <div className='relative h-[calc(100vh-64px)]'>
+      <Canvas />
+      {/* FloatingChat 和 CanvasToolbar 将在后续任务添加 */}
     </div>
   )
 }
