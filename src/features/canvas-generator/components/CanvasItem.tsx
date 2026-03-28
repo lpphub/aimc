@@ -40,7 +40,7 @@ export const CanvasItem = memo(function CanvasItem({
   return (
     <button
       type='button'
-      className={`absolute cursor-move ${isSelected ? 'ring-2 ring-secondary' : ''}`}
+      className={`absolute cursor-move ${isSelected ? 'ring-2 ring-primary' : ''}`}
       style={{
         left: item.x,
         top: item.y,

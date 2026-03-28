@@ -87,10 +87,10 @@ export function ChatPanel() {
   }
 
   return (
-    <div className='w-[380px] h-full flex flex-col bg-white border-r'>
+    <div className='w-[380px] h-full flex flex-col bg-card border-r border-border'>
       {/* Header */}
-      <div className='flex items-center gap-3 px-4 py-3 border-b bg-gray-50/50'>
-        <div className='flex items-center justify-center w-8 h-8 rounded-lg bg-secondary/10'>
+      <div className='flex items-center gap-3 px-4 py-3 border-b border-border bg-surface'>
+        <div className='flex items-center justify-center w-8 h-8 rounded-lg bg-secondary-container/20'>
           <MessageSquare className='w-4 h-4 text-secondary' />
         </div>
         <div className='flex-1 min-w-0'>
@@ -100,11 +100,11 @@ export function ChatPanel() {
       </div>
 
       {/* Messages */}
-      <div className='flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50/30'>
+      <div className='flex-1 overflow-y-auto p-4 space-y-4 bg-surface'>
         {messages.length === 0 && (
           <div className='text-center py-8 text-muted-foreground'>
             <div className='flex justify-center mb-3'>
-              <ImageIcon className='w-12 h-12 text-gray-300' />
+              <ImageIcon className='w-12 h-12 text-muted' />
             </div>
             <p className='text-sm'>上传图片或输入描述</p>
             <p className='text-xs mt-1'>AI 将为您生成营销图片</p>
@@ -125,8 +125,8 @@ export function ChatPanel() {
               <div
                 className={`relative group max-w-[90%] rounded-2xl px-4 py-3 text-sm ${
                   message.role === 'user'
-                    ? 'bg-secondary text-white'
-                    : 'bg-white border border-gray-200 text-foreground'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-card border border-border text-foreground'
                 }`}
               >
                 {/* Copy button for assistant messages */}
@@ -134,10 +134,10 @@ export function ChatPanel() {
                   <button
                     type='button'
                     onClick={() => copyToClipboard(message.content)}
-                    className='absolute -right-8 top-1/2 -translate-y-1/2 p-1.5 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-gray-100 rounded'
+                    className='absolute -right-8 top-1/2 -translate-y-1/2 p-1.5 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-surface-container-high rounded'
                     title='复制'
                   >
-                    <Copy className='w-3.5 h-3.5 text-gray-400' />
+                    <Copy className='w-3.5 h-3.5 text-muted-foreground' />
                   </button>
                 )}
 
@@ -158,11 +158,11 @@ export function ChatPanel() {
         {/* Loading indicator */}
         {isLoading && (
           <div className='flex justify-start'>
-            <div className='bg-white border border-gray-200 rounded-2xl px-4 py-3'>
+            <div className='bg-card border border-border rounded-2xl px-4 py-3'>
               <div className='flex items-center gap-2'>
-                <div className='w-2 h-2 bg-secondary rounded-full animate-bounce' />
-                <div className='w-2 h-2 bg-secondary rounded-full animate-bounce [animation-delay:0.2s]' />
-                <div className='w-2 h-2 bg-secondary rounded-full animate-bounce [animation-delay:0.4s]' />
+                <div className='w-2 h-2 bg-primary rounded-full animate-bounce' />
+                <div className='w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:0.2s]' />
+                <div className='w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:0.4s]' />
               </div>
             </div>
           </div>
@@ -172,7 +172,7 @@ export function ChatPanel() {
       </div>
 
       {/* Input area */}
-      <div className='p-4 border-t bg-white'>
+      <div className='p-4 border-t border-border bg-card'>
         <div className='flex flex-col gap-2'>
           {/* Text input */}
           <div className='flex items-center gap-2'>
@@ -186,7 +186,7 @@ export function ChatPanel() {
             <button
               type='button'
               onClick={() => fileInputRef.current?.click()}
-              className='p-2 text-gray-400 hover:text-secondary hover:bg-secondary/10 rounded-lg transition-colors'
+              className='p-2 text-muted-foreground hover:text-secondary hover:bg-secondary/10 rounded-lg transition-colors'
               title='上传图片'
             >
               <Upload className='w-5 h-5' />
@@ -197,14 +197,14 @@ export function ChatPanel() {
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage()}
               placeholder='描述你想要的效果，让 AI 搞定所有设计'
-              className='flex-1 px-3 py-2 text-sm bg-gray-50 border-0 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary/20 placeholder:text-gray-400'
+              className='flex-1 px-3 py-2 text-sm bg-muted border-0 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 placeholder:text-muted-foreground'
               disabled={isLoading}
             />
             <button
               type='button'
               onClick={() => sendMessage()}
               disabled={isLoading || !input.trim()}
-              className='p-2 bg-secondary text-white rounded-lg hover:bg-secondary/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors'
+              className='p-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed transition-colors'
             >
               <Send className='w-4 h-4' />
             </button>
@@ -214,23 +214,23 @@ export function ChatPanel() {
           <div className='flex items-center gap-2 px-1'>
             <button
               type='button'
-              className='text-xs text-gray-400 hover:text-secondary transition-colors'
+              className='text-xs text-muted-foreground hover:text-secondary transition-colors'
               onClick={() => setInput('生成场景图')}
             >
               生成场景图
             </button>
-            <span className='text-gray-300'>|</span>
+            <span className='text-border'>|</span>
             <button
               type='button'
-              className='text-xs text-gray-400 hover:text-secondary transition-colors'
+              className='text-xs text-muted-foreground hover:text-secondary transition-colors'
               onClick={() => setInput('生成卖点图')}
             >
               生成卖点图
             </button>
-            <span className='text-gray-300'>|</span>
+            <span className='text-border'>|</span>
             <button
               type='button'
-              className='text-xs text-gray-400 hover:text-secondary transition-colors'
+              className='text-xs text-muted-foreground hover:text-secondary transition-colors'
               onClick={() => setInput('生成白底图')}
             >
               生成白底图
