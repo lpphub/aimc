@@ -1,15 +1,18 @@
 {
 	"$schema": "https://biomejs.dev/schemas/2.4.6/schema.json",
+	"files": {
+		"includes": [
+			"**",
+			"!!**/dist",
+			"!!**/node_modules",
+			"!!**/public",
+			"!!**/docs",
+			"!!**/.claude"
+		]
+	},
 	"overrides": [
 		{
-			"includes": [
-				"**/*.{js,jsx,ts,tsx}",
-				"!dist",
-				"!node_modules",
-				"!public",
-				"!docs",
-				"!.claude"
-			],
+			"includes": ["**/*.{js,jsx,ts,tsx}"],
 			"linter": {
 				"enabled": true,
 				"rules": {
@@ -37,12 +40,6 @@
 				"indentWidth": 2,
 				"lineWidth": 100
 			}
-		},
-		{
-			"includes": ["**/*.css"],
-			"formatter": {
-				"enabled": false
-			}
 		}
 	],
 	"javascript": {
@@ -63,7 +60,7 @@
 			"tailwindDirectives": true
 		},
 		"formatter": {
-			"enabled": false
+			"enabled": true
 		}
 	}
 }

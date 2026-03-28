@@ -12,7 +12,7 @@ export function Sidebar() {
     {
       path: '/creations',
       icon: Sparkles,
-      label: '创作中心',
+      label: '工具箱',
     },
     {
       path: '/canvas',

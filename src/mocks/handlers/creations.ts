@@ -1,9 +1,5 @@
 import { delay, HttpResponse, http } from 'msw'
-import type {
-  GeneratePosterResp,
-  GenerateTextResp,
-  OcrResp,
-} from '@/features/creations/types'
+import type { GeneratePosterResp, GenerateTextResp, OcrResp } from '@/features/creations/types'
 import type { ApiResponse } from '@/lib/api'
 
 const API_BASE = '/api'

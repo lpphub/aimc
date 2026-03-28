@@ -6,8 +6,8 @@ import { Button } from '@/shared/components/ui/button'
 import { Dialog, DialogContent } from '@/shared/components/ui/dialog'
 import { Textarea } from '@/shared/components/ui/textarea'
 import { useFileUpload } from '@/shared/hooks'
-import type { AspectRatio, PosterStyle } from '../types'
 import { useGeneratePoster } from '../hooks'
+import type { AspectRatio, PosterStyle } from '../types'
 import { ToolHeader } from './ToolGrid'
 
 interface PosterToolProps {
@@ -275,25 +275,28 @@ export function PosterTool({ onBack }: PosterToolProps) {
   const [resultUrl, setResultUrl] = useState<string | null>(null)
 
   const { file, previewUrl, fileInputRef, selectFile, clearFile } = useFileUpload({
-      accept: ['image/png', 'image/jpeg', 'image/webp'],
-      maxSize: 10 * 1024 * 1024,
-      errorMessage: {
-        type: '仅支持 PNG, JPG, WebP 格式',
-        size: '文件大小不能超过 10MB',
-      },
-    })
+    accept: ['image/png', 'image/jpeg', 'image/webp'],
+    maxSize: 10 * 1024 * 1024,
+    errorMessage: {
+      type: '仅支持 PNG, JPG, WebP 格式',
+      size: '文件大小不能超过 10MB',
+    },
+  })
 
   const generatePoster = useGeneratePoster()
 
   const isGenerating = generatePoster.isPending
 
-  const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.target.files?.[0]
-    if (f) {
-      selectFile(f)
-      setResultUrl(null)
-    }
-  }, [selectFile])
+  const handleFileSelect = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const f = e.target.files?.[0]
+      if (f) {
+        selectFile(f)
+        setResultUrl(null)
+      }
+    },
+    [selectFile]
+  )
 
   const handleDelete = useCallback(() => {
     clearFile()

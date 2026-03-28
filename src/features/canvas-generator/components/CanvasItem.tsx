@@ -54,6 +54,8 @@ export const CanvasItem = memo(function CanvasItem({
         pointerEvents: tool === 'select' ? 'auto' : 'none',
       }}
       onMouseDown={handleMouseDown}
+      role='img'
+      tabIndex={-1}
     >
       <img
         src={item.imageUrl}

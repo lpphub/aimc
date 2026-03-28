@@ -188,7 +188,9 @@ export function OcrTool({ onBack }: OcrToolProps) {
                   <FileUp className='w-10 h-10 text-primary' />
                 </div>
                 <div>
-                  <h3 className='text-xl font-sans font-bold text-foreground mb-2'>拖拽或点击上传</h3>
+                  <h3 className='text-xl font-sans font-bold text-foreground mb-2'>
+                    拖拽或点击上传
+                  </h3>
                   <p className='text-muted-foreground text-xs tracking-widest uppercase'>
                     支持 JPG, PNG, PDF (最大 20MB)
                   </p>

@@ -1,5 +1,6 @@
-import { ImagePlus, MessageSquare, Send, X } from 'lucide-react'
+import { ArrowLeft, ImagePlus, MessageSquare, Minimize2, Send, XCircle } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { useCanvas } from '../hooks/useCanvas'
 
@@ -17,7 +18,7 @@ interface Message {
   id: string
   role: 'user' | 'assistant'
   content: string
-  imageUrl?: string
+  imageUrls?: string[]
   timestamp: number
 }
 
@@ -26,9 +27,10 @@ export function FloatingChat() {
   const [messages, setMessages] = useState<Message[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [inputValue, setInputValue] = useState('')
+  const [pendingImages, setPendingImages] = useState<{ url: string }[]>([])
   const fileInputRef = useRef<HTMLInputElement>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const navigate = useNavigate()
   const { handleAddImage } = useCanvas()
 
   useEffect(() => {
@@ -37,28 +39,23 @@ export function FloatingChat() {
     }
   }, [isExpanded])
 
-  // 自动调整 textarea 高度
-  const adjustTextareaHeight = () => {
-    const textarea = textareaRef.current
-    if (textarea) {
-      textarea.style.height = 'auto'
-      textarea.style.height = `${Math.min(textarea.scrollHeight, 120)}px`
-    }
-  }
+  // 输入框固定高度，无需动态调整
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!inputValue.trim() || isLoading) return
+    if ((!inputValue.trim() && pendingImages.length === 0) || isLoading) return
 
     const userMessage: Message = {
       id: crypto.randomUUID(),
       role: 'user',
-      content: inputValue.trim(),
+      content: inputValue.trim() || '[图片]',
+      imageUrls: pendingImages.map(img => img.url),
       timestamp: Date.now(),
     }
 
     setMessages(prev => [...prev, userMessage])
     setInputValue('')
+    setPendingImages([])
     setIsLoading(true)
 
     // Mock 延迟
@@ -66,7 +63,7 @@ export function FloatingChat() {
 
     // 随机选择一张图片
     const randomImage = MOCK_IMAGES[Math.floor(Math.random() * MOCK_IMAGES.length)]
-    const randomX = 100 + Math.random() * 400
+    const randomX = 480 + Math.random() * 400
     const randomY = 100 + Math.random() * 300
 
     // 添加到画布
@@ -84,43 +81,23 @@ export function FloatingChat() {
     setIsLoading(false)
   }
 
-  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file || isLoading) return
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (!files || isLoading) return
 
-    const imageUrl = URL.createObjectURL(file)
-    const userMessage: Message = {
-      id: crypto.randomUUID(),
-      role: 'user',
-      content: '[图片]',
-      imageUrl,
-      timestamp: Date.now(),
+    const newImages = Array.from(files).map(file => ({ url: URL.createObjectURL(file) }))
+    setPendingImages(prev => [...prev, ...newImages])
+
+    // 重置 input 以便同一文件可重新选择
+    e.target.value = ''
+  }
+
+  const removePendingImage = (index: number) => {
+    const img = pendingImages[index]
+    if (img) {
+      URL.revokeObjectURL(img.url)
+      setPendingImages(prev => prev.filter((_, i) => i !== index))
     }
-
-    setMessages(prev => [...prev, userMessage])
-    setIsLoading(true)
-
-    // Mock 延迟
-    await new Promise(resolve => setTimeout(resolve, 1500))
-
-    // 随机选择一张图片作为响应
-    const randomImage = MOCK_IMAGES[Math.floor(Math.random() * MOCK_IMAGES.length)]
-    const randomX = 100 + Math.random() * 400
-    const randomY = 100 + Math.random() * 300
-
-    // 添加到画布
-    handleAddImage(randomImage, { x: randomX, y: randomY })
-
-    // 只显示文字回复，不显示图片
-    const assistantMessage: Message = {
-      id: crypto.randomUUID(),
-      role: 'assistant',
-      content: '已根据您上传的图片生成新的创意图片\n\n图片已添加到画布上',
-      timestamp: Date.now(),
-    }
-
-    setMessages(prev => [...prev, assistantMessage])
-    setIsLoading(false)
   }
 
   const copyToClipboard = async (text: string) => {
@@ -153,7 +130,7 @@ export function FloatingChat() {
 
   // 展开状态：显示完整面板
   return (
-    <div className='absolute left-4 top-20 bottom-20 z-50 w-[400px] flex flex-col bg-card/95 backdrop-blur-xl border border-border rounded-2xl shadow-[0_0_60px_rgba(0,0,0,0.3)] transition-all duration-300'>
+    <div className='absolute left-4 top-20 bottom-20 z-50 w-100 flex flex-col bg-card/95 backdrop-blur-xl border border-border rounded-2xl shadow-[0_0_60px_rgba(0,0,0,0.3)] transition-all duration-300'>
       {/* 头部区域 */}
       <div className='flex items-center justify-between px-4 py-3 border-b border-border/50 bg-card/50'>
         <div className='flex items-center gap-2'>
@@ -162,14 +139,24 @@ export function FloatingChat() {
           </div>
           <span className='text-sm font-medium text-foreground'>AI 绘图助手</span>
         </div>
-        <button
-          type='button'
-          onClick={() => setIsExpanded(false)}
-          className='p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors'
-          title='收起'
-        >
-          <X className='w-4 h-4' />
-        </button>
+        <div className='flex items-center gap-1'>
+          <button
+            type='button'
+            onClick={() => navigate('/creations')}
+            className='p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors'
+            title='返回'
+          >
+            <ArrowLeft className='w-4 h-4' />
+          </button>
+          <button
+            type='button'
+            onClick={() => setIsExpanded(false)}
+            className='p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors'
+            title='收起'
+          >
+            <Minimize2 className='w-4 h-4' />
+          </button>
+        </div>
       </div>
 
       {/* 消息列表 */}
@@ -217,14 +204,21 @@ export function FloatingChat() {
                 )}
 
                 {/* 图片 */}
-                {message.imageUrl && (
-                  <div className='mb-2 overflow-hidden rounded-xl'>
-                    <img
-                      src={message.imageUrl}
-                      alt='生成的图片'
-                      className='max-w-full rounded-xl hover:scale-105 transition-transform duration-300 cursor-pointer'
-                      onClick={() => window.open(message.imageUrl, '_blank')}
-                    />
+                {message.imageUrls && message.imageUrls.length > 0 && (
+                  <div className='mb-2 flex flex-wrap gap-1'>
+                    {message.imageUrls.map(url => (
+                      <div key={url} className='overflow-hidden rounded-xl'>
+                        <img
+                          src={url}
+                          alt='生成的图片'
+                          className='max-w-[120px] max-h-[120px] rounded-xl hover:scale-105 transition-transform duration-300 cursor-pointer'
+                          onClick={() => window.open(url, '_blank')}
+                          onKeyDown={e => {
+                            if (e.key === 'Enter') window.open(url, '_blank')
+                          }}
+                        />
+                      </div>
+                    ))}
                   </div>
                 )}
 
@@ -264,28 +258,43 @@ export function FloatingChat() {
       </div>
 
       {/* 输入框区域 */}
-      <div className='p-4 border-t border-border/50 bg-card/50'>
+      <div className='shrink-0 p-4 border-t border-border/50 bg-card/50'>
         <form onSubmit={handleSubmit}>
-          <div className='relative bg-muted/50 rounded-2xl border border-border/30 focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/20 transition-all'>
+          <div className='bg-muted/50 rounded-2xl border border-border/30 focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/20 transition-all'>
             <input
               ref={fileInputRef}
               type='file'
               accept='image/*'
+              multiple
               className='hidden'
               onChange={handleFileSelect}
             />
 
-            {/* 输入框 - 加大尺寸 */}
+            {/* 待发送图片预览 */}
+            {pendingImages.length > 0 && (
+              <div className='flex flex-wrap gap-2 mx-3 mt-2'>
+                {pendingImages.map((img, index) => (
+                  <div key={img.url} className='relative'>
+                    <img src={img.url} alt='待发送图片' className='h-5 w-10 rounded object-cover' />
+                    <button
+                      type='button'
+                      onClick={() => removePendingImage(index)}
+                      className='absolute -top-1.5 -right-1.5 p-0.5 bg-background rounded-full text-muted-foreground hover:text-destructive transition-colors shadow-sm'
+                      title='移除图片'
+                    >
+                      <XCircle className='w-3 h-3' />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* 输入框 - 最多显示3行再滚动 */}
             <textarea
-              ref={textareaRef}
               value={inputValue}
-              onChange={e => {
-                setInputValue(e.target.value)
-                adjustTextareaHeight()
-              }}
-              onInput={adjustTextareaHeight}
+              onChange={e => setInputValue(e.target.value)}
               placeholder='描述你想要的效果...'
-              className='w-full px-4 py-4 pr-16 text-base bg-transparent border-0 rounded-2xl focus:outline-none focus:ring-0 placeholder:text-muted-foreground/60 resize-none min-h-[80px] max-h-[200px] leading-relaxed'
+              className='w-full px-4 py-3 text-sm bg-transparent border-0 rounded-t-2xl focus:outline-none focus:ring-0 placeholder:text-muted-foreground/60 resize-none max-h-32 leading-relaxed overflow-y-auto'
               disabled={isLoading}
               rows={3}
               onKeyDown={e => {
@@ -296,25 +305,25 @@ export function FloatingChat() {
               }}
             />
 
-            {/* 上传按钮 - 调整位置 */}
-            <button
-              type='button'
-              onClick={() => fileInputRef.current?.click()}
-              disabled={isLoading}
-              className='absolute left-3 bottom-3 p-2.5 text-muted-foreground/60 hover:text-primary hover:bg-primary/10 rounded-xl transition-all disabled:opacity-40'
-              title='上传图片'
-            >
-              <ImagePlus className='w-5 h-5' />
-            </button>
-
-            {/* 发送按钮 - 调整位置 */}
-            <button
-              type='submit'
-              disabled={isLoading || !inputValue.trim()}
-              className='absolute right-3 bottom-3 p-2.5 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-[0_0_20px_rgba(0,242,255,0.3)] hover:shadow-[0_0_30px_rgba(0,242,255,0.5)]'
-            >
-              <Send className='w-5 h-5' />
-            </button>
+            {/* 底部栏：图标和发送按钮 */}
+            <div className='flex items-center justify-between px-2 pb-2 pt-0.5'>
+              <button
+                type='button'
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isLoading}
+                className='p-1.5 text-muted-foreground/60 hover:text-primary hover:bg-primary/10 rounded-lg transition-all disabled:opacity-40'
+                title='上传图片'
+              >
+                <ImagePlus className='w-4 h-4' />
+              </button>
+              <button
+                type='submit'
+                disabled={isLoading || (!inputValue.trim() && pendingImages.length === 0)}
+                className='p-1.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-[0_0_20px_rgba(0,242,255,0.3)] hover:shadow-[0_0_30px_rgba(0,242,255,0.5)]'
+              >
+                <Send className='w-4 h-4' />
+              </button>
+            </div>
           </div>
           <div className='flex items-center justify-between mt-3 px-1'>
             <span className='text-xs text-muted-foreground/40'>
