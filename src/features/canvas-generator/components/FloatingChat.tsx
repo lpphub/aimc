@@ -54,7 +54,7 @@ export function FloatingChat() {
       <button
         type='button'
         onClick={() => setIsExpanded(true)}
-        className='absolute left-4 top-4 z-20 p-3 bg-primary text-primary-foreground rounded-full shadow-elevation hover:bg-primary/90 transition-all'
+        className='absolute left-4 top-20 z-20 p-3 bg-primary text-primary-foreground rounded-full shadow-elevation hover:bg-primary/90 transition-all'
         title='打开聊天'
       >
         <MessageSquare className='w-5 h-5' />
@@ -64,7 +64,7 @@ export function FloatingChat() {
 
   // 展开状态：显示完整面板
   return (
-    <div className='absolute left-4 top-4 bottom-4 z-20 w-[400px] flex flex-col bg-card border border-border rounded-xl shadow-elevation transition-all duration-300'>
+    <div className='absolute left-4 top-20 bottom-20 z-20 w-[400px] flex flex-col bg-card border border-border rounded-xl shadow-elevation transition-all duration-300'>
       {/* 关闭按钮 */}
       <div className='flex justify-end p-3 border-b border-border'>
         <button

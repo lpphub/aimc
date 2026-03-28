@@ -7,7 +7,7 @@ export function CanvasToolbar() {
   const [activeTool, setActiveTool] = useState<Tool>('select')
 
   return (
-    <div className='absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 px-2 py-1.5 bg-card rounded-lg border border-border shadow-elevation'>
+    <div className='absolute bottom-20 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 px-2 py-1.5 bg-card rounded-lg border border-border shadow-elevation'>
       <button
         type='button'
         onClick={() => setActiveTool('select')}
