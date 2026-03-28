@@ -1,4 +1,4 @@
-import { Clock, FolderOpen, LogOut, Sparkles } from 'lucide-react'
+import { Clock, FolderOpen, Image, LogOut, Sparkles } from 'lucide-react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { useLogout } from '@/features/auth'
 import { cn } from '@/lib/utils'
@@ -13,6 +13,11 @@ export function Sidebar() {
       path: '/creations',
       icon: Sparkles,
       label: '创作中心',
+    },
+    {
+      path: '/canvas',
+      icon: Image,
+      label: '画布生成器',
     },
     {
       path: '/materials',
