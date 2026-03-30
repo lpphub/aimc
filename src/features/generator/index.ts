@@ -5,6 +5,7 @@ export {
   CanvasItem,
   CanvasToolbar,
   FloatingChat,
+  AiDrawLanding,
 } from './components'
 export * from './hooks/useCanvas'
 export * from './stores/canvas'

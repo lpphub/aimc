@@ -3,93 +3,53 @@ import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { useCanvas } from '../hooks/useCanvas'
-
-// Mock 响应图片列表
-const MOCK_IMAGES = [
-  'https://images.unsplash.com/photo-1560343090-f0409e92791a?w=800&q=80',
-  'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80',
-  'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80',
-  'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=800&q=80',
-  'https://images.unsplash.com/photo-1585386959980-a93cfa7ed2c7?w=800&q=80',
-  'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80',
-]
-
-interface Message {
-  id: string
-  role: 'user' | 'assistant'
-  content: string
-  imageUrls?: string[]
-  timestamp: number
-}
+import { useChat } from '../hooks/useChat'
 
 interface FloatingChatProps {
-  conversationId?: string
+  conversationId: string
 }
 
-export function FloatingChat({ conversationId: _conversationId }: FloatingChatProps) {
+export function FloatingChat({ conversationId }: FloatingChatProps) {
   const [isExpanded, setIsExpanded] = useState(true)
-  const [messages, setMessages] = useState<Message[]>([])
-  const [isLoading, setIsLoading] = useState(false)
   const [inputValue, setInputValue] = useState('')
-  const [pendingImages, setPendingImages] = useState<{ url: string }[]>([])
+  const [pendingImages, setPendingImages] = useState<{ url: string; file: File }[]>([])
   const fileInputRef = useRef<HTMLInputElement>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
   const { handleAddImage } = useCanvas()
 
+  const { messages, isLoading, sendMessage } = useChat({
+    conversationId,
+    onGenerateImage: handleAddImage,
+  })
+
   useEffect(() => {
     if (isExpanded && messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
     }
-  }, [isExpanded])
-
-  // 输入框固定高度，无需动态调整
+  }, [isExpanded, messages])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if ((!inputValue.trim() && pendingImages.length === 0) || isLoading) return
 
-    const userMessage: Message = {
-      id: crypto.randomUUID(),
-      role: 'user',
-      content: inputValue.trim() || '[图片]',
-      imageUrls: pendingImages.map(img => img.url),
-      timestamp: Date.now(),
-    }
+    const message = inputValue.trim() || '[图片]'
+    const image = pendingImages[0]?.file // Send only the first image for now
 
-    setMessages(prev => [...prev, userMessage])
+    await sendMessage(message, image)
+
     setInputValue('')
     setPendingImages([])
-    setIsLoading(true)
-
-    // Mock 延迟
-    await new Promise(resolve => setTimeout(resolve, 1500))
-
-    // 随机选择一张图片
-    const randomImage = MOCK_IMAGES[Math.floor(Math.random() * MOCK_IMAGES.length)]
-    const randomX = 480 + Math.random() * 400
-    const randomY = 100 + Math.random() * 300
-
-    // 添加到画布
-    handleAddImage(randomImage, { x: randomX, y: randomY })
-
-    // 只显示文字回复，不显示图片
-    const assistantMessage: Message = {
-      id: crypto.randomUUID(),
-      role: 'assistant',
-      content: `已为您生成图片："${userMessage.content}"\n\n图片已添加到画布上`,
-      timestamp: Date.now(),
-    }
-
-    setMessages(prev => [...prev, assistantMessage])
-    setIsLoading(false)
   }
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
     if (!files || isLoading) return
 
-    const newImages = Array.from(files).map(file => ({ url: URL.createObjectURL(file) }))
+    const newImages = Array.from(files).map(file => ({
+      url: URL.createObjectURL(file),
+      file,
+    }))
     setPendingImages(prev => [...prev, ...newImages])
 
     // 重置 input 以便同一文件可重新选择
@@ -208,21 +168,17 @@ export function FloatingChat({ conversationId: _conversationId }: FloatingChatPr
                 )}
 
                 {/* 图片 */}
-                {message.imageUrls && message.imageUrls.length > 0 && (
-                  <div className='mb-2 flex flex-wrap gap-1'>
-                    {message.imageUrls.map(url => (
-                      <div key={url} className='overflow-hidden rounded-xl'>
-                        <img
-                          src={url}
-                          alt='生成的图片'
-                          className='max-w-[120px] max-h-[120px] rounded-xl hover:scale-105 transition-transform duration-300 cursor-pointer'
-                          onClick={() => window.open(url, '_blank')}
-                          onKeyDown={e => {
-                            if (e.key === 'Enter') window.open(url, '_blank')
-                          }}
-                        />
-                      </div>
-                    ))}
+                {message.imageUrl && (
+                  <div className='mb-2 overflow-hidden rounded-xl'>
+                    <img
+                      src={message.imageUrl}
+                      alt='生成的图片'
+                      className='max-w-[120px] max-h-[120px] rounded-xl hover:scale-105 transition-transform duration-300 cursor-pointer'
+                      onClick={() => window.open(message.imageUrl, '_blank')}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter') window.open(message.imageUrl, '_blank')
+                      }}
+                    />
                   </div>
                 )}
 

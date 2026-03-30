@@ -10,11 +10,6 @@ export function Sidebar() {
 
   const navItems = [
     {
-      path: '/tools',
-      icon: Sparkles,
-      label: '工具箱',
-    },
-    {
       path: '/canvas',
       icon: Image,
       label: 'AI绘图',
@@ -23,6 +18,11 @@ export function Sidebar() {
       path: '/materials',
       icon: FolderOpen,
       label: '素材库',
+    },
+    {
+      path: '/tools',
+      icon: Sparkles,
+      label: '工具箱',
     },
   ]
 

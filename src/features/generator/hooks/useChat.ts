@@ -1,40 +1,34 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import { toast } from 'sonner'
 import { generatorApi } from '../api'
 import type { ChatMessage } from '../types'
 
-const CHAT_MESSAGES_KEY = 'chat-messages'
-
-export function useChat(
+interface UseChatOptions {
+  conversationId: string
   onGenerateImage?: (imageUrl: string, position?: { x: number; y: number }) => void
-) {
-  const queryClient = useQueryClient()
-  const [conversationId, setConversationId] = useState<string>()
+}
 
-  const messages = queryClient.getQueryData<ChatMessage[]>([CHAT_MESSAGES_KEY]) ?? []
+export function useChat({ conversationId, onGenerateImage }: UseChatOptions) {
+  const queryClient = useQueryClient()
+
+  const queryKey = ['chat-messages', conversationId] as const
+
+  const messages = queryClient.getQueryData<ChatMessage[]>(queryKey) ?? []
 
   const setMessages = useCallback(
     (updater: ChatMessage[] | ((prev: ChatMessage[]) => ChatMessage[])) => {
-      const current = queryClient.getQueryData<ChatMessage[]>([CHAT_MESSAGES_KEY]) ?? []
+      const current = queryClient.getQueryData<ChatMessage[]>(queryKey) ?? []
       const next = typeof updater === 'function' ? updater(current) : updater
-      queryClient.setQueryData([CHAT_MESSAGES_KEY], next)
+      queryClient.setQueryData(queryKey, next)
     },
-    [queryClient]
+    [queryClient, queryKey]
   )
 
   const sendMessageMutation = useMutation({
     mutationFn: async ({ message, image }: { message: string; image?: File }) => {
-      // Create a conversation if none exists
-      let convId = conversationId
-      if (!convId) {
-        const convResp = await generatorApi.createConversation({})
-        convId = convResp.conversation.id
-        setConversationId(convId)
-      }
-
       const response = await generatorApi.sendMessage({
-        conversationId: convId,
+        conversationId,
         message,
         image,
       })
@@ -78,14 +72,12 @@ export function useChat(
   )
 
   const clearMessages = useCallback(() => {
-    queryClient.setQueryData([CHAT_MESSAGES_KEY], [])
-    setConversationId(undefined)
-  }, [queryClient])
+    queryClient.setQueryData(queryKey, [])
+  }, [queryClient, queryKey])
 
   return {
     messages,
     isLoading: sendMessageMutation.isPending,
-    conversationId,
     sendMessage,
     clearMessages,
   }

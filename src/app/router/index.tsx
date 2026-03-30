@@ -6,9 +6,10 @@ import { AuthGuard } from './guard'
 
 const Login = lazy(() => import('@/pages/Login'))
 const Landing = lazy(() => import('@/pages/Landing'))
-const Materials = lazy(() => import('@/pages/Materials'))
+const AiDraw = lazy(() => import('@/pages/AiDraw'))
+const Generator = lazy(() => import('@/pages/Generator'))
 const Tools = lazy(() => import('@/pages/Tools'))
-const CanvasGenerator = lazy(() => import('@/pages/CanvasGenerator'))
+const Materials = lazy(() => import('@/pages/Materials'))
 
 const router = createBrowserRouter([
   {
@@ -27,7 +28,15 @@ const router = createBrowserRouter([
     path: '/canvas',
     element: (
       <AuthGuard requireAuth>
-        <CanvasGenerator />
+        <AiDraw />
+      </AuthGuard>
+    ),
+  },
+  {
+    path: '/canvas/:conversationId',
+    element: (
+      <AuthGuard requireAuth>
+        <Generator />
       </AuthGuard>
     ),
   },
