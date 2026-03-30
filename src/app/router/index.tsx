@@ -25,14 +25,6 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/canvas',
-    element: (
-      <AuthGuard requireAuth>
-        <AiDraw />
-      </AuthGuard>
-    ),
-  },
-  {
     path: '/canvas/:conversationId',
     element: (
       <AuthGuard requireAuth>
@@ -47,6 +39,7 @@ const router = createBrowserRouter([
       </AuthGuard>
     ),
     children: [
+      { path: '/canvas', element: <AiDraw /> },
       { path: '/tools', element: <Tools /> },
       { path: '/materials', element: <Materials /> },
     ],
