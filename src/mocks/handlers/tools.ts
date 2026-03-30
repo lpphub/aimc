@@ -1,5 +1,5 @@
 import { delay, HttpResponse, http } from 'msw'
-import type { GeneratePosterResp, GenerateTextResp, OcrResp } from '@/features/creations/types'
+import type { GeneratePosterResp, GenerateTextResp, OcrResp } from '@/features/tools/types'
 import type { ApiResponse } from '@/lib/api'
 
 const API_BASE = '/api'
@@ -22,7 +22,7 @@ function serverError<T = null>(message: string) {
 
 const shouldFailRandomly = () => Math.random() < 0.1
 
-export const creationsHandlers = [
+export const toolsHandlers = [
   http.post<never, { prompt: string }, ApiResponse<GenerateTextResp>>(
     `${API_BASE}/creations/text`,
     async ({ request }) => {

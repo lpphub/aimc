@@ -5,7 +5,7 @@ import { PosterTool } from './PosterTool'
 import { TextTool } from './TextTool'
 import { ToolGrid } from './ToolGrid'
 
-export function CreationsPage() {
+export function ToolsPage() {
   const [selectedTool, setSelectedTool] = useState<ToolType | null>(null)
 
   return (

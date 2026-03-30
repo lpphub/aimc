@@ -1,7 +1,7 @@
 import { Sparkles } from 'lucide-react'
-import { CreationsPage } from '@/features/creations'
+import { ToolsPage } from '@/features/tools'
 
-export default function Creations() {
+export default function Tools() {
   return (
     <div className='flex min-h-screen flex-col bg-surface'>
       <div className='flex items-center gap-4 p-8'>
@@ -14,7 +14,7 @@ export default function Creations() {
         </div>
       </div>
 
-      <CreationsPage />
+      <ToolsPage />
     </div>
   )
 }

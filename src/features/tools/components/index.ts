@@ -1,4 +1,4 @@
-export { CreationsPage } from './CreationsPage'
+export { ToolsPage } from './ToolsPage'
 export { OcrTool } from './OcrTool'
 export { PosterTool } from './PosterTool'
 export { TextTool } from './TextTool'

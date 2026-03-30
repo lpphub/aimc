@@ -7,7 +7,7 @@ import { AuthGuard } from './guard'
 const Login = lazy(() => import('@/pages/Login'))
 const Landing = lazy(() => import('@/pages/Landing'))
 const Materials = lazy(() => import('@/pages/Materials'))
-const Creations = lazy(() => import('@/pages/Creations'))
+const Tools = lazy(() => import('@/pages/Tools'))
 const CanvasGenerator = lazy(() => import('@/pages/CanvasGenerator'))
 
 const router = createBrowserRouter([
@@ -38,7 +38,7 @@ const router = createBrowserRouter([
       </AuthGuard>
     ),
     children: [
-      { path: '/creations', element: <Creations /> },
+      { path: '/tools', element: <Tools /> },
       { path: '/materials', element: <Materials /> },
     ],
   },

@@ -1,6 +1,6 @@
 export * from './api'
 export {
-  CreationsPage,
+  ToolsPage,
   OcrTool,
   PosterTool,
   TextTool,
