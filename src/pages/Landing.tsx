@@ -90,7 +90,7 @@ export default function LandingPage() {
 
           <div className='hidden md:flex items-center space-x-6'>
             {isAuthenticated ? (
-              <Button className='rounded-full' onClick={() => navigate('/creations')}>
+              <Button className='rounded-full' onClick={() => navigate('/tools')}>
                 进入控制台
               </Button>
             ) : (
@@ -136,7 +136,7 @@ export default function LandingPage() {
                     className='w-full rounded-full'
                     onClick={() => {
                       setMobileMenuOpen(false)
-                      navigate('/creations')
+                      navigate('/tools')
                     }}
                   >
                     进入控制台
@@ -182,7 +182,7 @@ export default function LandingPage() {
               <Button
                 size='lg'
                 className='text-lg px-12 py-6 rounded-full shadow-glow-primary-lg hover:shadow-glow-primary-lg-hover transition-all group'
-                onClick={() => navigate(isAuthenticated ? '/creations' : '/login')}
+                onClick={() => navigate(isAuthenticated ? '/tools' : '/login')}
               >
                 {isAuthenticated ? '进入控制台' : '立即开启'}
                 <ArrowRight className='w-5 h-5 group-hover:translate-x-1 transition-transform' />
@@ -358,7 +358,7 @@ export default function LandingPage() {
               <Button
                 size='lg'
                 className='w-full md:w-auto text-lg px-12 py-6 rounded-full shadow-glow-primary-lg hover:shadow-glow-primary-lg-hover transition-all'
-                onClick={() => navigate(isAuthenticated ? '/creations' : '/login')}
+                onClick={() => navigate(isAuthenticated ? '/tools' : '/login')}
               >
                 {isAuthenticated ? '进入控制台' : '立即开始免费试用'}
               </Button>

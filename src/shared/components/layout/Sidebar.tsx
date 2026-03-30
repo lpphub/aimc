@@ -10,7 +10,7 @@ export function Sidebar() {
 
   const navItems = [
     {
-      path: '/creations',
+      path: '/tools',
       icon: Sparkles,
       label: '工具箱',
     },

@@ -47,7 +47,7 @@ export function RegisterForm() {
   const handleFinish = async (values: RegisterFormValues) => {
     try {
       await registerMutation.mutateAsync(values)
-      navigate('/creations', { replace: true })
+      navigate('/tools', { replace: true })
     } catch (error) {
       const { message } = error as ApiError
       toast.error('注册失败', { description: message })

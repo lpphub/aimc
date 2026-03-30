@@ -142,7 +142,7 @@ export function FloatingChat() {
         <div className='flex items-center gap-1'>
           <button
             type='button'
-            onClick={() => navigate('/creations')}
+            onClick={() => navigate('/canvas')}
             className='p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors'
             title='返回'
           >
