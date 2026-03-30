@@ -50,7 +50,8 @@ src/
 │   │   │   ├── index.ts          # 更新导出
 │   │   │   ├── useCanvas.ts      # 保持
 │   │   │   ├── useChat.ts        # 更新：支持 conversationId
-│   │   │   └── useConversations.ts # 新增：历史对话列表 hooks
+│   │   │   ├── useConversations.ts # 新增：历史对话列表 hooks
+│   │   │   └── useConversation.ts  # 新增：单个对话详情 hook
 │   │   ├── components/
 │   │   │   ├── AiDrawLanding.tsx # 新增：AI绘图首页
 │   │   │   ├── ConversationList.tsx # 新增：历史对话列表
@@ -109,6 +110,8 @@ src/
 ## API Design
 
 ### New Types (generator/types.ts)
+
+> **Note:** `ChatMessage` and `CanvasItem` types already exist in the current `types.ts`. They will be reused/extended with the new Conversation types below.
 
 ```typescript
 // 对话摘要
@@ -233,6 +236,27 @@ export const generatorKeys = {
 - 删除按钮触发确认对话框
 - 列表顶部有"新建对话"按钮
 - 使用 `useConversations` hook 获取数据
+
+### Hooks: useConversations & useConversation
+
+```typescript
+// useConversations - 获取对话列表
+export function useConversations() {
+  return useQuery({
+    queryKey: generatorKeys.conversations(),
+    queryFn: () => generatorApi.getConversations(),
+  })
+}
+
+// useConversation - 获取单个对话详情
+export function useConversation(id: string) {
+  return useQuery({
+    queryKey: generatorKeys.conversation(id),
+    queryFn: () => generatorApi.getConversation(id),
+    enabled: !!id,
+  })
+}
+```
 
 ### GeneratorPage (原 CanvasGeneratorPage)
 
@@ -420,10 +444,11 @@ export const generatorHandlers = [
    - Add conversation API methods
    - Update ChatMessageReq to require conversationId
 
-6. **Create new components**:
+6. **Create new components & hooks**:
    - `AiDrawLanding.tsx`
    - `ConversationList.tsx`
-   - `useConversations.ts` hook
+   - `useConversations.ts` hook (列表)
+   - `useConversation.ts` hook (单个对话详情)
 
 7. **Update existing components**:
    - `GeneratorPage.tsx`: Load conversation on mount
