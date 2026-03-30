@@ -1,5 +1,5 @@
 import { delay, HttpResponse, http } from 'msw'
-import type { CanvasExportResp, ChatMessageResp } from '@/features/canvas-generator/types'
+import type { CanvasExportResp, ChatMessageResp } from '@/features/generator/types'
 import type { ApiResponse } from '@/lib/api'
 
 const API_BASE = '/api'
@@ -8,7 +8,7 @@ function success<T>(data: T): ApiResponse<T> {
   return { code: 0, message: 'success', data }
 }
 
-export const canvasGeneratorHandlers = [
+export const generatorHandlers = [
   http.post<never, never, ApiResponse<ChatMessageResp>>(
     `${API_BASE}/canvas/chat`,
     async ({ request }) => {

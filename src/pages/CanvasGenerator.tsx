@@ -1,4 +1,4 @@
-import { CanvasGeneratorPage } from '@/features/canvas-generator'
+import { CanvasGeneratorPage } from '@/features/generator'
 
 export default function CanvasGenerator() {
   return (

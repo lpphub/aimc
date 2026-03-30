@@ -1,5 +1,5 @@
 import { authHandlers } from './auth'
-import { canvasGeneratorHandlers } from './canvas-generator'
+import { generatorHandlers } from './generator'
 import { creationsHandlers } from './creations'
 import { materialsHandlers } from './materials'
 import { tagGroupHandlers } from './tag-groups'
@@ -9,5 +9,5 @@ export const handlers = [
   ...materialsHandlers,
   ...tagGroupHandlers,
   ...creationsHandlers,
-  ...canvasGeneratorHandlers,
+  ...generatorHandlers,
 ]
