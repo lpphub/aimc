@@ -34,6 +34,15 @@ export function useCanvas() {
     [updateItem]
   )
 
+  const handleDownload = useCallback((imageUrl: string) => {
+    const link = document.createElement('a')
+    link.href = imageUrl
+    link.download = `canvas-item-${Date.now()}.png`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }, [])
+
   return {
     items,
     selectedId,
@@ -41,5 +50,6 @@ export function useCanvas() {
     handleDrag,
     selectItem,
     removeItem,
+    handleDownload,
   }
 }
