@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight, Image, ScanText, Type } from 'lucide-react'
+import { ArrowLeft, ArrowRight, ScanText } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { ToolType } from '../types'
 
@@ -13,24 +13,6 @@ interface ToolCardDef {
 }
 
 const tools: ToolCardDef[] = [
-  {
-    id: 'text',
-    type: 'text',
-    title: '营销文案',
-    description: 'AI 生成商品文案、广告语、种草内容等',
-    label: 'Ecommerce Insight',
-    icon: Type,
-    accent: 'primary',
-  },
-  {
-    id: 'image',
-    type: 'image',
-    title: '海报创作',
-    description: '输入描述生成精美图片，支持多比例',
-    label: 'Visual Core',
-    icon: Image,
-    accent: 'primary',
-  },
   {
     id: 'ocr',
     type: 'ocr',
