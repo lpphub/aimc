@@ -78,9 +78,10 @@ export function ConversationList({ onSelectConversation }: ConversationListProps
         ) : (
           <div className='space-y-1 p-2'>
             {conversations.map(conv => (
-              <div
+              <button
+                type='button'
                 key={conv.id}
-                className='group flex items-center gap-2 p-3 rounded-lg hover:bg-surface-container-high cursor-pointer transition-colors'
+                className='group flex items-center gap-2 p-3 rounded-lg hover:bg-surface-container-high cursor-pointer transition-colors w-full text-left'
                 onClick={() => handleSelect(conv.id)}
               >
                 <MessageSquare className='w-4 h-4 text-muted-foreground shrink-0' />
@@ -88,12 +89,7 @@ export function ConversationList({ onSelectConversation }: ConversationListProps
                   <div className='text-sm text-foreground truncate'>{conv.title}</div>
                   <div className='text-xs text-muted-foreground'>{formatDate(conv.updatedAt)}</div>
                 </div>
-                <button
-                  type='button'
-                  onClick={e => {
-                    e.stopPropagation()
-                    handleDelete(conv.id)
-                  }}
+                <span
                   className={cn(
                     'p-1.5 rounded transition-colors',
                     deleteConfirmId === conv.id
@@ -102,9 +98,18 @@ export function ConversationList({ onSelectConversation }: ConversationListProps
                   )}
                   title={deleteConfirmId === conv.id ? '再次点击确认删除' : '删除'}
                 >
-                  <Trash2 className='w-3.5 h-3.5' />
-                </button>
-              </div>
+                  <button
+                    type='button'
+                    onClick={e => {
+                      e.stopPropagation()
+                      handleDelete(conv.id)
+                    }}
+                    className='bg-transparent border-none p-0 cursor-pointer'
+                  >
+                    <Trash2 className='w-3.5 h-3.5' />
+                  </button>
+                </span>
+              </button>
             ))}
           </div>
         )}

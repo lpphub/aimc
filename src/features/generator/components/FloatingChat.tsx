@@ -27,7 +27,7 @@ export function FloatingChat({ conversationId }: FloatingChatProps) {
     if (isExpanded && messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
     }
-  }, [isExpanded, messages])
+  }, [isExpanded])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

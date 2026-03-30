@@ -1,7 +1,7 @@
 export { AiDrawLanding } from './AiDrawLanding'
 export { Canvas } from './Canvas'
-export { GeneratorPage } from './GeneratorPage'
 export { CanvasItem } from './CanvasItem'
 export { CanvasToolbar } from './CanvasToolbar'
 export { ConversationList } from './ConversationList'
 export { FloatingChat } from './FloatingChat'
+export { GeneratorPage } from './GeneratorPage'

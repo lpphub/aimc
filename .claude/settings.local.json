@@ -25,7 +25,8 @@
       "Bash(pkill -f 'vite --host')",
       "Bash(agent-browser open:*)",
       "Bash(agent-browser wait:*)",
-      "Bash(agent-browser snapshot:*)"
+      "Bash(agent-browser snapshot:*)",
+      "Bash(pnpm lint:fix)"
     ]
   }
 }

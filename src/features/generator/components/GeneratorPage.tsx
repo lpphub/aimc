@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useConversation } from '../hooks'
 import { useCanvasStore } from '../stores/canvas'
 import { Canvas } from './Canvas'
@@ -24,10 +24,12 @@ export function GeneratorPage({ conversationId }: GeneratorPageProps) {
     }
   }, [conversation, isLoaded, setItems])
 
-  // Reset loaded state when conversationId changes
-  useEffect(() => {
+  // Reset loaded state when conversationId changes - using ref to track previous value
+  const prevConversationIdRef = useRef(conversationId)
+  if (prevConversationIdRef.current !== conversationId) {
+    prevConversationIdRef.current = conversationId
     setIsLoaded(false)
-  }, [conversationId])
+  }
 
   if (!conversationId) {
     return null // Should be redirected by router

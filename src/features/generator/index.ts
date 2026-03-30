@@ -1,11 +1,11 @@
 export * from './api'
 export {
+  AiDrawLanding,
   Canvas,
-  GeneratorPage,
   CanvasItem,
   CanvasToolbar,
   FloatingChat,
-  AiDrawLanding,
+  GeneratorPage,
 } from './components'
 export * from './hooks/useCanvas'
 export * from './stores/canvas'
