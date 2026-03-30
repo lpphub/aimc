@@ -47,11 +47,13 @@ src/
 │   │   ├── api.ts                # 更新：新增对话历史 API
 │   │   ├── types.ts              # 更新：新增 Conversation 相关类型
 │   │   ├── hooks/
-│   │   │   ├── index.ts          # 更新导出
-│   │   │   ├── useCanvas.ts      # 保持
-│   │   │   ├── useChat.ts        # 更新：支持 conversationId
-│   │   │   ├── useConversations.ts # 新增：历史对话列表 hooks
-│   │   │   └── useConversation.ts  # 新增：单个对话详情 hook
+│   │   │   ├── index.ts              # 更新导出
+│   │   │   ├── useCanvas.ts          # 保持
+│   │   │   ├── useChat.ts            # 更新：支持 conversationId
+│   │   │   ├── useConversations.ts   # 新增：历史对话列表 query hook
+│   │   │   ├── useConversation.ts    # 新增：单个对话详情 query hook
+│   │   │   ├── useCreateConversation.ts # 新增：创建对话 mutation hook
+│   │   │   └── useDeleteConversation.ts # 新增：删除对话 mutation hook
 │   │   ├── components/
 │   │   │   ├── AiDrawLanding.tsx # 新增：AI绘图首页
 │   │   │   ├── ConversationList.tsx # 新增：历史对话列表
@@ -237,7 +239,7 @@ export const generatorKeys = {
 - 列表顶部有"新建对话"按钮
 - 使用 `useConversations` hook 获取数据
 
-### Hooks: useConversations & useConversation
+### Hooks: useConversations & useConversation & Mutations
 
 ```typescript
 // useConversations - 获取对话列表
@@ -254,6 +256,30 @@ export function useConversation(id: string) {
     queryKey: generatorKeys.conversation(id),
     queryFn: () => generatorApi.getConversation(id),
     enabled: !!id,
+  })
+}
+
+// useCreateConversation - 创建新对话
+export function useCreateConversation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (data: CreateConversationReq) => generatorApi.createConversation(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: generatorKeys.conversations() })
+    },
+    onError: createMutationErrorHandler('创建对话失败'),
+  })
+}
+
+// useDeleteConversation - 删除对话
+export function useDeleteConversation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (id: string) => generatorApi.deleteConversation(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: generatorKeys.conversations() })
+    },
+    onError: createMutationErrorHandler('删除对话失败'),
   })
 }
 ```
@@ -447,8 +473,10 @@ export const generatorHandlers = [
 6. **Create new components & hooks**:
    - `AiDrawLanding.tsx`
    - `ConversationList.tsx`
-   - `useConversations.ts` hook (列表)
-   - `useConversation.ts` hook (单个对话详情)
+   - `useConversations.ts` hook (列表 query)
+   - `useConversation.ts` hook (单个对话详情 query)
+   - `useCreateConversation.ts` hook (创建 mutation)
+   - `useDeleteConversation.ts` hook (删除 mutation)
 
 7. **Update existing components**:
    - `GeneratorPage.tsx`: Load conversation on mount
