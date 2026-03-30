@@ -1,7 +1,7 @@
 export * from './api'
 export {
   Canvas,
-  CanvasGeneratorPage,
+  GeneratorPage,
   CanvasItem,
   CanvasToolbar,
   FloatingChat,

@@ -22,7 +22,11 @@ interface Message {
   timestamp: number
 }
 
-export function FloatingChat() {
+interface FloatingChatProps {
+  conversationId?: string
+}
+
+export function FloatingChat({ conversationId: _conversationId }: FloatingChatProps) {
   const [isExpanded, setIsExpanded] = useState(true)
   const [messages, setMessages] = useState<Message[]>([])
   const [isLoading, setIsLoading] = useState(false)

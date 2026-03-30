@@ -1,6 +1,6 @@
 export { AiDrawLanding } from './AiDrawLanding'
 export { Canvas } from './Canvas'
-export { CanvasGeneratorPage } from './CanvasGeneratorPage'
+export { GeneratorPage } from './GeneratorPage'
 export { CanvasItem } from './CanvasItem'
 export { CanvasToolbar } from './CanvasToolbar'
 export { ConversationList } from './ConversationList'
