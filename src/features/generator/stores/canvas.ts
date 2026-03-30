@@ -7,6 +7,7 @@ interface CanvasState {
   isDragging: boolean
 
   addItem: (item: CanvasItem) => void
+  setItems: (items: CanvasItem[]) => void
   updateItem: (id: string, updates: Partial<CanvasItem>) => void
   removeItem: (id: string) => void
   selectItem: (id: string | null) => void
@@ -19,6 +20,8 @@ export const useCanvasStore = create<CanvasState>(set => ({
   isDragging: false,
 
   addItem: item => set(state => ({ items: [...state.items, item] })),
+
+  setItems: items => set({ items }),
 
   updateItem: (id, updates) =>
     set(state => ({
