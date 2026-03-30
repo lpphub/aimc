@@ -7,6 +7,8 @@ interface CanvasItemProps {
   onDrag: (id: string, x: number, y: number) => void
   onSelect: (id: string) => void
   tool?: 'select' | 'hand'
+  onDelete: (id: string) => void
+  onDownload: (imageUrl: string) => void
 }
 
 export const CanvasItem = memo(function CanvasItem({
@@ -15,6 +17,8 @@ export const CanvasItem = memo(function CanvasItem({
   onDrag,
   onSelect,
   tool = 'select',
+  onDelete,
+  onDownload,
 }: CanvasItemProps) {
   const handleMouseDown = useCallback(
     (e: React.MouseEvent) => {
@@ -57,6 +61,29 @@ export const CanvasItem = memo(function CanvasItem({
       role='img'
       tabIndex={-1}
     >
+      {/* 选中时显示操作栏 */}
+      {isSelected && tool === 'select' && (
+        <div className="absolute top-0 left-0 right-0 bg-black/60 rounded-t-md p-1.5 flex gap-2 justify-center z-10">
+          <button
+            className="text-white text-xs hover:bg-white/20 rounded px-2 py-0.5 transition-colors"
+            onClick={e => {
+              e.stopPropagation()
+              onDelete(item.id)
+            }}
+          >
+            🗑️ 删除
+          </button>
+          <button
+            className="text-white text-xs hover:bg-white/20 rounded px-2 py-0.5 transition-colors"
+            onClick={e => {
+              e.stopPropagation()
+              onDownload(item.imageUrl)
+            }}
+          >
+            ⬇️ 下载
+          </button>
+        </div>
+      )}
       <img
         src={item.imageUrl}
         alt='Canvas item'

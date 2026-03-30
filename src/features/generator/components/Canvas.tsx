@@ -7,7 +7,7 @@ interface CanvasProps {
 }
 
 export function Canvas({ tool = 'select' }: CanvasProps) {
-  const { items, selectedId, handleDrag, selectItem } = useCanvas()
+  const { items, selectedId, handleDrag, selectItem, removeItem, handleDownload } = useCanvas()
   const canvasRef = useRef<HTMLElement>(null)
   const [canvasOffset, setCanvasOffset] = useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
@@ -116,6 +116,8 @@ export function Canvas({ tool = 'select' }: CanvasProps) {
             onDrag={handleDrag}
             onSelect={selectItem}
             tool={tool}
+            onDelete={removeItem}
+            onDownload={handleDownload}
           />
         ))}
       </div>
