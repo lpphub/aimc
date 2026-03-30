@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { useCanvas } from '../hooks/useCanvas'
 import { useChat } from '../hooks/useChat'
+import { type PendingImage, useChatStore } from '../stores/chat'
 
 interface FloatingChatProps {
   conversationId: string
@@ -12,34 +13,62 @@ interface FloatingChatProps {
 export function FloatingChat({ conversationId }: FloatingChatProps) {
   const [isExpanded, setIsExpanded] = useState(true)
   const [inputValue, setInputValue] = useState('')
-  const [pendingImages, setPendingImages] = useState<{ url: string; file: File }[]>([])
+  const [pendingImages, setPendingImages] = useState<PendingImage[]>([])
   const fileInputRef = useRef<HTMLInputElement>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
   const { handleAddImage } = useCanvas()
+
+  const pendingMessage = useChatStore(state => state.pendingMessage)
+  const clearPendingMessage = useChatStore(state => state.clearPendingMessage)
 
   const { messages, isLoading, sendMessage } = useChat({
     conversationId,
     onGenerateImage: handleAddImage,
   })
 
+  const processedRef = useRef(false)
+  const prevMessagesLengthRef = useRef(0)
+  const prevLoadingRef = useRef(false)
+
   useEffect(() => {
-    if (isExpanded && messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
+    if (pendingMessage && !processedRef.current) {
+      processedRef.current = true
+      const { text, images } = pendingMessage
+      clearPendingMessage()
+      sendMessage(
+        text,
+        images.map(img => img.file)
+      )
     }
-  }, [isExpanded])
+  }, [pendingMessage, clearPendingMessage, sendMessage])
+
+  // Scroll to bottom when messages added or loading state changes
+  useEffect(() => {
+    const messagesChanged = messages.length !== prevMessagesLengthRef.current
+    const loadingChanged = isLoading !== prevLoadingRef.current
+    prevMessagesLengthRef.current = messages.length
+    prevLoadingRef.current = isLoading
+
+    if (messagesChanged || loadingChanged) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [messages, isLoading])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if ((!inputValue.trim() && pendingImages.length === 0) || isLoading) return
 
     const message = inputValue.trim() || '[图片]'
-    const image = pendingImages[0]?.file // Send only the first image for now
+    const images = pendingImages.map(img => img.file)
 
-    await sendMessage(message, image)
-
+    pendingImages.forEach(img => {
+      URL.revokeObjectURL(img.url)
+    })
     setInputValue('')
     setPendingImages([])
+
+    await sendMessage(message, images)
   }
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,8 +80,6 @@ export function FloatingChat({ conversationId }: FloatingChatProps) {
       file,
     }))
     setPendingImages(prev => [...prev, ...newImages])
-
-    // 重置 input 以便同一文件可重新选择
     e.target.value = ''
   }
 
@@ -69,16 +96,14 @@ export function FloatingChat({ conversationId }: FloatingChatProps) {
     toast.success('已复制到剪贴板')
   }
 
-  const formatTime = (timestamp: number) => {
-    return new Date(timestamp).toLocaleString('zh-CN', {
+  const formatTime = (timestamp: number) =>
+    new Date(timestamp).toLocaleString('zh-CN', {
       month: '2-digit',
       day: '2-digit',
       hour: '2-digit',
       minute: '2-digit',
     })
-  }
 
-  // 收起状态：显示浮动按钮
   if (!isExpanded) {
     return (
       <button
@@ -92,10 +117,8 @@ export function FloatingChat({ conversationId }: FloatingChatProps) {
     )
   }
 
-  // 展开状态：显示完整面板
   return (
     <div className='absolute left-4 top-20 bottom-20 z-50 w-100 flex flex-col bg-card/95 backdrop-blur-xl border border-border rounded-2xl shadow-[0_0_60px_rgba(0,0,0,0.3)] transition-all duration-300'>
-      {/* 头部区域 */}
       <div className='flex items-center justify-between px-4 py-3 border-b border-border/50 bg-card/50'>
         <div className='flex items-center gap-2'>
           <div className='w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center'>
@@ -123,9 +146,8 @@ export function FloatingChat({ conversationId }: FloatingChatProps) {
         </div>
       </div>
 
-      {/* 消息列表 */}
       <div className='flex-1 overflow-y-auto p-4 space-y-4 min-h-0'>
-        {messages.length === 0 && (
+        {messages.length === 0 && !isLoading && (
           <div className='text-center py-12 text-muted-foreground space-y-3'>
             <div className='w-12 h-12 mx-auto rounded-2xl bg-muted/50 flex items-center justify-center'>
               <MessageSquare className='w-6 h-6 text-muted-foreground/50' />
@@ -139,14 +161,12 @@ export function FloatingChat({ conversationId }: FloatingChatProps) {
 
         {messages.map((message, index) => (
           <div key={message.id} className={`space-y-1 ${index === 0 ? '' : 'mt-4'}`}>
-            {/* 时间戳 */}
             <div className='flex justify-center'>
               <span className='text-[10px] text-muted-foreground/40 font-medium tracking-wide'>
                 {formatTime(message.timestamp)}
               </span>
             </div>
 
-            {/* 消息气泡 */}
             <div className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               <div
                 className={`relative group max-w-[85%] rounded-2xl px-4 py-3 text-sm ${
@@ -155,7 +175,6 @@ export function FloatingChat({ conversationId }: FloatingChatProps) {
                     : 'bg-muted text-foreground mr-8 border border-border/30'
                 }`}
               >
-                {/* 复制按钮 */}
                 {message.role === 'assistant' && message.content && (
                   <button
                     type='button'
@@ -167,22 +186,23 @@ export function FloatingChat({ conversationId }: FloatingChatProps) {
                   </button>
                 )}
 
-                {/* 图片 */}
-                {message.imageUrl && (
-                  <div className='mb-2 overflow-hidden rounded-xl'>
-                    <img
-                      src={message.imageUrl}
-                      alt='生成的图片'
-                      className='max-w-[120px] max-h-[120px] rounded-xl hover:scale-105 transition-transform duration-300 cursor-pointer'
-                      onClick={() => window.open(message.imageUrl, '_blank')}
-                      onKeyDown={e => {
-                        if (e.key === 'Enter') window.open(message.imageUrl, '_blank')
-                      }}
-                    />
+                {message.imageUrls && message.imageUrls.length > 0 && (
+                  <div className='mb-2 flex flex-wrap gap-2'>
+                    {message.imageUrls.map(url => (
+                      <img
+                        key={url}
+                        src={url}
+                        alt='图片'
+                        className='max-w-[120px] max-h-[120px] rounded-xl hover:scale-105 transition-transform duration-300 cursor-pointer overflow-hidden'
+                        onClick={() => window.open(url, '_blank')}
+                        onKeyDown={e => {
+                          if (e.key === 'Enter') window.open(url, '_blank')
+                        }}
+                      />
+                    ))}
                   </div>
                 )}
 
-                {/* 文本内容 */}
                 {message.content && (
                   <div className='whitespace-pre-wrap leading-relaxed'>{message.content}</div>
                 )}
@@ -191,7 +211,6 @@ export function FloatingChat({ conversationId }: FloatingChatProps) {
           </div>
         ))}
 
-        {/* 加载状态 */}
         {isLoading && (
           <div className='flex justify-start'>
             <div className='bg-muted/80 rounded-2xl px-4 py-3 border border-border/20'>
@@ -217,7 +236,6 @@ export function FloatingChat({ conversationId }: FloatingChatProps) {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* 输入框区域 */}
       <div className='shrink-0 p-4 border-t border-border/50 bg-card/50'>
         <form onSubmit={handleSubmit}>
           <div className='bg-muted/50 rounded-2xl border border-border/30 focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/20 transition-all'>
@@ -230,7 +248,6 @@ export function FloatingChat({ conversationId }: FloatingChatProps) {
               onChange={handleFileSelect}
             />
 
-            {/* 待发送图片预览 */}
             {pendingImages.length > 0 && (
               <div className='flex flex-wrap gap-2 mx-3 mt-2'>
                 {pendingImages.map((img, index) => (
@@ -249,7 +266,6 @@ export function FloatingChat({ conversationId }: FloatingChatProps) {
               </div>
             )}
 
-            {/* 输入框 - 最多显示3行再滚动 */}
             <textarea
               value={inputValue}
               onChange={e => setInputValue(e.target.value)}
@@ -265,7 +281,6 @@ export function FloatingChat({ conversationId }: FloatingChatProps) {
               }}
             />
 
-            {/* 底部栏：图标和发送按钮 */}
             <div className='flex items-center justify-between px-2 pb-2 pt-0.5'>
               <button
                 type='button'
@@ -285,11 +300,10 @@ export function FloatingChat({ conversationId }: FloatingChatProps) {
               </button>
             </div>
           </div>
-          <div className='flex items-center justify-between mt-3 px-1'>
+          <div className='flex items-center justify-end mt-3 px-1'>
             <span className='text-xs text-muted-foreground/40'>
               按 Enter 发送，Shift + Enter 换行
             </span>
-            <span className='text-xs text-muted-foreground/40'>支持 JPG、PNG</span>
           </div>
         </form>
       </div>

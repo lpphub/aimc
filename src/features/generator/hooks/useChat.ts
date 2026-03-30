@@ -1,5 +1,4 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useCallback } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { generatorApi } from '../api'
 import type { ChatMessage } from '../types'
@@ -10,74 +9,78 @@ interface UseChatOptions {
 }
 
 export function useChat({ conversationId, onGenerateImage }: UseChatOptions) {
-  const queryClient = useQueryClient()
+  const [messages, setMessages] = useState<ChatMessage[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const blobUrlsRef = useRef<Set<string>>(new Set())
 
-  const queryKey = ['chat-messages', conversationId] as const
-
-  const messages = queryClient.getQueryData<ChatMessage[]>(queryKey) ?? []
-
-  const setMessages = useCallback(
-    (updater: ChatMessage[] | ((prev: ChatMessage[]) => ChatMessage[])) => {
-      const current = queryClient.getQueryData<ChatMessage[]>(queryKey) ?? []
-      const next = typeof updater === 'function' ? updater(current) : updater
-      queryClient.setQueryData(queryKey, next)
-    },
-    [queryClient, queryKey]
-  )
-
-  const sendMessageMutation = useMutation({
-    mutationFn: async ({ message, image }: { message: string; image?: File }) => {
-      const response = await generatorApi.sendMessage({
-        conversationId,
-        message,
-        image,
+  // Cleanup blob URLs on unmount
+  useEffect(() => {
+    return () => {
+      blobUrlsRef.current.forEach(url => {
+        URL.revokeObjectURL(url)
       })
-      return response
-    },
-    onMutate: async ({ message, image }) => {
+    }
+  }, [])
+
+  const sendMessage = useCallback(
+    async (message: string, images?: File[]) => {
+      if (!message.trim() && !images?.length) return
+
+      const userImageUrls = images?.map(f => {
+        const url = URL.createObjectURL(f)
+        blobUrlsRef.current.add(url)
+        return url
+      })
+
       const userMessage: ChatMessage = {
         id: crypto.randomUUID(),
         role: 'user',
         content: message,
-        imageUrl: image ? URL.createObjectURL(image) : undefined,
+        imageUrls: userImageUrls,
         timestamp: Date.now(),
       }
       setMessages(prev => [...prev, userMessage])
-    },
-    onSuccess: data => {
-      const assistantMessage: ChatMessage = {
-        id: crypto.randomUUID(),
-        role: 'assistant',
-        content: data.message.content,
-        timestamp: Date.now(),
+      setIsLoading(true)
+
+      try {
+        const data = await generatorApi.sendMessage({
+          conversationId,
+          message,
+          images,
+        })
+
+        const assistantMessage: ChatMessage = {
+          id: crypto.randomUUID(),
+          role: 'assistant',
+          content: data.message.content,
+          imageUrls: data.generatedImage?.imageUrl ? [data.generatedImage.imageUrl] : undefined,
+          timestamp: Date.now(),
+        }
+        setMessages(prev => [...prev, assistantMessage])
+
+        if (data.generatedImage?.imageUrl) {
+          onGenerateImage?.(data.generatedImage.imageUrl, data.generatedImage.suggestedPosition)
+        }
+      } catch {
+        toast.error('发送消息失败')
+      } finally {
+        setIsLoading(false)
       }
-
-      setMessages(prev => [...prev, assistantMessage])
-
-      if (data.generatedImage?.imageUrl) {
-        onGenerateImage?.(data.generatedImage.imageUrl, data.generatedImage.suggestedPosition)
-      }
     },
-    onError: () => {
-      toast.error('发送消息失败')
-    },
-  })
-
-  const sendMessage = useCallback(
-    async (message: string, image?: File) => {
-      if (!message.trim() && !image) return
-      await sendMessageMutation.mutateAsync({ message, image })
-    },
-    [sendMessageMutation]
+    [conversationId, onGenerateImage]
   )
 
   const clearMessages = useCallback(() => {
-    queryClient.setQueryData(queryKey, [])
-  }, [queryClient, queryKey])
+    blobUrlsRef.current.forEach(url => {
+      URL.revokeObjectURL(url)
+    })
+    blobUrlsRef.current.clear()
+    setMessages([])
+  }, [])
 
   return {
     messages,
-    isLoading: sendMessageMutation.isPending,
+    isLoading,
     sendMessage,
     clearMessages,
   }

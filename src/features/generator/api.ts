@@ -23,9 +23,9 @@ export const generatorApi = {
     const formData = new FormData()
     formData.append('message', data.message)
     formData.append('conversationId', data.conversationId)
-    if (data.image) {
-      formData.append('image', data.image)
-    }
+    data.images?.forEach((file, index) => {
+      formData.append(`images[${index}]`, file)
+    })
     const res = await apiClient.post('canvas/chat', { body: formData })
     return unwrap<ChatMessageResp>(res)
   },

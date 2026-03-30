@@ -2,7 +2,7 @@ export interface ChatMessage {
   id: string
   role: 'user' | 'assistant'
   content: string
-  imageUrl?: string
+  imageUrls?: string[]
   timestamp: number
 }
 
@@ -20,7 +20,7 @@ export interface CanvasItem {
 export interface ChatMessageReq {
   conversationId: string // Now required
   message: string
-  image?: File
+  images?: File[]
 }
 
 export interface ChatMessageResp {
