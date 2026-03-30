@@ -1,7 +1,7 @@
 ---
 title: AIMC Sidebar & AI Draw Refactor
 date: 2026-03-30
-status: draft
+status: ready
 ---
 
 # AIMC Sidebar & AI Draw Refactor Design
