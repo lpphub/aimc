@@ -48,7 +48,7 @@ export const CanvasItem = memo(function CanvasItem({
 
   return (
     <div
-      className={`absolute ${tool === 'select' ? 'cursor-move' : 'cursor-grab'} ${isSelected && tool === 'select' ? 'ring-2 ring-primary' : ''}`}
+      className={`canvas-item absolute ${tool === 'select' ? 'cursor-move' : 'cursor-grab'} ${isSelected && tool === 'select' ? 'ring-2 ring-primary' : ''}`}
       style={{
         left: item.x,
         top: item.y,

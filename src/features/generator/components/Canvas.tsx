@@ -14,15 +14,14 @@ export function Canvas({ tool = 'select' }: CanvasProps) {
   const dragStartRef = useRef({ x: 0, y: 0 })
   const offsetStartRef = useRef({ x: 0, y: 0 })
 
-  const handleCanvasClick = useCallback(() => {
-    if (tool === 'select') {
-      selectItem(null)
-    }
-  }, [selectItem, tool])
-
-  // 处理画布拖拽（抓手工具）
+  // 处理画布拖拽（抓手工具）和取消选中
   const handleMouseDown = useCallback(
     (e: React.MouseEvent) => {
+      // 点击空白区域取消选中
+      if (tool === 'select' && !(e.target as HTMLElement).closest('.canvas-item')) {
+        selectItem(null)
+      }
+
       if (tool !== 'hand') return
       if ((e.target as HTMLElement).closest('.canvas-item')) return
 
@@ -30,7 +29,7 @@ export function Canvas({ tool = 'select' }: CanvasProps) {
       dragStartRef.current = { x: e.clientX, y: e.clientY }
       offsetStartRef.current = { ...canvasOffset }
     },
-    [tool, canvasOffset]
+    [tool, canvasOffset, selectItem]
   )
 
   const handleMouseMove = useCallback(
@@ -90,7 +89,6 @@ export function Canvas({ tool = 'select' }: CanvasProps) {
         backgroundSize: '20px 20px',
         backgroundPosition: `${canvasOffset.x}px ${canvasOffset.y}px`,
       }}
-      onClick={handleCanvasClick}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
