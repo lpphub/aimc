@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useState } from 'react'
 import { toast } from 'sonner'
-import { canvasGeneratorApi } from '../api'
+import { generatorApi } from '../api'
 import type { ChatMessage } from '../types'
 
 const CHAT_MESSAGES_KEY = 'chat-messages'
@@ -25,8 +25,16 @@ export function useChat(
 
   const sendMessageMutation = useMutation({
     mutationFn: async ({ message, image }: { message: string; image?: File }) => {
-      const response = await canvasGeneratorApi.sendMessage({
-        conversationId,
+      // Create a conversation if none exists
+      let convId = conversationId
+      if (!convId) {
+        const convResp = await generatorApi.createConversation({})
+        convId = convResp.conversation.id
+        setConversationId(convId)
+      }
+
+      const response = await generatorApi.sendMessage({
+        conversationId: convId,
         message,
         image,
       })
@@ -43,8 +51,6 @@ export function useChat(
       setMessages(prev => [...prev, userMessage])
     },
     onSuccess: data => {
-      setConversationId(data.conversationId)
-
       const assistantMessage: ChatMessage = {
         id: crypto.randomUUID(),
         role: 'assistant',

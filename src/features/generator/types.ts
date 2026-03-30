@@ -18,7 +18,7 @@ export interface CanvasItem {
 }
 
 export interface ChatMessageReq {
-  conversationId?: string
+  conversationId: string // Now required
   message: string
   image?: File
 }
@@ -39,4 +39,32 @@ export interface CanvasExportReq {
 
 export interface CanvasExportResp {
   imageUrl: string
+}
+
+// 对话摘要
+export interface Conversation {
+  id: string
+  title: string
+  createdAt: number
+  updatedAt: number
+}
+
+// 对话详情（含消息和画布状态）
+export interface ConversationDetail {
+  id: string
+  title: string
+  messages: ChatMessage[]
+  canvasItems: CanvasItem[]
+  createdAt: number
+  updatedAt: number
+}
+
+// 创建对话请求
+export interface CreateConversationReq {
+  title?: string
+}
+
+// 创建对话响应
+export interface CreateConversationResp {
+  conversation: Conversation
 }
