@@ -13,7 +13,7 @@ interface CanvasZoomResult {
 
 const DEFAULT_MIN_ZOOM = 0.25
 const DEFAULT_MAX_ZOOM = 2.0
-const DEFAULT_STEP = 0.1
+const DEFAULT_STEP = 0.05
 
 export function useCanvasZoom(options?: UseCanvasZoomOptions) {
   const minZoom = options?.minZoom ?? DEFAULT_MIN_ZOOM
