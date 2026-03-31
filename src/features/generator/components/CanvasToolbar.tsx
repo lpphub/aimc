@@ -50,9 +50,7 @@ export function CanvasToolbar({ onToolChange, zoom = 1 }: CanvasToolbarProps) {
 
       <div className='w-5 h-px bg-border/50' />
 
-      <div className='text-xs text-muted-foreground font-mono'>
-        {zoomPercentage}%
-      </div>
+      <div className='text-xs text-muted-foreground font-mono'>{zoomPercentage}%</div>
     </div>
   )
 }
