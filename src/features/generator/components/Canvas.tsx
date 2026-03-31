@@ -1,13 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useCanvas } from '../hooks/useCanvas'
+import { useCanvasZoom } from '../hooks/useCanvasZoom'
 import { CanvasItem } from './CanvasItem'
 
 interface CanvasProps {
   tool?: 'select' | 'hand'
+  onZoomChange?: (zoom: number) => void
 }
 
-export function Canvas({ tool = 'select' }: CanvasProps) {
+export function Canvas({ tool = 'select', onZoomChange }: CanvasProps) {
   const { items, selectedId, handleDrag, selectItem, removeItem, handleDownload } = useCanvas()
+  const { zoom, setZoom, handleWheel: handleZoomWheel } = useCanvasZoom()
   const canvasRef = useRef<HTMLElement>(null)
   const [canvasOffset, setCanvasOffset] = useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
@@ -51,6 +54,17 @@ export function Canvas({ tool = 'select' }: CanvasProps) {
     setIsDragging(false)
   }, [])
 
+  // Handle zoom via wheel
+  const handleWheel = useCallback(
+    (e: React.WheelEvent) => {
+      const result = handleZoomWheel(e, canvasOffset)
+      setZoom(result.zoom)
+      setCanvasOffset(result.offset)
+      onZoomChange?.(result.zoom)
+    },
+    [handleZoomWheel, canvasOffset, setZoom, onZoomChange]
+  )
+
   // 全局鼠标事件监听
   useEffect(() => {
     if (!isDragging) return
@@ -86,12 +100,13 @@ export function Canvas({ tool = 'select' }: CanvasProps) {
       } ${isDragging ? 'cursor-grabbing' : ''}`}
       style={{
         backgroundImage: `radial-gradient(circle, rgba(100, 116, 139, 0.4) 1px, transparent 1px)`,
-        backgroundSize: '20px 20px',
+        backgroundSize: `${20 * zoom}px ${20 * zoom}px`,
         backgroundPosition: `${canvasOffset.x}px ${canvasOffset.y}px`,
       }}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
+      onWheel={handleWheel}
       onKeyDown={e => {
         if (e.key === 'Escape') {
           selectItem(null)
@@ -101,9 +116,10 @@ export function Canvas({ tool = 'select' }: CanvasProps) {
     >
       {/* 可拖拽的内容层 */}
       <div
-        className='absolute inset-0 transition-transform duration-75'
+        className='absolute inset-0'
         style={{
-          transform: `translate(${canvasOffset.x}px, ${canvasOffset.y}px)`,
+          transform: `translate(${canvasOffset.x}px, ${canvasOffset.y}px) scale(${zoom})`,
+          transformOrigin: '0 0',
         }}
       >
         {items.map(item => (
