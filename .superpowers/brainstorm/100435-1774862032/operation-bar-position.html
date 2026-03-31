@@ -1,0 +1,71 @@
+<h2>操作栏位置和样式</h2>
+<p class="subtitle">当画布上的 item 被选中时，操作栏应该出现在哪里？</p>
+
+<div class="cards">
+  <div class="card" data-choice="above" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="mockup">
+        <div class="mockup-body" style="background: #f1f5f9; min-height: 200px; position: relative;">
+          <div style="position: absolute; top: 60px; left: 40px; width: 120px; height: 100px; background: #fff; border: 2px solid #3b82f6; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #64748b;">
+            图片
+          </div>
+          <div style="position: absolute; top: 30px; left: 40px; width: 120px; background: #fff; border: 1px solid #e2e8f0; border-radius: 4px; padding: 6px; display: flex; gap: 8px; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+            <button class="mock-button" style="font-size: 11px; padding: 4px 8px;">🗑️</button>
+            <button class="mock-button" style="font-size: 11px; padding: 4px 8px;">⬇️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>上方悬浮</h3>
+      <p>操作栏紧贴选中项上方，跟随移动</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="inside" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="mockup">
+        <div class="mockup-body" style="background: #f1f5f9; min-height: 200px; position: relative;">
+          <div style="position: absolute; top: 50px; left: 40px; width: 120px; height: 100px; background: #fff; border: 2px solid #3b82f6; border-radius: 4px; overflow: hidden;">
+            <div style="background: rgba(0,0,0,0.6); padding: 6px; display: flex; gap: 8px; justify-content: center;">
+              <button style="background: none; border: none; color: #fff; font-size: 11px; cursor: pointer;">🗑️</button>
+              <button style="background: none; border: none; color: #fff; font-size: 11px; cursor: pointer;">⬇️</button>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: center; height: 70px; font-size: 12px; color: #64748b;">
+              图片
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>内嵌顶部</h3>
+      <p>操作栏在选中项内部顶部，半透明背景</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="toolbar" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="mockup">
+        <div class="mockup-body" style="background: #f1f5f9; min-height: 200px; position: relative;">
+          <div style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px 16px; display: flex; gap: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+            <button class="mock-button" style="font-size: 12px;">🗑️ 删除</button>
+            <button class="mock-button" style="font-size: 12px;">⬇️ 下载</button>
+          </div>
+          <div style="position: absolute; top: 60px; left: 40px; width: 120px; height: 100px; background: #fff; border: 2px solid #3b82f6; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #64748b;">
+            图片
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>画布顶部工具栏</h3>
+      <p>固定在画布顶部中央，选中时显示</p>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top: 24px;">
+  <p class="label">提示</p>
+  <p style="color: #64748b; font-size: 14px;">点击选择你喜欢的方案，也可以直接在终端告诉我偏好</p>
+</div>

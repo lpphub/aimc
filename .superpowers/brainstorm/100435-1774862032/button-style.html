@@ -1,0 +1,55 @@
+<h2>操作按钮样式</h2>
+<p class="subtitle">删除和下载按钮应该用什么样式？</p>
+
+<div class="cards">
+  <div class="card" data-choice="icon-only" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="mockup">
+        <div class="mockup-body" style="background: rgba(0,0,0,0.6); padding: 6px; display: flex; gap: 12px; justify-content: center; border-radius: 4px 4px 0 0;">
+          <button style="background: none; border: none; color: #fff; font-size: 16px; cursor: pointer; padding: 4px;">🗑️</button>
+          <button style="background: none; border: none; color: #fff; font-size: 16px; cursor: pointer; padding: 4px;">⬇️</button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>纯图标</h3>
+      <p>简洁，适合小尺寸 item</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="icon-text" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="mockup">
+        <div class="mockup-body" style="background: rgba(0,0,0,0.6); padding: 6px 10px; display: flex; gap: 16px; justify-content: center; border-radius: 4px 4px 0 0;">
+          <button style="background: none; border: none; color: #fff; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 4px;">🗑️ 删除</button>
+          <button style="background: none; border: none; color: #fff; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 4px;">⬇️ 下载</button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>图标 + 文字</h3>
+      <p>清晰明了，操作意图明确</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="hover-text" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="mockup">
+        <div class="mockup-body" style="background: rgba(0,0,0,0.6); padding: 6px; display: flex; gap: 12px; justify-content: center; border-radius: 4px 4px 0 0;">
+          <button style="background: rgba(255,255,255,0.2); border: none; color: #fff; font-size: 14px; cursor: pointer; padding: 4px 8px; border-radius: 4px;">🗑️</button>
+          <button style="background: none; border: none; color: #fff; font-size: 14px; cursor: pointer; padding: 4px 8px; border-radius: 4px;">⬇️</button>
+        </div>
+        <p style="font-size: 11px; color: #94a3b8; margin-top: 8px; text-align: center;">hover 时显示背景 + tooltip 文字</p>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>图标 + hover 提示</h3>
+      <p>默认简洁，hover 时有反馈</p>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top: 24px;">
+  <p class="label">注意</p>
+  <p style="color: #64748b; font-size: 14px;">操作栏背景为半透明深色，按钮为白色/浅色以保持对比度</p>
+</div>
