@@ -63,10 +63,10 @@ export const CanvasItem = memo(function CanvasItem({
     >
       {/* 选中时显示操作栏 */}
       {isSelected && tool === 'select' && (
-        <div className='absolute top-0 left-0 right-0 bg-black/60 rounded-t-md p-1.5 flex gap-2 justify-center z-10'>
+        <div className='absolute top-0 left-0 right-0 bg-black/60 rounded-t-md p-1 flex gap-1.5 justify-center z-10'>
           <button
             type='button'
-            className='text-white text-xs hover:bg-white/20 rounded px-2 py-0.5 transition-colors'
+            className='text-white text-[10px] hover:bg-white/20 rounded px-1.5 py-0.5 transition-colors'
             onClick={e => {
               e.stopPropagation()
               onDelete(item.id)
@@ -76,7 +76,7 @@ export const CanvasItem = memo(function CanvasItem({
           </button>
           <button
             type='button'
-            className='text-white text-xs hover:bg-white/20 rounded px-2 py-0.5 transition-colors'
+            className='text-white text-[10px] hover:bg-white/20 rounded px-1.5 py-0.5 transition-colors'
             onClick={e => {
               e.stopPropagation()
               onDownload(item.imageUrl)
