@@ -12,6 +12,7 @@ interface GeneratorPageProps {
 export function GeneratorPage({ conversationId }: GeneratorPageProps) {
   const [activeTool, setActiveTool] = useState<'select' | 'hand'>('select')
   const [isLoaded, setIsLoaded] = useState(false)
+  const [zoom, setZoom] = useState(1)
 
   const { data: conversation, isLoading } = useConversation(conversationId || '')
   const setItems = useCanvasStore(state => state.setItems)
@@ -45,9 +46,9 @@ export function GeneratorPage({ conversationId }: GeneratorPageProps) {
 
   return (
     <div className='relative h-full'>
-      <Canvas tool={activeTool} />
+      <Canvas tool={activeTool} onZoomChange={setZoom} />
       <FloatingChat conversationId={conversationId} />
-      <CanvasToolbar onToolChange={setActiveTool} />
+      <CanvasToolbar onToolChange={setActiveTool} zoom={zoom} />
     </div>
   )
 }
